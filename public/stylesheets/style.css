@@ -1,0 +1,24 @@
+body 
+{
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a 
+{
+	color: #00B7FF;
+}
+nav>ul, footer>ul
+{
+	list-style-type: none;
+}
+nav>ul>li, footer>ul>li
+{
+	display: inline;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-left: 1px solid #dda;
+}
+nav>ul>li:first-child, footer>ul>li:first-child
+{
+	border-left: 0;
+}

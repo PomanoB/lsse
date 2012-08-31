@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+		<script>
+			var socket = io.connect();
+			socket.on('result', function (data) {
+				$('#results_count').text('Results count: ' + data.result.length);
+				if (data.result.length > 0)
+				{
+					data.result.sort(function(a, b){
+						return b.value - a.value
+					});
+					var i;
+					var result = '';
+					for(i = 0; i < data.result.length; i++)
+					{
+						
+						result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a> - ' + data.result[i].value + '</li>');
+					}
+					$('#result').append(result);
+				}
+				else
+					$('#result').append('<li>Nothing found!</li>');
+
+				$('#result').show();
+			});
+			$(function(){
+				$('#input_form').submit(function(){
+					$('#result').hide().empty();					
+					socket.emit('get relationships', { word: $('#input_word').val(), model: $('#model').val()});
+
+					return false;
+				});
+				$(document).on("click", "#result a", function(){
+					$('#input_word').val($(this).attr('href').slice(1));
+					$('#input_form').submit();
+
+					return false;
+				});
+				$('#model').change(function(){
+					$('#input_form').submit();
+				});
+			});
+			
+		</script>
+	</head>
+	<body>
+		<% include nav %>
+		<h1><%= title %></h1>
+		<form action="?" id="input_form">
+			<input type="text" placeholder="input word" id="input_word" />
+			<select id="model">
+				<% for(var i=0; i < models.length; i++) {%>
+				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
+				<% } %>
+			</select>
+			<input type="submit" value="Search" />
+		</form>
+		<div id="results_count" style="margin: 10px;"></div>
+		<ol id="result">
+			
+		</ol>
+
+		
+	</body>
+</html>
