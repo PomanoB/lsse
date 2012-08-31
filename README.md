@@ -1,5 +1,5 @@
-lsse
-====
+Lexico-Semantic Search Engine
+=============================
 
 Name
 ----
