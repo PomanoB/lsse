@@ -16,8 +16,9 @@ How to install
 6. Run: "node app"
 7. Use "node import" to import all CSV files, described in data_models.js to MongoDB
 8. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data
+9. Use PORT environment variable to set port for using 
 
 API
 ---
 
-Execute request GET /find/<model>/<word> to obtain results
+Execute request GET /find/&lt;model&gt;/<word> to obtain results
