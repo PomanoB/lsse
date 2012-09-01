@@ -21,4 +21,4 @@ How to install
 API
 ---
 
-Execute request GET /find/&lt;model&gt;/<word> to obtain results
+Execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
