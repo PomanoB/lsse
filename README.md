@@ -14,10 +14,8 @@ How to install
 4. Go to the directory with lsse and type "npm install" to install all Node.JS dependencies of the system.
 5. Use mongorestore tool to restore databases: "mongorestore backup", where "backup" is a folder with directory serelex, containing files system.indexes.bson and words.bson. Downloadable here -- http://cental.fltr.ucl.ac.be/team/~panchenko/data/serelex/mongodb.tgz.
 If indexes were not generated automatically, please do 
-
-$mongorestore -d serelex words.bson
-
-$mongo
+  - $mongorestore -d serelex words.bson 
+  - $mongo
 >use serelex
 >db.words.ensureIndex({word: 1})
 >db.words.ensureIndex({word: 1, model: 1})
