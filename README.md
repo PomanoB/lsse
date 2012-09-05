@@ -16,9 +16,9 @@ How to install
 If indexes were not generated automatically, please do 
   - $mongorestore -d serelex words.bson 
   - $mongo
->use serelex
->db.words.ensureIndex({word: 1})
->db.words.ensureIndex({word: 1, model: 1})
+  - >use serelex
+  - >db.words.ensureIndex({word: 1})
+  - >db.words.ensureIndex({word: 1, model: 1})
 6. Start the application: "node app".
 7. Use "node import" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
 8. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data.
