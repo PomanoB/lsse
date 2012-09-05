@@ -23,6 +23,7 @@ If indexes were not generated automatically, please do
 7. Start the application: "node app.js".
 
 Additional: 
+
 8. Use "node import" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
 9. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data.
 
