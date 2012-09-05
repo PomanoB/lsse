@@ -3,7 +3,12 @@ Lexico-Semantic Search Engine
 
 Name
 ----
-Serelex - lexico-semantic search engine
+Serelex - a lexico-semantic search engine. 
+
+This system is a kind of "lexico-semantic search engine". Given a text query it provides a list of related words.
+A traditional search engine provides as a results a list of related documents. The current version is based on two 
+semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second 
+relies on a text corpus.
 
 How to install
 --------------
