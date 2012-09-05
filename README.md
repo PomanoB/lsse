@@ -19,10 +19,12 @@ If indexes were not generated automatically, please do
   - >use serelex
   - >db.words.ensureIndex({word: 1})
   - >db.words.ensureIndex({word: 1, model: 1})
-6. Start the application: "node app.js".
-7. Use "node import" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
-8. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data.
-9. Use PORT environment variable to set port (e.g. "export PORT=8080"). By default -- 80.
+6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux). By default -- 80.
+7. Start the application: "node app.js".
+
+Additional: 
+8. Use "node import" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
+9. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data.
 
 
 API
