@@ -2,42 +2,45 @@ var fs = require("fs");
 var BufferedReader = require("buffered-reader");
 var util = require('util');
 
+var ObjectID = require('mongodb').ObjectID;
+
 var serelex = function() {
+
 	this.fileName = "";
 	this.data = {};
-	this.wordId = {};
-	this.wordsArray = [];
-	this.relationsCount = {};
+	this.idToWord = {};
+	this.wordToId = {};
+	
 	var t = this;
 
 	this.emptyResult = [];
 	
+	this.setWordId = function(word, id){
+		this.wordToId[word + "13ashdf"] = id;
+		this.idToWord[id] = word;
+	}
+
 	this.getWordId = function(word){
 		var key = word + "13ashdf";
-		if (typeof this.wordId[key] == "undefined")
+		if (typeof this.wordToId[key] == "undefined")
 		{
-			this.wordsArray.push(word);
-			return (this.wordId[key] = this.wordsArray.length - 1);
-		}
-		return this.wordId[key];
+			var id = new ObjectID();
+			this.idToWord[id] = word;
+			this.wordToId[key] = id;
+
+			return id;
+		}	
+
+		return this.wordToId[key];
 	}
 	
 	this.getWordById = function(id){
-		return this.wordsArray[id];
-	}
-
-	this.setWordId = function(word, id)
-	{
-		this.wordsArray[id] = word;
-		this.wordId[word + "13ashdf"] = id;
+		return this.idToWord[id];
 	}
 
 	this.addRelationship = function(alias, word, pair, value){
 		if (typeof this.data[alias][word] == "undefined")
-		{
-			this.relationsCount[alias]++;
 			this.data[alias][word] = [];
-		}	
 		this.data[alias][word].push([pair, parseFloat(value)]);
 	}
 
@@ -56,7 +59,6 @@ var serelex = function() {
 		}
 		var loaded, lastLoaded;
 		this.data[alias] = {};
-		this.relationsCount[alias] = 0;
 
 		new BufferedReader (file, { encoding: "utf8" })
 			.on ("error", function (error){
@@ -79,7 +81,7 @@ var serelex = function() {
 			})
 			.on ("end", function (){
 				this.close();
-				callback(false, t.getWordId(alias), t.data[alias]);
+				callback(false, alias, t.data[alias]);
 			})
 			.read ();
 	};

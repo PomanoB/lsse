@@ -7,6 +7,10 @@ a
 {
 	color: #00B7FF;
 }
+#result
+{
+	padding: 40px;
+}
 nav>ul, footer>ul
 {
 	list-style-type: none;

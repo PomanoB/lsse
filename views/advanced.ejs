@@ -14,11 +14,10 @@
 			$(function(){
 				
 				var lsse = new LSSE(socket, '/find');
-				var defaultModel = 'norm60-corpus-all';
 				
 				$('#input_form').submit(function(){
 					$('#result').empty();
-					lsse.search($('#input_word').val(), defaultModel, function(data){
+					lsse.search($('#input_word').val(), $('#model').val(), function(data){
 						var result = 'Nothing found!';
 						if (data.result.length > 0)
 						{
@@ -30,7 +29,7 @@
 							result += '<ol>';
 							for(i = 0; i < data.result.length; i++)
 							{
-								result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a></li>');
+								result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a> - ' + data.result[i].value + '</li>');
 							}
 							result += '</ol>';
 						}
@@ -44,6 +43,9 @@
 
 					return false;
 				});
+				$('#model').change(function(){
+					$('#input_form').submit();
+				});
 			});
 			
 		</script>
@@ -53,6 +55,11 @@
 		<h1><%= title %></h1>
 		<form action="?" id="input_form">
 			<input type="text" placeholder="input word" id="input_word" />
+			<select id="model">
+				<% for(var i=0; i < models.length; i++) {%>
+				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
+				<% } %>
+			</select>
 			<input type="submit" value="Search" />
 		</form>
 		<div id="result">

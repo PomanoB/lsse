@@ -1,4 +1,9 @@
 exports.models = [
+	// {
+	// 	name: "TEST",
+	// 	alias: 'test',
+	// 	fileName: 'data/test.csv'
+	// },
 	{
 		name: "Cos-MKNN-5",
 		alias: 'cos-mknn-5-327167',
@@ -24,39 +29,42 @@ exports.models = [
 		alias: 'overlap-mknn-50-327167',
 		fileName: 'data/overlap-mknn-50-327167.csv'
 	},
-	{
-		name: "PatternSim: Efreq-Rnum-Cfreq-Pnum",
-		alias: 'norm60-corpus-all',
-		fileName: 'data/norm60-corpus-all.csv'
-	},
-	{
-		name: "PatternSim: Efreq",
-		alias: 'norm60-corpus-all',
-		fileName: 'data/pairs-all-raw-sort.csv'
-	},
-	{
-		name: "PatternSim: Efreq-Rnum",
-		alias: 'norm31',
-		fileName: 'data/norm31.csv'
-	},
-	{
-		name: "PatternSim: Efreq-Rnum-Cfreq",
-		alias: 'norm51-corpus',
-		fileName: 'data/norm51-corpus.csv'
-	},
-	{
-		name: "PatternSim: Efreq-Cfreq",
-		alias: 'norm42',
-		fileName: 'data/norm42.csv'
-	},
-	{
-		name: "PatternSim: Efreq (ukWaC)",
-		alias: 'raw-pukwac',
-		fileName: 'data/raw-pukwac.csv'
-	},
-	{
-		name: "PatternSim: Efreq (WaCky)",
-		alias: 'raw-wacky',
-		fileName: 'data/raw-wacky.csv'
-	},
+
+
+	// - FATAL ERROR: CALL_AND_RETRY_2 Allocation failed - process out of memory
+	// {
+	// 	name: "PatternSim: Efreq-Rnum-Cfreq-Pnum",
+	// 	alias: 'norm60-corpus-all',
+	// 	fileName: 'data/norm60-corpus-all.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq",
+	// 	alias: 'norm60-corpus-all',
+	// 	fileName: 'data/pairs-all-raw-sort.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq-Rnum",
+	// 	alias: 'norm31',
+	// 	fileName: 'data/norm31.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq-Rnum-Cfreq",
+	// 	alias: 'norm51-corpus',
+	// 	fileName: 'data/norm51-corpus.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq-Cfreq",
+	// 	alias: 'norm42',
+	// 	fileName: 'data/norm42.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq (ukWaC)",
+	// 	alias: 'raw-pukwac',
+	// 	fileName: 'data/raw-pukwac.csv'
+	// },
+	// {
+	// 	name: "PatternSim: Efreq (WaCky)",
+	// 	alias: 'raw-wacky',
+	// 	fileName: 'data/raw-wacky.csv'
+	// },
 ];
