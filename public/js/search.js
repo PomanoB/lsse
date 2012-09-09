@@ -43,7 +43,7 @@ $(function(){
 				result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>'+ (advanced ? (' - ' + data.result[i].value) : '') + '</li>');
 			}
 			result += '</ol>';
-			if (result.length < data.totalRelations)
+			if (data.result.length < data.totalRelations)
 				$('#show_all').show();
 		}
 		$('#result').html(result);
