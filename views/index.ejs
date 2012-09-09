@@ -4,55 +4,31 @@
 		<title><%= title %></title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
-		<script src="/js/lsse.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
+		<script src="/js/lsse.js"></script>
+		<script src="/js/search.js"></script>
+
 		<script>
-			var socket = io.connect();
 			
+			var advanced = false;
 			$(function(){
 				
-				var lsse = new LSSE(socket, '/find');
 				var defaultModel = 'norm60-corpus-all';
 				
-				$('#input_form').submit(function(){
-					$('#result').empty();
-					lsse.search($('#input_word').val(), defaultModel, function(data){
-						var result = 'Nothing found!';
-						if (data.result.length > 0)
-						{
-							result = '<span>Results count: ' + data.result.length + '</span>';
-							data.result.sort(function(a, b){
-								return b.value - a.value
-							});
-							var i;
-							result += '<ol>';
-							for(i = 0; i < data.result.length; i++)
-							{
-								result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a></li>');
-							}
-							result += '</ol>';
-						}
-						$('#result').html(result);
-					});
-					return false;
-				});
-				$(document).on("click", "#result a", function(){
-					$('#input_word').val($(this).attr('href').slice(1));
-					$('#input_form').submit();
-
-					return false;
-				});
+				$('#model').val(defaultModel);
 			});
 			
 		</script>
+
 	</head>
 	<body>
 		<% include nav %>
 		<h1><%= title %></h1>
 		<form action="?" id="input_form">
 			<input type="text" placeholder="input word" id="input_word" />
+			<input type="hidden" name="model" id="model" />
 			<input type="submit" value="Search" />
 		</form>
 		<div id="result">

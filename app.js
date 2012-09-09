@@ -64,11 +64,11 @@ lsse.openDb(db, function(err){
 		console.log("Express server listening on port " + app.get('port'));
 	});
 	var io = require('socket.io').listen(server);
-	io.set('log level', 3); // 0 - error, 1 - warn, 2 - info, 3 - debug
+	io.set('log level', 1); // 0 - error, 1 - warn, 2 - info, 3 - debug
 	
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
-			lsse.getRelations(data.word.toLowerCase(), data.model.toLowerCase(), function(err, item){
+			lsse.getRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item, totalRelations){
 				var result;
 				if (err)
 				{
@@ -77,7 +77,7 @@ lsse.openDb(db, function(err){
 				}
 				else
 					result = item ? item.relations : [];
-				socket.emit('result', { result: result });
+				socket.emit('result', { result: result, totalRelations: totalRelations });
 			});
 		});
 	});

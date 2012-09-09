@@ -5,7 +5,7 @@ var LSSE = function(){
 	this.relations = null;
 };
 
-LSSE.prototype.getRelations = function(word, model, callback){
+LSSE.prototype.getRelations = function(word, model, limit, callback){
 	var t = this;
 	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
 		if (err)
@@ -36,12 +36,23 @@ LSSE.prototype.getRelations = function(word, model, callback){
 			}
 			if (!item)
 			{
-				callback(null, null);
+				callback(null, null, 0);
 				return;
 			}
 			item.word = items[wordId].word;
 			item.model = items[modelId].word;
+
 			var i, length = item.relations.length;
+			var totalRelations = length;
+			if (typeof limit != "undefined" && (limit = +limit) > 0)
+			{
+				item.relations.sort(function(a, b){
+					return b.value - a.value;
+				});
+				item.relations.splice(limit, length - limit);
+				length = item.relations.length;		
+			}
+				
 			var loaded = 0;
 			var needWords = [];
 			for(i = 0; i < length; i++)
@@ -64,7 +75,7 @@ LSSE.prototype.getRelations = function(word, model, callback){
 						}
 					}
 				}
-				callback(null, item);
+				callback(null, item, totalRelations);
 			});
 		});
 	});

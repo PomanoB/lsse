@@ -29,7 +29,7 @@ db.open(function(err, db) {
 			db.close();
 			return;
 		}
-
+		console.log("Loading existing words...");
 		wordsCollection.find().toArray(function(err, items){
 			if(err) 
 			{
@@ -37,7 +37,7 @@ db.open(function(err, db) {
 				db.close();
 				return;
 			}
-
+			console.log("Complete...");
 			var i;
 			for(i = 0; i < items.length; i++)
 			{
@@ -97,16 +97,22 @@ db.open(function(err, db) {
 
 						if (modelsLoaded == dataModels.length)
 						{
-							// var wordsArray = [];
+							var wordsArray = [];
 							var length = serelex.wordsArray.length;
 							var i;
 							for(i = newWordsStart; i < length; i++)
 							{
-								wordsCollection.insert({word: serelex.wordsArray[i], id: i});
-								// wordsArray.push({word: serelex.wordsArray[i], id: i});
+								//wordsCollection.insert({word: serelex.wordsArray[i], id: i});
+								wordsArray.push({word: serelex.wordsArray[i], id: i});
 								if (i % 5000 == 0)
+								{
+									wordsCollection.insert(wordsArray);
 									console.log("Insertnig ", i, "/", length," new words");
+									wordsArray = [];
+								}	
 							}
+							if (wordsArray.length > 0)
+								wordsCollection.insert(wordsArray);
 							console.log("Update words complete!");
 							// wordsCollection.insert(wordsArray);
 						}
