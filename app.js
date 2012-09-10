@@ -4,7 +4,10 @@ var express = require('express')
 	
 var LSSE = require('./lsse');
 var lsse = new LSSE();
-	
+
+var LsseLogger = require('./logger');
+var logger = new LsseLogger('logs');
+
 var app = express();
 
 app.configure(function(){
@@ -79,6 +82,10 @@ lsse.openDb(db, function(err){
 					result = item ? item.relations : [];
 				socket.emit('result', { result: result, totalRelations: totalRelations });
 			});
+		});
+
+		socket.on('log', function (data) {
+			logger.writeLogEntry(data);
 		});
 	});
 });

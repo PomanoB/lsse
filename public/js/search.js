@@ -11,7 +11,11 @@ $(function(){
 	});
 
 	$(document).on("click", "#result a", function(){
-		$('#input_word').val($(this).attr('href').slice(1));
+
+		var newWord = $(this).attr('href').slice(1);
+		lsse.completeLog(newWord);
+
+		$('#input_word').val(newWord);
 		$('#input_form').submit();
 
 		return false;
@@ -30,6 +34,11 @@ $(function(){
 	});
 	$('#show_all').hide();
 
+
+	$(window).unload(function(){
+		lsse.completeLog();
+	});
+	
 	function displayResults(data)
 	{
 		var result = 'Nothing found!';
