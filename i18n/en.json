@@ -2,7 +2,9 @@
 	"nav": {
 		"main": "main",
 		"advanced": "advanced",
-		"about": "about"
+		"about": "about",
+		"english": "In English",
+		"russian": "In Russian"
 	},
 	"title": "Lexico-Semantic Search Engine",
 	"about": {

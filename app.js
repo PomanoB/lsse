@@ -22,12 +22,18 @@ app.configure(function(){
 		path: __dirname + '/i18n'
 	}));
 
+	app.use(function(req, res, next){
+		res.locals.locale = res.lingua.locale;
+		next();
+	});
+
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
+
 });
 
 app.configure('development', function(){

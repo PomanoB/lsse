@@ -55,3 +55,9 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	background-color: #ccc;
 }
+
+#switch_lang
+{
+	float: right;
+	color: #888;
+}
