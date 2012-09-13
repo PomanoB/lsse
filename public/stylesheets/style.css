@@ -7,7 +7,11 @@ a
 {
 	color: #00B7FF;
 }
-nav>ul, footer>ul
+#result
+{
+	padding: 20px 40px 10px 40px;
+}
+nav>ul, footer>ul, #suggest_results
 {
 	list-style-type: none;
 }
@@ -21,4 +25,33 @@ nav>ul>li, footer>ul>li
 nav>ul>li:first-child, footer>ul>li:first-child
 {
 	border-left: 0;
+}
+
+#input_form
+{
+	position: relative;
+}
+#input_word
+{
+	width: 160px;
+	border: 1px solid #ccc;
+}
+#suggest_results
+{
+	padding: 0;
+	margin: 0;
+	width: 162px;
+	position: absolute;
+	display: none;
+}
+#suggest_results>li
+{
+	border: 1px solid #ccc;
+	padding: 2px;
+	cursor: pointer;
+	background-color: #fff;
+}
+#suggest_results>li.active
+{
+	background-color: #ccc;
 }

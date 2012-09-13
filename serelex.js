@@ -7,7 +7,7 @@ var serelex = function() {
 	this.data = {};
 	this.wordId = {};
 	this.wordsArray = [];
-	
+	this.relationsCount = {};
 	var t = this;
 
 	this.emptyResult = [];
@@ -22,9 +22,22 @@ var serelex = function() {
 		return this.wordId[key];
 	}
 	
+	this.getWordById = function(id){
+		return this.wordsArray[id];
+	}
+
+	this.setWordId = function(word, id)
+	{
+		this.wordsArray[id] = word;
+		this.wordId[word + "13ashdf"] = id;
+	}
+
 	this.addRelationship = function(alias, word, pair, value){
 		if (typeof this.data[alias][word] == "undefined")
+		{
+			this.relationsCount[alias]++;
 			this.data[alias][word] = [];
+		}	
 		this.data[alias][word].push([pair, parseFloat(value)]);
 	}
 
@@ -43,6 +56,7 @@ var serelex = function() {
 		}
 		var loaded, lastLoaded;
 		this.data[alias] = {};
+		this.relationsCount[alias] = 0;
 
 		new BufferedReader (file, { encoding: "utf8" })
 			.on ("error", function (error){
@@ -65,7 +79,7 @@ var serelex = function() {
 			})
 			.on ("end", function (){
 				this.close();
-				callback(false);
+				callback(false, t.getWordId(alias), t.data[alias]);
 			})
 			.read ();
 	};
@@ -81,7 +95,7 @@ var serelex = function() {
 		for(var i = 0; i < array.length; i++)
 		{
 			result.push({
-				"word": this.wordsArray[array[i][0]], 
+				"word": this.getWordById(array[i][0]), 
 				"value": array[i][1]
 			});
 		}
@@ -89,4 +103,4 @@ var serelex = function() {
 	}
 }
 
-exports.serelex = serelex;
+module.exports = serelex;

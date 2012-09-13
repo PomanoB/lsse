@@ -1,6 +1,12 @@
 var express = require('express')
 	, routes = require('./routes')
 	, http = require('http');
+	
+var LSSE = require('./lsse');
+var lsse = new LSSE();
+
+var LsseLogger = require('./logger');
+var logger = new LsseLogger('logs');
 
 var app = express();
 
@@ -25,15 +31,7 @@ var wordsCollection = null;
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word', function(req, res){
-	if (wordsCollection == null)
-	{
-		res.send([]);
-		return;
-	}
-	wordsCollection.findOne({
-		word: req.params.word.toLowerCase(),
-		model: req.params.model.toLowerCase()
-	}, function(err, item) {
+	lsse.getRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), function(err, item) {
 		var result = [];
 		if (err)
 		{
@@ -43,8 +41,8 @@ app.get('/find/:model/:word', function(req, res){
 		{
 			result = item.relations;
 		}
-		res.send(result);
-	});
+		res.send({result: result});
+	})
 });
 
 var dataModels = require('./data_models').models;
@@ -54,53 +52,46 @@ var mongo = require('mongodb'),
 	Db = mongo.Db;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex', server);
+var db = new Db('serelex2', server);
 
-db.open(function(err, db) {
-	if(!err) 
-	{
-		db.collection('words', function(err, collection) {
-			if (err)
-			{
-				console.log(err);
-				return;
-			}
-			wordsCollection = collection;
-
-			var server = http.createServer(app);
-
-			server.listen(app.get('port'), function(){
-				console.log("Express server listening on port " + app.get('port'));
-			});
-			var io = require('socket.io').listen(server);
-
-			io.sockets.on('connection', function (socket) {
-				socket.on('get relationships', function (data) {
-
-					collection.findOne({
-						word: data.word.toLowerCase(),
-						model: data.model.toLowerCase()
-					}, function(err, item) {
-						var result = [];
-						if (err)
-						{
-							console.log(err);
-						}
-						else if (item != null)
-						{
-							result = item.relations;
-						}
-						socket.emit('result', { result: result });
-					});
-				});
-			});
-
-		});
-	}
-	else
+lsse.openDb(db, function(err){
+	if (err)
 	{
 		console.log(err);
 		return;
 	}
-});
+	
+	var server = http.createServer(app);
 
+	server.listen(app.get('port'), function(){
+		console.log("Express server listening on port " + app.get('port'));
+	});
+	var io = require('socket.io').listen(server);
+	io.set('log level', 1); // 0 - error, 1 - warn, 2 - info, 3 - debug
+	
+	io.sockets.on('connection', function (socket) {
+		socket.on('get relationships', function (data) {
+			lsse.getRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item, totalRelations){
+				var result;
+				if (err)
+				{
+					console.log(err);
+					result = [];
+				}
+				else
+					result = item ? item.relations : [];
+				socket.emit('result', { result: result, totalRelations: totalRelations });
+			});
+		});
+
+		socket.on('log', function (data) {
+			logger.writeLogEntry(data);
+		});
+
+		socket.on('suggest', function (data) {
+			lsse.suggest(data.word.toLowerCase(), 10, function(words){
+				socket.emit('suggest result', words);
+			})
+		});
+	});
+});

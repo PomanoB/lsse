@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+		<script>
+			
+			var advanced = true;
+
+		</script>
+
+		<script src="/js/lsse.js"></script>
+		<script src="/js/search.js"></script>
+
+
+	</head>
+	<body>
+		<% include nav %>
+		<h1><%= title %></h1>
+		<form action="?" id="input_form">
+			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
+			<select id="model">
+				<% for(var i=0; i < models.length; i++) {%>
+				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
+				<% } %>
+			</select>
+			<input type="submit" value="Search" />
+			<ul id="suggest_results">
+				<li>dog</li>
+				<li>cat</li>
+				<li>human</li>
+			</ul>
+		</form>
+		<div id="result">
+			
+		</div>
+		<a href="#show_all" id="show_all">Show all results...</a>
+	</body>
+</html>

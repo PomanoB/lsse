@@ -2,7 +2,7 @@ var dataModels = require('./data_models').models;
 var BufferedReader = require("buffered-reader");
 var fs = require("fs");
 
-var s = require('./serelex').serelex;
+var s = require('./serelex');
 
 var serelex = new s();
 

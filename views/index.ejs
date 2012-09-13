@@ -7,79 +7,50 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
+		<script src="/js/lsse.js"></script>
+		<script src="/js/search.js"></script>
+
 		<script>
-			var socket = io.connect();
-			socket.on('result', function (data) {
-				$('#results_count').text('Results count: ' + data.result.length);
-				if (data.result.length > 0)
-				{
-					data.result.sort(function(a, b){
-						return b.value - a.value
-					});
-					var i;
-					var result = '';
-					for(i = 0; i < data.result.length; i++)
-					{
-						
-						result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a> - ' + data.result[i].value + '</li>');
-					}
-					$('#result').append(result);
-				}
-				else
-					$('#result').append('<li>Nothing found!</li>');
-
-				$('#result').show();
-			});
+			
+			var advanced = false;
 			$(function(){
-				$('#input_form').submit(function(){
-					$('#result').hide().empty();					
-					socket.emit('get relationships', { word: $('#input_word').val(), model: $('#model').val()});
-
-					return false;
-				});
-				$(document).on("click", "#result a", function(){
-					$('#input_word').val($(this).attr('href').slice(1));
-					$('#input_form').submit();
-
-					return false;
-				});
-				$('#model').change(function(){
-					$('#input_form').submit();
-				});
+				
+				var defaultModel = 'norm60-corpus-all';
+				
+				$('#model').val(defaultModel);
 			});
 			
 		</script>
 
-<script type="text/javascript">
+		<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34670459-1']);
-  _gaq.push(['_trackPageview']);
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34670459-1']);
+			_gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
 	</head>
 	<body>
 		<% include nav %>
 		<h1><%= title %></h1>
 		<form action="?" id="input_form">
-			<input type="text" placeholder="input word" id="input_word" />
-			<select id="model">
-				<% for(var i=0; i < models.length; i++) {%>
-				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
-				<% } %>
-			</select>
+			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
+			<input type="hidden" name="model" id="model" />
 			<input type="submit" value="Search" />
+			<ul id="suggest_results">
+				<li>dog</li>
+				<li>cat</li>
+				<li>human</li>
+			</ul>
 		</form>
-		<div id="results_count" style="margin: 10px;"></div>
-		<ol id="result">
+		<div id="result">
 			
-		</ol>
-
-		
+		</div>
+		<a href="#show_all" id="show_all">Show all results...</a>
 	</body>
 </html>

@@ -17,19 +17,19 @@ How to install
 2. Install MongoDB (Ubuntu -- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-debian-or-ubuntu-linux/).
 3. Clone this repository (git clone ...).
 4. Go to the directory with lsse and type "npm install" to install all Node.JS dependencies of the system.
-5. Use mongorestore tool to restore databases: "mongorestore backup", where "backup" is a folder with directory serelex, containing files system.indexes.bson and words.bson. Downloadable here -- http://cental.fltr.ucl.ac.be/team/~panchenko/data/serelex/mongodb.tgz.
+5. Use mongorestore tool to restore databases: "mongorestore backup", where "backup" is a folder with directory serelex2, containing files system.indexes.bson, words.bson and relations.bson. Downloadable here -- http://cental.fltr.ucl.ac.be/team/~panchenko/data/serelex/mongodb.tgz.
 If indexes were not generated automatically, please do 
-  - $mongorestore -d serelex words.bson 
   - $mongo
-  - >use serelex
+  - >use serelex2
   - >db.words.ensureIndex({word: 1})
-  - >db.words.ensureIndex({word: 1, model: 1})
-6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux). By default -- 80.
-7. Start the application: "node app.js".
+  - >db.words.ensureIndex({id: 1})
+  - >db.relations.ensureIndex({word: 1, model: 1})
+6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux, "set PORT=8080" for Windows). By default -- 80.
+7. Start the application: "node app".
 
 Additional: 
 
-8. Use "node import" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
+8. Use "node import_v2" to import all CSV files with semantic relations, described in data_models.js to MongoDB.
 9. Use "node generate_access_log [count] [file name]" to generate access log for JMeter with random data.
 
 

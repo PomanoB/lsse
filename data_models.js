@@ -1,12 +1,19 @@
 exports.models = [
+	// {
+	// 	name: "TEST",
+	// 	alias: 'test',
+	// 	fileName: 'data/test.csv'
+	// },
+	
 	{
 		name: "PatternSim: Efreq-Rnum-Cfreq-Pnum",
 		alias: 'norm60-corpus-all',
 		fileName: 'data/norm60-corpus-all.csv'
 	},
+	
 	{
 		name: "PatternSim: Efreq",
-		alias: 'norm60-corpus-all',
+		alias: 'pairs-all-raw-sort',
 		fileName: 'data/pairs-all-raw-sort.csv'
 	},
 	{
