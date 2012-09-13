@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= title %></title>
+		<title><%= lingua.about.title %></title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -9,26 +9,19 @@
 	</head>
 	<body>
 		<% include nav %>
-		<h1><%= title %></h1>
+		<h1><%= lingua.about.title %></h1>
 		<dl>
 			
-			<dd>
-				This system is a kind of "lexico-semantic search engine". Given a text query it provides a list of related words.
-				A traditional search engine provides as a results a list of related documents. The current version is based on two 
-				semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second 
-				relies
-				on a text corpus. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be). 
-				
-			</dd>
-			<dt><h3>Source code</h2></dt>
+			<dd><%= lingua.about.description %></dd>
+			<dt><h3><%= lingua.about.source_code %></h2></dt>
 			<dd>
 				<ul>
 					<li>Serelex -- <a target="_blank" href="https://github.com/jgc128/Serelex">https://github.com/jgc128/Serelex</a></li>
 					<li>PatternSim -- <a target="_blank" href="https://github.com/cental/patternsim">https://github.com/cental/patternsim</a></li>
-					<li>Lexico-Semantic Search Engine (this site) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
+					<li>Lexico-Semantic Search Engine (<%= lingua.about.this_site %>) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
 				</ul>
 			</dd>
-			<dt><h3>Publications related to Serelex and PatternSim similarity measures</h3></dt>
+			<dt><h3><%= lingua.about.publications %></h3></dt>
 			<dd>
 				<ul>
 					<li>Панченко A., Адейкин С., Романов П., Романов A. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/aist-camera-final.pdf">Извлечение семантических отношений из статей Википедии с помощью алгоритмов ближайших соседей.</a> // Труды конференции Анализ Социальных сетей, Изображений и Текстов (АИСТ) --- Екатеринбург, 2012 --- С.~208--219.</li>

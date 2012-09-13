@@ -1,0 +1,25 @@
+{
+	"nav": {
+		"main": "главная",
+		"advanced": "расширенный поиск",
+		"about": "о системе"
+	},
+	"title": "Lexico-Semantic Search Engine",
+	"about": {
+		"title": "О системе",
+		"description": "Lexico-Semantic Search Engine - это лексико-семантическая поисковая система. По текстовому запросу она предлагает список связанных слов. Текущая версия основана на двух мерах семантического сходства - Serelex и PatternSim. Первый из них основан на определениях слов, а второй на корпусах текстов. Этот проект сейчас разрабатывается, пожалуйста, пишите ваши замечания или предложения Александру Панченко (alexander.panchenko@uclouvain.be).",
+		"source_code": "Исходный код",
+		"this_site": "этот сайт",
+		"publications": "Публикации о Serelex и PatternSim"
+	},
+	"search": {
+		"input_word": "введите слово",
+		"search": "Искать",
+		"show_all": "Показать все результаты...",
+		"not_found": "Ничего не найдено!",
+		"results_count": "Количество результатов"
+	},
+	"advanced": {
+		"title": "Lexico-Semantic Search Engine: расширенный поиск"
+	}
+}

@@ -95,10 +95,11 @@ $(function(){
 
 	function displayResults(data)
 	{
-		var result = 'Nothing found!';
+		var result = lingua.not_found;
+
 		if (data.totalRelations > 0)
 		{
-			result = '<span>Results count: ' + data.totalRelations + '</span>';
+			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
 			result += '<ol>';
 			for(i = 0; i < data.result.length; i++)

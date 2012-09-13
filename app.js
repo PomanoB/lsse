@@ -1,6 +1,7 @@
 var express = require('express')
 	, routes = require('./routes')
-	, http = require('http');
+	, http = require('http')
+	, lingua  = require('lingua');
 	
 var LSSE = require('./lsse');
 var lsse = new LSSE();
@@ -14,6 +15,13 @@ app.configure(function(){
 	app.set('port', process.env.PORT || 80);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
+
+	// Lingua configuration
+    app.use(lingua(app, {
+		defaultLocale: 'en',
+		path: __dirname + '/i18n'
+	}));
+
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());

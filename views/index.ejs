@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= title %></title>
+		<title><%= lingua.title %></title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
 		<script src="/socket.io/socket.io.js"></script>
@@ -13,6 +13,10 @@
 		<script>
 			
 			var advanced = false;
+			var lingua = {
+				not_found: "<%= lingua.search.not_found %>",
+				results_count: "<%= lingua.search.results_count %>"
+			};
 			$(function(){
 				
 				var defaultModel = 'norm60-corpus-all';
@@ -37,11 +41,11 @@
 	</head>
 	<body>
 		<% include nav %>
-		<h1><%= title %></h1>
+		<h1><%= lingua.title %></h1>
 		<form action="?" id="input_form">
-			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
+			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
 			<input type="hidden" name="model" id="model" />
-			<input type="submit" value="Search" />
+			<input type="submit" value="<%= lingua.search.search %>" />
 			<ul id="suggest_results">
 				<li>dog</li>
 				<li>cat</li>
@@ -51,6 +55,6 @@
 		<div id="result">
 			
 		</div>
-		<a href="#show_all" id="show_all">Show all results...</a>
+		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 	</body>
 </html>
