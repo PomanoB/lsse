@@ -23,13 +23,18 @@
 		<% include nav %>
 		<h1><%= title %></h1>
 		<form action="?" id="input_form">
-			<input type="text" placeholder="input word" id="input_word" />
+			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
 			<select id="model">
 				<% for(var i=0; i < models.length; i++) {%>
 				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
 				<% } %>
 			</select>
 			<input type="submit" value="Search" />
+			<ul id="suggest_results">
+				<li>dog</li>
+				<li>cat</li>
+				<li>human</li>
+			</ul>
 		</form>
 		<div id="result">
 			

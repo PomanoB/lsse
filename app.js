@@ -87,5 +87,11 @@ lsse.openDb(db, function(err){
 		socket.on('log', function (data) {
 			logger.writeLogEntry(data);
 		});
+
+		socket.on('suggest', function (data) {
+			lsse.suggest(data.word.toLowerCase(), 10, function(words){
+				socket.emit('suggest result', words);
+			})
+		});
 	});
 });

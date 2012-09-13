@@ -121,4 +121,23 @@ LSSE.prototype.relationsOpened = function(err, collection) {
 	this.callback(null);
 };
 
+LSSE.prototype.suggest = function(word, limit, callback)
+{
+
+	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9]/, ''))}, {word: 1})
+				.sort({word: 1}).limit(limit).toArray(function(err, items){
+		if (err)
+		{
+			callback([])
+			return;
+		}
+		var result = [];
+		for(var i = 0; i < items.length; i++)
+		{
+			result.push(items[i].word);
+		}
+		callback(result);
+	});
+}
+
 module.exports = LSSE;

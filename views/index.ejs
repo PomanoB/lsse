@@ -39,9 +39,14 @@
 		<% include nav %>
 		<h1><%= title %></h1>
 		<form action="?" id="input_form">
-			<input type="text" placeholder="input word" id="input_word" />
+			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
 			<input type="hidden" name="model" id="model" />
 			<input type="submit" value="Search" />
+			<ul id="suggest_results">
+				<li>dog</li>
+				<li>cat</li>
+				<li>human</li>
+			</ul>
 		</form>
 		<div id="result">
 			

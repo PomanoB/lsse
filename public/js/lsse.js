@@ -7,6 +7,8 @@ var LSSE = function(socket, apiAdress)
 	this.queryTime = 0;
 	this.logCompleted = true;
 
+	this.suggestResults = {};
+
 	this.search = function(word, model, limit, callback){
 
 		if (!this.logCompleted)
@@ -32,5 +34,21 @@ var LSSE = function(socket, apiAdress)
 			return;
 		this.logCompleted = true;
 		socket.emit('log', { query: this.lastQuery, time: this.queryTime, click: click});
+	}
+
+	this.suggest = function(word, callback){
+		var key = word + "un12";
+		
+		if (typeof this.suggestResults[key] == "undefined")
+		{
+			var t = this;
+			socket.once('suggest result', function(words){
+				t.suggestResults[key] = words;
+				callback(words);
+			});
+			socket.emit('suggest', { word: word});
+		}
+		else
+			callback(this.suggestResults[key]);
 	}
 }
