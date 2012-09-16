@@ -16,9 +16,10 @@
 				not_found: "<%= lingua.search.not_found %>",
 				results_count: "<%= lingua.search.results_count %>"
 			};
-			var model_help = {};
+			var modelStats = <%- JSON.stringify(modelStats) %>;
+			var modelHelp = {};
 			<% for(var model in lingua.models) {%>
-			   model_help["<%= model %>"] = "<%= lingua.models[model] %>";
+			   modelHelp["<%= model %>"] = "<%- lingua.models[model] %>";
 			<% } %>
 		</script>
 
@@ -29,11 +30,19 @@
 			$(function(){
 				var helpDisplayed = false;
 				$('#show_help').click(function(){
+					if (helpDisplayed)
+					{
+						$('#model_description').hide();
+						return helpDisplayed = false;
+					}
 					var m = $('#model').val();
-					if (typeof model_help[m] != "undefined")
+					if (typeof modelHelp[m] != "undefined")
 					{
 						helpDisplayed = true;
-						$('#model_description').css('display', 'inline-block').find('div').html(model_help[m]);
+						$('#model_description').css('display', 'inline-block');
+						$('#model_number_of_words').html(modelStats[m].words);
+						$('#model_number_of_relations').html(modelStats[m].relations);
+						$('#model_help_text').html(modelHelp[m]);
 					}
 					return false;
 				});
@@ -43,7 +52,10 @@
 				});
 				$('#model').change(function(){
 					if (helpDisplayed)
+					{
+						helpDisplayed = false;
 						$('#show_help').click();
+					}
 				});	
 
 			});
@@ -65,11 +77,13 @@
 			<div id="model_description">
 				<a href="#close">x</a>
 				<div>
-					asfasfdasfdasdfasf
-					asfdasfasfdasdfasfd
-					asdfasdfasdfasdfasdfasfd
-					asdfasdfasdfasfdasdfasdf
-					asdfasdfasdfsafd
+					<%= lingua.advanced.number_of_words %>: <span id="model_number_of_words"></span>
+				</div>
+				<div>
+					<%= lingua.advanced.number_of_relations %>: <span id="model_number_of_relations"></span>
+				</div>
+				<div id="model_help_text">
+
 				</div>
 			</div>
 			<ul id="suggest_results">

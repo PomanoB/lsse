@@ -1,10 +1,13 @@
+var fs = require("fs");
+
 var allowedPages = {
 	about: {
 		view: "about"
 	},
 	advanced: {
 		view: "advanced",
-		models: require('./../data_models').models
+		models: require('./../data_models').models,
+		modelStats: JSON.parse(fs.readFileSync('./stats.json'))
 	}
 };
 

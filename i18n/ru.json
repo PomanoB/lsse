@@ -22,7 +22,9 @@
 		"results_count": "Количество результатов"
 	},
 	"advanced": {
-		"title": "Lexico-Semantic Search Engine: расширенный поиск"
+		"title": "Lexico-Semantic Search Engine: расширенный поиск",
+		"number_of_words": "Количество слов",
+		"number_of_relations": "Количество отношений"
 	},
 	"models": {
 		"norm60-corpus-all": "norm60-corpus-all desc",

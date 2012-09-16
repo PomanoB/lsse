@@ -22,7 +22,9 @@
 		"results_count": "Results count"
 	},
 	"advanced": {
-		"title": "Lexico-Semantic Search Engine: Advanced search"
+		"title": "Lexico-Semantic Search Engine: Advanced search",
+		"number_of_words": "Number of words",
+		"number_of_relations": "Number of relations"
 	},
 	"models": {
 		"norm60-corpus-all": "norm60-corpus-all desc",

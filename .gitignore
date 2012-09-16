@@ -14,5 +14,7 @@ results
 node_modules
 npm-debug.log
 
+data/*
+
 *.sublime-project
 *.sublime-workspace
