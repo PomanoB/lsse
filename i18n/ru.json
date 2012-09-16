@@ -23,5 +23,19 @@
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine: расширенный поиск"
+	},
+	"models": {
+		"norm60-corpus-all": "norm60-corpus-all desc",
+		"pairs-all-raw-sort": "pairs-all-raw-sort desc",
+		"norm31": "norm31 desc",
+		"norm51-corpus": "norm51-corpus desc",
+		"norm42": "norm42 desc",
+		"raw-pukwac": "raw-pukwac desc",
+		"raw-wacky": "raw-wacky desc",
+		"cos-mknn-5-327167": "cos-mknn-5-327167 desc",
+		"overlap-mknn-5-32716": "overlap-mknn-5-32716 desc",
+		"overlap-mknn-10-327167": "overlap-mknn-10-327167 desc",
+		"overlap-mknn-20-327167": "overlap-mknn-20-327167 desc",
+		"overlap-mknn-50-327167": "overlap-mknn-50-327167 desc"
 	}
 }

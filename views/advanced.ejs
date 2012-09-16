@@ -16,12 +16,38 @@
 				not_found: "<%= lingua.search.not_found %>",
 				results_count: "<%= lingua.search.results_count %>"
 			};
-
+			var model_help = {};
+			<% for(var model in lingua.models) {%>
+			   model_help["<%= model %>"] = "<%= lingua.models[model] %>";
+			<% } %>
 		</script>
 
 		<script src="/js/lsse.js"></script>
 		<script src="/js/search.js"></script>
 
+		<script>
+			$(function(){
+				var helpDisplayed = false;
+				$('#show_help').click(function(){
+					var m = $('#model').val();
+					if (typeof model_help[m] != "undefined")
+					{
+						helpDisplayed = true;
+						$('#model_description').css('display', 'inline-block').find('div').html(model_help[m]);
+					}
+					return false;
+				});
+				$('#model_description>a[href="#close"]').click(function(){
+					$(this).parent().hide();
+					return helpDisplayed = false;
+				});
+				$('#model').change(function(){
+					if (helpDisplayed)
+						$('#show_help').click();
+				});	
+
+			});
+		</script>
 
 	</head>
 	<body>
@@ -29,12 +55,23 @@
 		<h1><%= lingua.advanced.title %></h1>
 		<form action="?" id="input_form">
 			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
+			<input type="submit" value="<%= lingua.search.search %>" />
 			<select id="model">
 				<% for(var i=0; i < models.length; i++) {%>
 				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
 				<% } %>
 			</select>
-			<input type="submit" value="<%= lingua.search.search %>" />
+			<a href="#show_help" id="show_help">?</a>
+			<div id="model_description">
+				<a href="#close">x</a>
+				<div>
+					asfasfdasfdasdfasf
+					asfdasfasfdasdfasfd
+					asdfasdfasdfasdfasdfasfd
+					asdfasdfasdfasfdasdfasdf
+					asdfasdfasdfsafd
+				</div>
+			</div>
 			<ul id="suggest_results">
 				<li>dog</li>
 				<li>cat</li>

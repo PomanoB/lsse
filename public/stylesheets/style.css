@@ -61,3 +61,22 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	float: right;
 	color: #888;
 }
+
+#model_description
+{
+	position: absolute;
+	width: 300px;
+	display: none;
+	padding: 20px;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 15px;
+	margin-left: 10px;
+	background-color: #eee;
+	box-shadow: 3px 3px 6px;
+}
+#model_description>a[href="#close"]
+{
+	float: right;
+}
