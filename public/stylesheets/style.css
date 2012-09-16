@@ -51,7 +51,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	cursor: pointer;
 	background-color: #fff;
 }
-#suggest_results>li.active
+#suggest_results>li.active, #suggest_results>li:hover
 {
 	background-color: #ccc;
 }
