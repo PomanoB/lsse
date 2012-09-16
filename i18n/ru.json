@@ -34,10 +34,11 @@
 		"norm42": "norm42 desc",
 		"raw-pukwac": "raw-pukwac desc",
 		"raw-wacky": "raw-wacky desc",
-		"cos-mknn-5-327167": "cos-mknn-5-327167 desc",
-		"overlap-mknn-5-32716": "overlap-mknn-5-32716 desc",
-		"overlap-mknn-10-327167": "overlap-mknn-10-327167 desc",
-		"overlap-mknn-20-327167": "overlap-mknn-20-327167 desc",
-		"overlap-mknn-50-327167": "overlap-mknn-50-327167 desc"
+		"cos-mknn-5-12130": "cos-mknn-5-12130 desc",
+		"cos-mknn-10-12130": "cos-mknn-10-12130 desc",
+		"cos-mknn-20-12130": "cos-mknn-20-12130 desc",
+		"overlap-mknn-5-12130": "overlap-mknn-5-12130 desc",
+		"overlap-mknn-10-12130": "overlap-mknn-10-12130 desc",
+		"overlap-mknn-20-12130": "overlap-mknn-20-12130 desc"
 	}
 }
