@@ -11,6 +11,7 @@
     "socket.io": "*",
     "buffered-reader": "*",
     "mongodb": "*",
-    "lingua": "*"
+    "lingua": "*",
+    "async": "*"
   }
 }
