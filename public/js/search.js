@@ -101,12 +101,12 @@ $(function(){
 		{
 			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
-			result += '<ol>';
+			result += '<table>';
 			for(i = 0; i < data.result.length; i++)
 			{
-				result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>'+ (advanced ? (' - ' + data.result[i].value) : '') + '</li>');
+				result += ('<tr><td>'+ (i + 1)+ '</td><td><img src="/svg/' + (data.result[i].icon ? data.result[i].word : 'no') + '.svg" style="height: 32px;"/></td><td><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>'+ (advanced ? (' - ' + data.result[i].value) : '') + '</td></tr>');
 			}
-			result += '</ol>';
+			result += '</table>';
 			if (data.result.length < data.totalRelations)
 				$('#show_all').show();
 		}

@@ -70,6 +70,8 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 						if (items[j].id == rel[i].word)
 						{
 							rel[i].word = items[j].word;
+							rel[i].icon = !!items[j].icon;
+							
 							items.splice(j, 1);
 							wordsLength--;
 						}

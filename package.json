@@ -12,6 +12,7 @@
     "buffered-reader": "*",
     "mongodb": "*",
     "lingua": "*",
-    "async": "*"
+    "async": "*",
+	"request": "*"
   }
 }
