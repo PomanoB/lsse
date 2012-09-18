@@ -15,7 +15,7 @@ if (!fs.existsSync(dir))
 	fs.mkdirSync(dir);
 
 // 0 - start page, null to disable download
-downloadIcons(null, function(){
+downloadIcons(0, function(){
 	console.log("Start updating database");
 	
 	var server = new Server('localhost', 27017, {auto_reconnect: true});
