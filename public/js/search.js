@@ -104,7 +104,13 @@ $(function(){
 			result += '<table>';
 			for(i = 0; i < data.result.length; i++)
 			{
-				result += ('<tr><td>'+ (i + 1)+ '</td><td><img src="/svg/' + (data.result[i].icon ? data.result[i].word : 'no') + '.svg" style="height: 32px;"/></td><td><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>'+ (advanced ? (' - ' + data.result[i].value) : '') + '</td></tr>');
+				result += ('<tr><td>'+ (i + 1)+ '</td>');
+				if (advanced)
+					result += ('<td><img src="/svg/' + (data.result[i].icon ? data.result[i].word : 'no') + '.svg" style="height: 32px;"/></td>');
+				result += ('<td><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>');
+				if (advanced)
+					result += (' - ' + data.result[i].value);
+				result += '</td></tr>';
 			}
 			result += '</table>';
 			if (data.result.length < data.totalRelations)
