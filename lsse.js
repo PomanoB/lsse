@@ -1,9 +1,64 @@
+var async = require("async");
+
 var ObjectID = require('mongodb').ObjectID;
 
 var LSSE = function(){
 	this.words = null;
 	this.relations = null;
+	this.lemms = null;
 };
+
+LSSE.prototype.getLemma = function(word, callback){
+
+	this.lemms.find({forms: word}).toArray(function(err, items){
+		if (err)
+		{
+			callback([]);
+			return;
+		}
+		var lemms = [];
+		var i;
+		for(i = 0; i < items.length; i++)
+		{
+			lemms.push(items[i].lemma);
+		}
+		callback(lemms);
+	});
+};
+
+LSSE.prototype.getBestRelations = function(word, model, limit, callback){
+	var t = this;
+	this.getLemma(word, function(lemms){
+		if (lemms.length == 0)
+			 lemms = [word];
+		else if (lemms.indexOf(word) == -1)
+			lemms.unshift(word);
+
+		async.map(lemms, function(lemma, callback){
+			t.getRelations(lemma, model, limit, callback)
+		}, function(err, results){
+			if (err)
+			{
+				callback(err);
+				return;
+			}
+			var maxResuls = 0;
+			var maxNumber = 0;
+			var i;
+
+			for(i = 0; i < results.length; i++)
+			{
+				if (results[i] && results[i].totalRelations > maxResuls)
+				{
+					maxResuls = results[i].totalRelations;
+					maxNumber = i;
+				}
+			}
+
+			callback(null, results[maxNumber]);
+		});
+	});
+}
 
 LSSE.prototype.getRelations = function(word, model, limit, callback){
 	var t = this;
@@ -77,12 +132,14 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 						}
 					}
 				}
-				callback(null, item, totalRelations);
+				item.totalRelations = totalRelations;
+				callback(null, item);
 			});
 		});
 	});
 };
 LSSE.prototype.openDb = function(database, callback){
+
 	database.open(this.dbOpened.bind({
 		callback: callback,
 		lsse: this
@@ -94,33 +151,22 @@ LSSE.prototype.dbOpened = function(err, db){
 		this.callback(err);
 		return;
 	}
-	db.collection('words', this.lsse.wordsOpened.bind({
-		callback: this.callback,
-		lsse: this.lsse,
-		db: db
-	}));
-};
-LSSE.prototype.wordsOpened = function(err, collection) {
-	if (err)
-	{
-		this.callback(err);
-		return;
-	}
-	this.lsse.words = collection;
-	this.db.collection('relations', this.lsse.relationsOpened.bind({
-		callback: this.callback,
-		lsse: this.lsse,
-		db: this.db
-	}));
-};
-LSSE.prototype.relationsOpened = function(err, collection) {
-	if (err)
-	{
-		this.callback(err);
-		return;
-	}
-	this.lsse.relations = collection;
-	this.callback(null);
+
+	var t = this;
+	var collestions = ['words', 'relations', 'lemms'];
+	async.map(collestions, db.collection.bind(db), function(err, results){
+		if (err)
+		{
+			t.callback(err);
+			return;
+		}
+		var i;
+		for(i = 0; i < collestions.length; i++)
+		{
+			t.lsse[collestions[i]] = results[i];
+		}
+		t.callback(null);
+	});
 };
 
 LSSE.prototype.suggest = function(word, limit, callback)

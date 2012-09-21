@@ -102,18 +102,18 @@ $(function(){
 			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
 			result += '<table>';
-			for(i = 0; i < data.result.length; i++)
+			for(i = 0; i < data.relations.length; i++)
 			{
 				result += ('<tr><td>'+ (i + 1)+ '</td>');
 				if (advanced)
-					result += ('<td><img src="/svg/' + (data.result[i].icon ? data.result[i].word : 'no') + '.svg" style="height: 32px;"/></td>');
-				result += ('<td><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>');
+					result += ('<td><img src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" style="height: 32px;"/></td>');
+				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 				if (advanced)
-					result += (' - ' + data.result[i].value);
+					result += (' - ' + data.relations[i].value);
 				result += '</td></tr>';
 			}
 			result += '</table>';
-			if (data.result.length < data.totalRelations)
+			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
 		}
 		$('#result').html(result);

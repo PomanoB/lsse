@@ -45,17 +45,19 @@ var wordsCollection = null;
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word', function(req, res){
-	lsse.getRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), function(err, item) {
-		var result = [];
+
+	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), 0, function(err, item) {
+		var result = null;
+
 		if (err)
 		{
 			console.log(err);
 		}
-		else if (item != null)
+		else if (item)
 		{
-			result = item.relations;
+			result = item;
 		}
-		res.send({result: result});
+		res.send(result);
 	})
 });
 
@@ -85,16 +87,16 @@ lsse.openDb(db, function(err){
 	
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
-			lsse.getRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item, totalRelations){
+			lsse.getBestRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item){
+
 				var result;
 				if (err)
 				{
-					console.log(err);
-					result = [];
+					result = {totalRelations: 0};
 				}
-				else
-					result = item ? item.relations : [];
-				socket.emit('result', { result: result, totalRelations: totalRelations });
+				else if (item)
+					result = item;
+				socket.emit('result', item);
 			});
 		});
 
