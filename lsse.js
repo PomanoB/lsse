@@ -28,6 +28,7 @@ LSSE.prototype.getLemma = function(word, callback){
 
 LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 	var t = this;
+
 	this.getLemma(word, function(lemms){
 		if (lemms.length == 0)
 			 lemms = [word];
@@ -35,7 +36,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 			lemms.unshift(word);
 
 		async.map(lemms, function(lemma, callback){
-			t.getRelations(lemma, model, limit, callback)
+			t.loadRelations(lemma, model, callback);
 		}, function(err, results){
 			if (err)
 			{
@@ -43,7 +44,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 				return;
 			}
 			var maxResuls = 0;
-			var maxNumber = 0;
+			var maxNumber = -1;
 			var i;
 
 			for(i = 0; i < results.length; i++)
@@ -54,13 +55,65 @@ LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 					maxNumber = i;
 				}
 			}
+			if (maxNumber == -1)
+			{
+				callback(null, null);
+				return;
+			}
+			var item = results[maxNumber];
+			if (typeof limit != "undefined" && (limit = +limit) > 0)
+			{
+				item.relations.sort(function(a, b){
+					return b.value - a.value;
+				});
+				item.relations.splice(limit, item.totalRelations - limit);
+			}
 
-			callback(null, results[maxNumber]);
+			t.loadRelationsWords(item, function(err){
+				if (err)
+				{
+					callback(err)
+					return;
+				}
+				callback(null, item);
+			});
 		});
 	});
 }
 
 LSSE.prototype.getRelations = function(word, model, limit, callback){
+	var t = this;
+	this.loadRelations(word, model, function(err, item){
+		if (err)
+		{
+			callback(err)
+			return;
+		}
+		if (!item)
+		{
+			callback(null, null);
+			return;
+		}
+		if (typeof limit != "undefined" && (limit = +limit) > 0)
+		{
+			item.relations.sort(function(a, b){
+				return b.value - a.value;
+			});
+			item.relations.splice(limit, item.totalRelations - limit);
+		}
+
+		t.loadRelationsWords(item, function(err){
+			if (err)
+			{
+				callback(err)
+				return;
+			}
+			callback(null, item);
+		});
+	});
+};
+
+LSSE.prototype.loadRelations = function(word, model, callback){
 	var t = this;
 	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
 		if (err)
@@ -82,7 +135,7 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 		{
 			callback(null);
 			return;
-		}		
+		}
 		t.relations.findOne({word: items[wordId].id, model: items[modelId].id}, function(err, item){
 			if (err)
 			{
@@ -91,53 +144,54 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 			}
 			if (!item)
 			{
-				callback(null, null, 0);
+				callback(null, null);
 				return;
 			}
 			item.word = items[wordId].word;
 			item.model = items[modelId].word;
+			item.totalRelations = item.relations.length;
 
-			var i, length = item.relations.length;
-			var totalRelations = length;
-			if (typeof limit != "undefined" && (limit = +limit) > 0)
-			{
-				item.relations.sort(function(a, b){
-					return b.value - a.value;
-				});
-				item.relations.splice(limit, length - limit);
-				length = item.relations.length;		
-			}
-				
-			var loaded = 0;
-			var needWords = [];
-			for(i = 0; i < length; i++)
-			{
-				needWords.push(item.relations[i].word);
-			}
-			t.words.find({id: {$in: needWords}}).toArray(function(err, items){
-				var i = 0, j = 0;
-				var wordsLength = items.length;
-				var rel = item.relations;
-				for(i = 0; i < length; i++)
-				{
-					for(j = 0; j < wordsLength; j++)
-					{
-						if (items[j].id == rel[i].word)
-						{
-							rel[i].word = items[j].word;
-							rel[i].icon = !!items[j].icon;
-							
-							items.splice(j, 1);
-							wordsLength--;
-						}
-					}
-				}
-				item.totalRelations = totalRelations;
-				callback(null, item);
-			});
+			callback(null, item);
 		});
 	});
 };
+
+LSSE.prototype.loadRelationsWords = function(item, callback){
+	var needWords = [];
+	var rel = item.relations;
+	for(i = 0; i < rel.length; i++)
+	{
+		needWords.push(rel[i].word);
+	}
+	this.words.find({id: {$in: needWords}}).toArray(function(err, items){
+		if (err)
+		{
+			callback(err);
+			return;
+		}
+		var i = 0, j = 0;
+		var wordsLength = items.length;
+		var length = item.relations.length;
+
+		for(i = 0; i < length; i++)
+		{
+			for(j = 0; j < wordsLength; j++)
+			{
+				if (items[j].id == rel[i].word)
+				{
+					rel[i].word = items[j].word;
+					rel[i].icon = !!items[j].icon;
+					
+					items.splice(j, 1);
+					wordsLength--;
+				}
+			}
+		}
+		
+		callback(null);
+	});
+}
+
 LSSE.prototype.openDb = function(database, callback){
 
 	database.open(this.dbOpened.bind({

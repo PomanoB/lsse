@@ -88,15 +88,7 @@ lsse.openDb(db, function(err){
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
 			lsse.getBestRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item){
-
-				var result;
-				if (err)
-				{
-					result = {totalRelations: 0};
-				}
-				else if (item)
-					result = item;
-				socket.emit('result', item);
+				socket.emit('result', item || {totalRelations: 0});
 			});
 		});
 
