@@ -6,10 +6,10 @@
 		"english": "In English",
 		"russian": "По-русски"
 	},
-	"title": "Lexico-Semantic Search Engine",
+	"title": "Лексико-семантическая поисковая система",
 	"about": {
 		"title": "О системе",
-		"description": "Lexico-Semantic Search Engine - это лексико-семантическая поисковая система. По текстовому запросу она предлагает список связанных слов. Текущая версия основана на двух мерах семантического сходства - Serelex и PatternSim. Первый из них основан на определениях слов, а второй на корпусах текстов. Данный проект находиться в стадии разработки. Мы ждем ваших замечаний и предложений по адресу  alexander.panchenko@uclouvain.be.",
+		"description": "Лексико-семантическая поисковой система Serelex работает следующим образом. По запросу она предлагает список связанных по смыслу слов. Традиционная поисковая система по запросу возвращает список связанных по смыслу документов -- документов отвечающих на запрос. Таким образом, система позволяет искать слова связанные по смыслу. Текущая версия основана на двух мерах семантического сходства - Serelex и PatternSim. Первая основана на определениях слов, вторая на корпусах текстов. Данный проект находиться в стадии разработки. Мы ждем ваших замечаний и предложений по адресу  alexander.panchenko@uclouvain.be.",
 		"source_code": "Исходный код",
 		"this_site": "этот сайт",
 		"publications": "Публикации о Serelex и PatternSim"
@@ -22,23 +22,36 @@
 		"results_count": "Количество результатов"
 	},
 	"advanced": {
-		"title": "Lexico-Semantic Search Engine: расширенный поиск",
+		"title": "Лексико-семантическая поисковая система",
 		"number_of_words": "Количество слов",
 		"number_of_relations": "Количество отношений"
 	},
+		
 	"models": {
-		"norm60-corpus-all": "norm60-corpus-all desc",
-		"pairs-all-raw-sort": "pairs-all-raw-sort desc",
-		"norm31": "norm31 desc",
-		"norm51-corpus": "norm51-corpus desc",
-		"norm42": "norm42 desc",
-		"raw-pukwac": "raw-pukwac desc",
-		"raw-wacky": "raw-wacky desc",
-		"cos-mknn-5-12130": "cos-mknn-5-12130 desc",
-		"cos-mknn-10-12130": "cos-mknn-10-12130 desc",
-		"cos-mknn-20-12130": "cos-mknn-20-12130 desc",
-		"overlap-mknn-5-12130": "overlap-mknn-5-12130 desc",
-		"overlap-mknn-10-12130": "overlap-mknn-10-12130 desc",
-		"overlap-mknn-20-12130": "overlap-mknn-20-12130 desc"
+		"norm60-corpus-all": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq), number of relations between words (Rnum), frequency of the words in a corpus (Cfreq) and number of distinct patterns extracted a given relation (Pnum). For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"pairs-all-raw-sort": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq) from WaCky and ukWaC corpora. For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"norm31": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Enum) and number of relations between words (Rfreq). For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"norm51-corpus": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq), number of relations between words (Rnum) and frequency of the words in a corpus (Cfreq). For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"norm42": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq) and frequency of the words in a corpus (Cfreq). For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",		
+
+		"raw-pukwac": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq) from ukWaC corpus. For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"raw-wacky": "This semantic similarity measure relies on frequency of relation extraction with lexico-syntactic patterns (Efreq) from WaCky corpus. For details please refer to the following paper: Panchenko A., Morozova O., Naets H. <a href='http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf'>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</a>. // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012.",
+
+		"cos-mknn-5-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, cosine similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9",
+
+		"cos-mknn-10-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, cosine similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9",
+
+		"cos-mknn-20-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, cosine similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9",
+
+		"overlap-mknn-5-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, overlap similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9",
+
+		"overlap-mknn-10-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, overlap similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9",
+
+		"overlap-mknn-20-12130": "This semantic similarity measure relies on definitions of Wiktionary and Wikipedia, overlap similarity function and MKNN algorithm. For details please refer to the following paper: Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href='http://ceur-ws.org/Vol-871/paper_9.pdf'>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9"
 	}
 }
