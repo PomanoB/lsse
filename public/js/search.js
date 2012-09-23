@@ -2,6 +2,11 @@ $(function(){
 	var socket = io.connect();
 	var lsse = new LSSE(socket, '/find');
 
+	var showImages = false;
+
+	if (advanced)
+		switchImages();
+
 	$('#input_form').submit(function(){
 		$('#result').empty();
 		$('#show_all').hide();
@@ -88,10 +93,28 @@ $(function(){
 		}, 200);
 	});
 
+	$('#switch_images').click(switchImages);
+
 	$(document).on("click", "#suggest_results>li", function(){
 		$('#input_word').val($(this).text());
 		$('#input_form').submit();
 	})
+
+	function switchImages()
+	{
+		showImages = !showImages;
+		if(showImages)
+		{
+			$('#switch_images').text(lingua.hide_images);
+			$('img.result_icon').show();
+		}
+		else
+		{
+			$('#switch_images').text(lingua.show_images);
+			$('img.result_icon').hide();
+		}
+		return false;
+	}
 
 	function displayResults(data)
 	{
@@ -105,8 +128,7 @@ $(function(){
 			for(i = 0; i < data.relations.length; i++)
 			{
 				result += ('<tr><td>'+ (i + 1)+ '</td>');
-				if (advanced)
-					result += ('<td><img src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" style="height: 32px;"/></td>');
+				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 				if (advanced)
 					result += (' - ' + data.relations[i].value);

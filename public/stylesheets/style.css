@@ -56,10 +56,19 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	background-color: #ccc;
 }
 
-#switch_lang
+#switches
 {
 	float: right;
+}
+#switches>a
+{
 	color: #888;
+	border-left: 1px solid #888;
+	padding-left: 5px;
+}
+#switches>a:first-child
+{
+	border-left: 0;
 }
 
 #model_description
@@ -88,4 +97,8 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	text-align: right;
 	width: 40px;
+}
+.result_icon
+{
+	height: 32px;
 }

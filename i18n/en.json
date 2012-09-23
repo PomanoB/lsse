@@ -4,7 +4,9 @@
 		"advanced": "advanced",
 		"about": "about",
 		"english": "In English",
-		"russian": "По-русски"
+		"russian": "По-русски",
+		"show_images": "Show Images",
+		"hide_images": "Hide images"
 	},
 	"title": "Lexico-Semantic Search Engine",
 	"about": {
