@@ -79,7 +79,7 @@ function downloadIcons(number, callback)
 			while ((result = iconRegExp.exec(body)) != null)
 			{
 				iconsCount++;
-				fs.writeFile(dir + result[3].toLowerCase() + ".svg", result[2]);
+				fs.writeFileSync(dir + result[3].toLowerCase() + ".svg", result[2]);
 			}
 			
 			console.log("Done fetching page", number);
