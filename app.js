@@ -1,7 +1,8 @@
 var express = require('express')
 	, routes = require('./routes')
 	, http = require('http')
-	, lingua  = require('lingua');
+	, lingua  = require('lingua')
+	, async = require('async');
 	
 var LSSE = require('./lsse');
 var lsse = new LSSE();
@@ -87,8 +88,61 @@ lsse.openDb(db, function(err){
 	
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
-			lsse.getBestRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item){
-				socket.emit('result', item || {totalRelations: 0});
+			data.word = data.word.toLowerCase();
+			data.model = data.model.toLowerCase();
+
+			lsse.getBestRelations(data.word, data.model, data.limit, function(err, item){
+				if (err)
+				{
+					console.log(err);
+					socket.emit('result', {totalRelations: 0, word: data.word});
+					return;
+				}
+				if (item)
+				{
+					item.word = data.word;
+					socket.emit('result', item);
+					return;
+				}
+
+				var words = lsse.getPerhaps(data.word);
+
+				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
+				    var i, j;
+				    for(i = 0; i < results.length; i++)
+				    {
+				    	for(j = 0; j < results[i].length; j++)
+				    	{
+				    		if (words.indexOf(results[i][j]) == -1)
+				    			words.push(results[i][j]);
+				    	}
+				    }
+
+			    	async.map(words, function(word, callback){
+						lsse.loadRelations(word, data.model, callback);
+					}, function(err, results){
+
+						if (err)
+						{
+							console.log(err);
+							socket.emit('result', {totalRelations: 0});
+							return;
+						}
+						var perhaps = [], i;
+						for(i = 0; i < results.length; i++)
+						{
+							if (results[i])
+							{
+								perhaps.push({
+									word: results[i].word, 
+									totalRelations: results[i].totalRelations
+								});
+							}
+						}
+						socket.emit('result', {totalRelations: 0, perhaps: perhaps, word: data.word});
+					});
+
+				});
 			});
 		});
 

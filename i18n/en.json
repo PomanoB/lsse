@@ -21,7 +21,9 @@
 		"search": "Search",
 		"show_all": "Show all results...",
 		"not_found": "Nothing found!",
-		"results_count": "Results count"
+		"not_found_try_perhaps": "Nothing found for \"%s\". Try:",
+		"results_count": "Results count",
+		"results": "results"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",

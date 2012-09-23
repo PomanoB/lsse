@@ -118,7 +118,7 @@ $(function(){
 
 	function displayResults(data)
 	{
-		var result = lingua.not_found;
+		var result;
 
 		if (data.totalRelations > 0)
 		{
@@ -137,6 +137,29 @@ $(function(){
 			result += '</table>';
 			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
+		}
+		else
+		{
+			var pLen = data.perhaps.length;
+			if (pLen > 0)
+			{
+				result = lingua.not_found_try_perhaps.replace('%s', data.word);
+
+				data.perhaps.sort(function(a, b){
+					return b.totalRelations - a.totalRelations;
+				});;
+
+				result += "<ul>";
+				var i;
+				for(i = 0; i < pLen; i++)
+				{
+					result += ('<li><a href="#' + data.perhaps[i].word + '">' + data.perhaps[i].word + '</a>');
+					result += (' - ' + data.perhaps[i].totalRelations + ' ' + lingua.results);
+				}
+				result += "</ul>";
+			}
+			else
+				result = lingua.not_found;
 		}
 		$('#result').html(result);
 	}

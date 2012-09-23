@@ -8,12 +8,31 @@ var LSSE = function(){
 	this.lemms = null;
 };
 
+LSSE.prototype.getPerhaps = function(word){
+	var words = word.trim().split(/\s+/);
+	var i, j, k, len = words.length;
+	
+	var currWord;
+	for(i = 2; i < len; i++)
+	{
+		for(j = 0; j <= len - i; j++)
+		{
+			currWord = "";
+			for(k = 0; k < i; k++)
+				currWord += (" " + words[j + k]);
+			words.push(currWord.trim());
+		}
+	}
+
+	return words;
+}
+
 LSSE.prototype.getLemma = function(word, callback){
 
 	this.lemms.find({forms: word}).toArray(function(err, items){
 		if (err)
 		{
-			callback([]);
+			callback(err, []);
 			return;
 		}
 		var lemms = [];
@@ -22,14 +41,14 @@ LSSE.prototype.getLemma = function(word, callback){
 		{
 			lemms.push(items[i].lemma);
 		}
-		callback(lemms);
+		callback(null, lemms);
 	});
 };
 
 LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 	var t = this;
 
-	this.getLemma(word, function(lemms){
+	this.getLemma(word, function(err, lemms){
 		if (lemms.length == 0)
 			 lemms = [word];
 		else if (lemms.indexOf(word) == -1)
@@ -115,7 +134,9 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 
 LSSE.prototype.loadRelations = function(word, model, callback){
 	var t = this;
+
 	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
+
 		if (err)
 		{
 			callback(err)
@@ -137,11 +158,13 @@ LSSE.prototype.loadRelations = function(word, model, callback){
 			return;
 		}
 		t.relations.findOne({word: items[wordId].id, model: items[modelId].id}, function(err, item){
+			
 			if (err)
 			{
 				callback(err)
 				return;
 			}
+
 			if (!item)
 			{
 				callback(null, null);
