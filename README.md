@@ -24,6 +24,8 @@ If indexes were not generated automatically, please do
   - >db.words.ensureIndex({word: 1})
   - >db.words.ensureIndex({id: 1})
   - >db.relations.ensureIndex({word: 1, model: 1})
+  - >db.lemms.ensureIndex({lemma: 1}, {unique:true})
+  - >db.lemms.ensureIndex({forms: 1})
 6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux, "set PORT=8080" for Windows). By default -- 80.
 7. Start the application: "node app".
 
