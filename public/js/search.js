@@ -18,11 +18,12 @@ $(function(){
 
 	$(document).on("click", "#result a", function(){
 
-		var newWord = $(this).attr('href').slice(1);
+		var newWord = (location.hash = $(this).attr('href')).slice(1);
 		lsse.completeLog(newWord);
 
 		$('#input_word').val(newWord);
 		$('#input_form').submit();
+
 
 		return false;
 	});
@@ -99,6 +100,12 @@ $(function(){
 		$('#input_word').val($(this).text());
 		$('#input_form').submit();
 	})
+
+	if (location.hash != "")
+	{
+		$('#input_word').val(location.hash.slice(1));
+		$('#input_form').submit();
+	}
 
 	function switchImages()
 	{
