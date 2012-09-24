@@ -46,6 +46,11 @@ $(function(){
 		lsse.completeLog();
 	});
 	
+	$(window).on('hashchange', function(){
+		$('#input_word').val(location.hash.slice(1));
+		$('#input_form').submit();
+	});
+
 	var suggestTimeout = null;
 	var currentHighLight = -1;
 	var suggestLength = 0;
