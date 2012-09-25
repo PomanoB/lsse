@@ -1,13 +1,17 @@
+<div id="switches">
+	<a href="?language=<%= locale == "ru" ? "en" : "ru" %>" id="switch_lang"><%= locale == "ru" ? lingua.nav.english : lingua.nav.russian %></a>
+	<a href="#show_images" id="switch_images"><%= lingua.nav.show_images %></a>
+</div>
 <nav>
 		<ul>
 			<li>
-				<a href="/">main</a>
+				<a href="/"><%= lingua.nav.main %></a>
 			</li>
 			<li>
-				<a href="/page/advanced">advanced</a>
+				<a href="/page/advanced"><%= lingua.nav.advanced %></a>
 			</li>
 			<li>
-				<a href="/page/about">about</a>
+				<a href="/page/about"><%= lingua.nav.about %></a>
 			</li>
 		</ul>
 </nav>

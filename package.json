@@ -10,6 +10,10 @@
     "ejs": "*",
     "socket.io": "*",
     "buffered-reader": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "lingua": "*",
+    "async": "*",
+    "request": "*",
+    "sax": "*"
   }
 }

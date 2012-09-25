@@ -1,6 +1,8 @@
 var express = require('express')
 	, routes = require('./routes')
-	, http = require('http');
+	, http = require('http')
+	, lingua  = require('lingua')
+	, async = require('async');
 	
 var LSSE = require('./lsse');
 var lsse = new LSSE();
@@ -14,12 +16,25 @@ app.configure(function(){
 	app.set('port', process.env.PORT || 80);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
+
+	// Lingua configuration
+    app.use(lingua(app, {
+		defaultLocale: 'en',
+		path: __dirname + '/i18n'
+	}));
+
+	app.use(function(req, res, next){
+		res.locals.locale = res.lingua.locale;
+		next();
+	});
+
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
+
 });
 
 app.configure('development', function(){
@@ -31,17 +46,19 @@ var wordsCollection = null;
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word', function(req, res){
-	lsse.getRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), function(err, item) {
-		var result = [];
+
+	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), 0, function(err, item) {
+		var result = null;
+
 		if (err)
 		{
 			console.log(err);
 		}
-		else if (item != null)
+		else if (item)
 		{
-			result = item.relations;
+			result = item;
 		}
-		res.send({result: result});
+		res.send(result);
 	})
 });
 
@@ -71,16 +88,61 @@ lsse.openDb(db, function(err){
 	
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
-			lsse.getRelations(data.word.toLowerCase(), data.model.toLowerCase(), data.limit, function(err, item, totalRelations){
-				var result;
+			data.word = data.word.toLowerCase();
+			data.model = data.model.toLowerCase();
+
+			lsse.getBestRelations(data.word, data.model, data.limit, function(err, item){
 				if (err)
 				{
 					console.log(err);
-					result = [];
+					socket.emit('result', {totalRelations: 0, word: data.word});
+					return;
 				}
-				else
-					result = item ? item.relations : [];
-				socket.emit('result', { result: result, totalRelations: totalRelations });
+				if (item)
+				{
+					item.word = data.word;
+					socket.emit('result', item);
+					return;
+				}
+
+				var words = lsse.getPerhaps(data.word);
+
+				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
+				    var i, j;
+				    for(i = 0; i < results.length; i++)
+				    {
+				    	for(j = 0; j < results[i].length; j++)
+				    	{
+				    		if (words.indexOf(results[i][j]) == -1)
+				    			words.push(results[i][j]);
+				    	}
+				    }
+
+			    	async.map(words, function(word, callback){
+						lsse.loadRelations(word, data.model, callback);
+					}, function(err, results){
+
+						if (err)
+						{
+							console.log(err);
+							socket.emit('result', {totalRelations: 0});
+							return;
+						}
+						var perhaps = [], i;
+						for(i = 0; i < results.length; i++)
+						{
+							if (results[i])
+							{
+								perhaps.push({
+									word: results[i].word, 
+									totalRelations: results[i].totalRelations
+								});
+							}
+						}
+						socket.emit('result', {totalRelations: 0, perhaps: perhaps, word: data.word});
+					});
+
+				});
 			});
 		});
 

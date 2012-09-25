@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= title %></title>
+		<title><%= lingua.advanced.title %></title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
 
@@ -12,24 +12,84 @@
 			
 			var advanced = true;
 
+			var lingua = {
+				not_found: "<%= lingua.search.not_found %>",
+				not_found_try_perhaps: "<%= lingua.search.not_found_try_perhaps %>",
+				results_count: "<%= lingua.search.results_count %>",
+				results: "<%= lingua.search.results %>",
+				show_images: "<%= lingua.nav.show_images %>",
+				hide_images: "<%= lingua.nav.hide_images %>"
+			};
+			var modelStats = <%- JSON.stringify(modelStats) %>;
+			var modelHelp = {};
+			<% for(var model in lingua.models) {%>
+			   modelHelp["<%= model %>"] = "<%- lingua.models[model] %>";
+			<% } %>
 		</script>
 
 		<script src="/js/lsse.js"></script>
 		<script src="/js/search.js"></script>
 
+		<script>
+			$(function(){
+				var helpDisplayed = false;
+				$('#show_help').click(function(){
+					if (helpDisplayed)
+					{
+						$('#model_description').hide();
+						return helpDisplayed = false;
+					}
+					var m = $('#model').val();
+					if (typeof modelHelp[m] != "undefined")
+					{
+						helpDisplayed = true;
+						$('#model_description').css('display', 'inline-block');
+						$('#model_number_of_words').html(modelStats[m].words);
+						$('#model_number_of_relations').html(modelStats[m].relations);
+						$('#model_help_text').html(modelHelp[m]);
+					}
+					return false;
+				});
+				$('#model_description>a[href="#close"]').click(function(){
+					$(this).parent().hide();
+					return helpDisplayed = false;
+				});
+				$('#model').change(function(){
+					if (helpDisplayed)
+					{
+						helpDisplayed = false;
+						$('#show_help').click();
+					}
+				});	
+
+			});
+		</script>
 
 	</head>
 	<body>
 		<% include nav %>
-		<h1><%= title %></h1>
+		<h2><%= lingua.advanced.title %></h2>
 		<form action="?" id="input_form">
-			<input type="text" placeholder="input word" id="input_word" autocomplete='off' />
+			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
+			<input type="submit" value="<%= lingua.search.search %>" />
 			<select id="model">
 				<% for(var i=0; i < models.length; i++) {%>
 				   <option value="<%= models[i].alias %>"><%= models[i].name %></option>
 				<% } %>
 			</select>
-			<input type="submit" value="Search" />
+			<a href="#show_help" id="show_help">?</a>
+			<div id="model_description">
+				<a href="#close">x</a>
+				<div>
+					<%= lingua.advanced.number_of_words %>: <span id="model_number_of_words"></span>
+				</div>
+				<div>
+					<%= lingua.advanced.number_of_relations %>: <span id="model_number_of_relations"></span>
+				</div>
+				<div id="model_help_text">
+
+				</div>
+			</div>
 			<ul id="suggest_results">
 				<li>dog</li>
 				<li>cat</li>
@@ -37,8 +97,8 @@
 			</ul>
 		</form>
 		<div id="result">
-			
+
 		</div>
-		<a href="#show_all" id="show_all">Show all results...</a>
+		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 	</body>
 </html>

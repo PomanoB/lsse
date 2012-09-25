@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= title %></title>
+		<title><%= lingua.about.title %></title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -9,34 +9,64 @@
 	</head>
 	<body>
 		<% include nav %>
-		<h1><%= title %></h1>
-		<dl>
-			
-			<dd>
-				This system is a kind of "lexico-semantic search engine". Given a text query it provides a list of related words.
-				A traditional search engine provides as a results a list of related documents. The current version is based on two 
-				semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second 
-				relies
-				on a text corpus. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be). 
-				
-			</dd>
-			<dt><h3>Source code</h2></dt>
+		<h2><%= lingua.about.title %></h2>
+		<dl>			
+			<dd><%= lingua.about.description %></dd>
+			<dt><h3><%= lingua.about.source_code %></h2></dt>
 			<dd>
 				<ul>
 					<li>Serelex -- <a target="_blank" href="https://github.com/jgc128/Serelex">https://github.com/jgc128/Serelex</a></li>
 					<li>PatternSim -- <a target="_blank" href="https://github.com/cental/patternsim">https://github.com/cental/patternsim</a></li>
-					<li>Lexico-Semantic Search Engine (this site) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
+					<li>Lexico-Semantic Search Engine (<%= lingua.about.this_site %>) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
 				</ul>
 			</dd>
-			<dt><h3>Publications related to Serelex and PatternSim similarity measures</h3></dt>
+			<dt><h3><%= lingua.about.publications %></h3></dt>
 			<dd>
 				<ul>
-					<li>Панченко A., Адейкин С., Романов П., Романов A. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/aist-camera-final.pdf">Извлечение семантических отношений из статей Википедии с помощью алгоритмов ближайших соседей.</a> // Труды конференции Анализ Социальных сетей, Изображений и Текстов (АИСТ) --- Екатеринбург, 2012 --- С.~208--219.</li>
-					<li>Alexander Panchenko, Sergey Adeykin, Alexey Romanov and Pavel Romanov. <a href="http://ceur-ws.org/Vol-871/paper_9.pdf">Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9</li>
-					<li>Panchenko A., Morozova O., Naets H. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens2012.pdf">A Semantic Similarity Measure Based on Lexico-Syntactic Patterns.</a> // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), 2012 </li>
+					<li>Panchenko A., Morozova O., Naets H. <a href="http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf">A Semantic Similarity Measure Based on Lexico-Syntactic Patterns.</a> // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-poster.pdf">Poster</a> <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-presentation.pdf">Presentation</a></li>
+					<li>Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href="http://ceur-ws.org/Vol-871/paper_9.pdf">Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9</li>
+					<li>Панченко A., Адейкин С., Романов П., Романов A. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/aist-camera-final.pdf">Извлечение семантических отношений из статей Википедии с помощью алгоритмов ближайших соседей.</a> // Труды конференции Анализ Социальных сетей, Изображений и Текстов (АИСТ) --- Екатеринбург, 2012 --- С.~208--219. <a href="http://aistconf.org/images/Presentations/panchenko.pdf"> Презентация</a></li>
 				</ul>
 			</dd>
+
+			<dt><h3>API</h3></dt>
+			<dd>
+			<%- lingua.about.api_description %>
+			<pre><code>
+{
+  "word": "ubuntu",
+  "model": "norm60-corpus-all",
+  "relations": [
+    {
+      "word": "debian",
+      "value": 0.848965058911512,
+      "icon": false
+    },
+    {
+      "word": "mandriva",
+      "value": 0.498265193741008,
+      "icon": false
+    },
+    {
+      "word": "fedora",
+      "value": 0.333650822618753,
+      "icon": false
+    },
+    {
+      "word": "gentoo",
+      "value": 0.333297162942371,
+      "icon": false
+    },
+    {
+      "word": "opensuse",
+      "value": 0.232300240955515,
+      "icon": false
+    },
+...
+}
+</pre></code>
+
 		</dl>
-		
+
 	</body>
 </html>

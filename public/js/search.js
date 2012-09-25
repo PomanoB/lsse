@@ -2,6 +2,11 @@ $(function(){
 	var socket = io.connect();
 	var lsse = new LSSE(socket, '/find');
 
+	var showImages = false;
+
+	if (advanced)
+		switchImages();
+
 	$('#input_form').submit(function(){
 		$('#result').empty();
 		$('#show_all').hide();
@@ -13,11 +18,12 @@ $(function(){
 
 	$(document).on("click", "#result a", function(){
 
-		var newWord = $(this).attr('href').slice(1);
+		var newWord = (location.hash = $(this).attr('href')).slice(1);
 		lsse.completeLog(newWord);
 
 		$('#input_word').val(newWord);
 		$('#input_form').submit();
+
 
 		return false;
 	});
@@ -40,6 +46,11 @@ $(function(){
 		lsse.completeLog();
 	});
 	
+	$(window).on('hashchange', function(){
+		$('#input_word').val(location.hash.slice(1));
+		$('#input_form').submit();
+	});
+
 	var suggestTimeout = null;
 	var currentHighLight = -1;
 	var suggestLength = 0;
@@ -88,26 +99,79 @@ $(function(){
 		}, 200);
 	});
 
+	$('#switch_images').click(switchImages);
+
 	$(document).on("click", "#suggest_results>li", function(){
 		$('#input_word').val($(this).text());
 		$('#input_form').submit();
 	})
 
+	if (location.hash != "")
+	{
+		$('#input_word').val(location.hash.slice(1));
+		$('#input_form').submit();
+	}
+
+	function switchImages()
+	{
+		showImages = !showImages;
+		if(showImages)
+		{
+			$('#switch_images').text(lingua.hide_images);
+			$('img.result_icon').show();
+		}
+		else
+		{
+			$('#switch_images').text(lingua.show_images);
+			$('img.result_icon').hide();
+		}
+		return false;
+	}
+
 	function displayResults(data)
 	{
-		var result = 'Nothing found!';
+		var result;
+
 		if (data.totalRelations > 0)
 		{
-			result = '<span>Results count: ' + data.totalRelations + '</span>';
+			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
-			result += '<ol>';
-			for(i = 0; i < data.result.length; i++)
+			result += '<table>';
+			for(i = 0; i < data.relations.length; i++)
 			{
-				result += ('<li><a href="#' + data.result[i].word + '">' + data.result[i].word + '</a>'+ (advanced ? (' - ' + data.result[i].value) : '') + '</li>');
+				result += ('<tr><td>'+ (i + 1)+ '</td>');
+				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
+				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
+				if (advanced)
+					result += (' - ' + data.relations[i].value);
+				result += '</td></tr>';
 			}
-			result += '</ol>';
-			if (data.result.length < data.totalRelations)
+			result += '</table>';
+			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
+		}
+		else
+		{
+			var pLen = data.perhaps.length;
+			if (pLen > 0)
+			{
+				result = lingua.not_found_try_perhaps.replace('%s', data.word);
+
+				data.perhaps.sort(function(a, b){
+					return b.totalRelations - a.totalRelations;
+				});;
+
+				result += "<ul>";
+				var i;
+				for(i = 0; i < pLen; i++)
+				{
+					result += ('<li><a href="#' + data.perhaps[i].word + '">' + data.perhaps[i].word + '</a>');
+					result += (' - ' + data.perhaps[i].totalRelations + ' ' + lingua.results);
+				}
+				result += "</ul>";
+			}
+			else
+				result = lingua.not_found;
 		}
 		$('#result').html(result);
 	}

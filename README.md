@@ -24,6 +24,8 @@ If indexes were not generated automatically, please do
   - >db.words.ensureIndex({word: 1})
   - >db.words.ensureIndex({id: 1})
   - >db.relations.ensureIndex({word: 1, model: 1})
+  - >db.lemms.ensureIndex({lemma: 1}, {unique:true})
+  - >db.lemms.ensureIndex({forms: 1})
 6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux, "set PORT=8080" for Windows). By default -- 80.
 7. Start the application: "node app".
 
@@ -36,4 +38,8 @@ Additional:
 API
 ---
 
-Execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
+- execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
+- for instance  http://serelex.cental.be/find/norm60-corpus-all/ubuntu
+- the result is a This request should return a set of words related to 'ubuntu' in JSON format
+
+

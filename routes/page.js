@@ -1,12 +1,13 @@
+var fs = require("fs");
+
 var allowedPages = {
 	about: {
-		title: "About",
 		view: "about"
 	},
 	advanced: {
-		title: "Lexico-Semantic Search Engine: Advanced search",
 		view: "advanced",
-		models: require('./../data_models').models
+		models: require('./../data_models').models,
+		modelStats: JSON.parse(fs.readFileSync('./stats.json'))
 	}
 };
 
