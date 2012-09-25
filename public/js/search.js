@@ -25,7 +25,7 @@ $(function(){
 		"dog",
 		"cat",
 		"animal",
-		"vegetagle",
+		"vegetable",
 		"Moscow",
 		"Paris",
 		"Brussels",
