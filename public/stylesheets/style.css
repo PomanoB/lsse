@@ -102,3 +102,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	height: 32px;
 }
+#example_search, #example_search>a
+{
+	color: #888;
+}

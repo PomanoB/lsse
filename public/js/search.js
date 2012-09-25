@@ -4,6 +4,42 @@ $(function(){
 
 	var showImages = false;
 
+	var sampleSearch = [
+		"fruit",
+		"vehicle",
+		"computational linguistics",
+		"machine learning",
+		"weapon",
+		"tank",
+		"plane",
+		"airplane",
+		"mango",
+		"strawberry",
+		"Russia",
+		"Belgium",
+		"France",
+		"mathematics",
+		"physics",
+		"moose",
+		"racoon",
+		"dog",
+		"cat",
+		"animal",
+		"vegetagle",
+		"Moscow",
+		"Paris",
+		"Brussels",
+		"Vienna",
+		"Berlin",
+		"ferrari",
+		"porsche",
+		"lamborghini",
+		"pizza",
+		"hot dog",
+		"hamburger",
+		"soft drink"
+	];
+
 	if (advanced)
 		switchImages();
 
@@ -111,6 +147,9 @@ $(function(){
 		$('#input_word').val(location.hash.slice(1));
 		$('#input_form').submit();
 	}
+
+	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
+	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
 
 	function switchImages()
 	{

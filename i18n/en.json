@@ -24,7 +24,8 @@
 		"not_found": "Nothing found!",
 		"not_found_try_perhaps": "Nothing found for \"%s\". Try:",
 		"results_count": "Results count",
-		"results": "results"
+		"results": "results",
+		"for_example": "For example"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",
