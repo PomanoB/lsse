@@ -14,7 +14,8 @@
 		"description": "This system is a kind of \"lexico-semantic search engine\". Given a text query it provides a list of related words. A traditional search engine provides as a results a list of related documents. The current version is based on two semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second relies on a text corpus. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be)",
 		"source_code": "Source code",
 		"this_site": "this site",
-		"publications": "Publications"
+		"publications": "Publications",
+		"api_description": "You can access the system without any limitations as following: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. This request should return a set of words related to 'ubuntu' in JSON format:"
 	},
 	"search": {
 		"input_word": "input word",
