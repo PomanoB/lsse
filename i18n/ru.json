@@ -15,7 +15,7 @@
 		"source_code": "Исходный код",
 		"this_site": "этот сайт",
 		"publications": "Публикации о Serelex и PatternSim",
-		"api_description": "Вы можете использовать систему следующим образом без всяких ограничений: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. Данный запрос должен возвратить множество слов семантически связанных со словом 'ubuntu' в формате JSON:"
+		"api_description": "Вы можете использовать систему следующим образом без каких-либо ограничений: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. Данный запрос должен возвратить множество слов семантически связанных со словом 'ubuntu' в формате JSON:"
 	},
 	"search": {
 		"input_word": "введите слово",
