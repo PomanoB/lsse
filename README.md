@@ -38,4 +38,8 @@ Additional:
 API
 ---
 
-Execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
+- execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
+- for instance  http://serelex.cental.be/find/norm60-corpus-all/ubuntu
+- the result is a This request should return a set of words related to 'ubuntu' in JSON format
+
+
