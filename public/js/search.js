@@ -19,7 +19,7 @@ $(function(){
 		"Belgium",
 		"France",
 		"mathematics",
-		"physics",
+		"biology",
 		"moose",
 		"racoon",
 		"dog",
