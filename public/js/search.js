@@ -10,8 +10,8 @@ $(function(){
 		"computational linguistics",
 		"machine learning",
 		"weapon",
-		"tank",
-		"plane",
+		"machine gun",
+		"antelope",
 		"airplane",
 		"mango",
 		"strawberry",
@@ -27,7 +27,7 @@ $(function(){
 		"animal",
 		"vegetable",
 		"Moscow",
-		"Paris",
+		"Standord",
 		"Brussels",
 		"Vienna",
 		"Berlin",
@@ -37,7 +37,9 @@ $(function(){
 		"pizza",
 		"hot dog",
 		"hamburger",
-		"soft drink"
+		"soft drink",
+		"cottage cheese",
+		"local speciality"
 	];
 
 	if (advanced)
