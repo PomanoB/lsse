@@ -27,7 +27,7 @@ $(function(){
 		"animal",
 		"vegetable",
 		"Moscow",
-		"Standord",
+		"Stanford",
 		"Brussels",
 		"Vienna",
 		"Berlin",
