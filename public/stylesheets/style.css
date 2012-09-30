@@ -106,3 +106,28 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	color: #888;
 }
+#graph_container
+{
+	left: 560px;
+	right: 20px;
+	top: 100px;
+	bottom: 10px;
+	position: absolute;
+}
+#graph_container>svg
+{
+	width: 100%;
+	height: 100%;
+}
+#graph_container svg .node
+{
+	cursor: pointer;
+}
+#graph_container svg .parent
+{
+	font-weight: bold;
+}
+#graph_container>div
+{
+	display: none;
+}

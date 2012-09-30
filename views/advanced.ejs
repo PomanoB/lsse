@@ -7,6 +7,8 @@
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="/js/vivagraph.js"></script>
+		<script src="/js/jit.js"></script>
 
 		<script>
 			
@@ -25,10 +27,13 @@
 			<% for(var model in lingua.models) {%>
 			   modelHelp["<%= model %>"] = "<%- lingua.models[model] %>";
 			<% } %>
+
+
 		</script>
 
 		<script src="/js/lsse.js"></script>
 		<script src="/js/search.js"></script>
+		<script src="/js/visualization.js"></script>
 
 		<script>
 			$(function(){
@@ -61,7 +66,6 @@
 						$('#show_help').click();
 					}
 				});	
-
 			});
 		</script>
  		<% include counters %>
@@ -97,6 +101,13 @@
 				<li>human</li>
 			</ul>
 		</form>
+
+		<div id="graph_container">
+			<div>
+				<a href="#delete"><%= lingua.visualization.delete_last_node %></a>
+				<a href="#delete_free_nodes"><%= lingua.visualization.delete_all_free_node %></a>
+			</div>
+		</div>
 		<div id="result">
 
 		</div>

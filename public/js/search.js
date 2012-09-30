@@ -1,6 +1,7 @@
+var lsse;
 $(function(){
 	var socket = io.connect();
-	var lsse = new LSSE(socket, '/find');
+	lsse = new LSSE(socket, '/find');
 
 	var showImages = false;
 
@@ -54,17 +55,17 @@ $(function(){
 		return false;
 	});
 
-	$(document).on("click", "#result a", function(){
+	// $(document).on("click", "#result a", function(){
 
-		var newWord = (location.hash = $(this).attr('href')).slice(1);
-		lsse.completeLog(newWord);
+	// 	var newWord = (location.hash = $(this).attr('href')).slice(1);
+	// 	lsse.completeLog(newWord);
 
-		$('#input_word').val(newWord);
-		$('#input_form').submit();
+	// 	$('#input_word').val(newWord);
+	// 	$('#input_form').submit();
 
 
-		return false;
-	});
+	// 	return false;
+	// });
 
 	$('#model').change(function(){
 		$('#input_form').submit();
@@ -171,7 +172,21 @@ $(function(){
 
 	function displayResults(data)
 	{
-		var result;
+		$('#graph_container>div').show();
+		graph.clear();
+		graph.addNode(data.word, {parent: true});
+
+		// graph.graph.empty();
+
+		// var result;
+		// var adjacencies = [];
+		// var graphData = [
+		// 	{
+		// 		adjacencies: adjacencies,
+		// 		id: data.word,
+		// 		name: data.word
+		// 	}
+		// ];	
 
 		if (data.totalRelations > 0)
 		{
@@ -180,6 +195,14 @@ $(function(){
 			result += '<table>';
 			for(i = 0; i < data.relations.length; i++)
 			{
+				if (i <= 20)
+				{
+					// graphData.push({adjacencies: [],	id: data.relations[i].word, name: data.relations[i].word});
+					// adjacencies.push({"nodeTo": data.relations[i].word, "nodeFrom": data.word});
+
+					graph.addNode(data.relations[i].word);
+					graph.addLink(data.word, data.relations[i].word);
+				}
 				result += ('<tr><td>'+ (i + 1)+ '</td>');
 				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
@@ -214,6 +237,21 @@ $(function(){
 			else
 				result = lingua.not_found;
 		}
+
+		// graph.loadJSON(graphData);
+		// graph.computeIncremental({
+		// 	iter: 40,
+		// 	property: 'end',
+		// 	onComplete: function(){
+		// 		console.log('done');
+		// 		graph.animate({
+		// 			modes: ['linear'],
+		// 			transition: $jit.Trans.Elastic.easeOut,
+		// 			duration: 2500
+		// 		});
+		// 	}
+		// });
+
 		$('#result').html(result);
 	}
 });

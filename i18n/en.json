@@ -8,6 +8,10 @@
 		"show_images": "Show Images",
 		"hide_images": "Hide images"
 	},
+	"visualization": {
+		"delete_last_node": "delete last node",
+		"delete_all_free_node": "delete free nodes"
+	},
 	"title": "Lexico-Semantic Search Engine",
 	"about": {
 		"title": "About",
