@@ -193,6 +193,8 @@ $(function(){
 			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
 			result += '<table>';
+			var firstRel = -1;
+
 			for(i = 0; i < data.relations.length; i++)
 			{
 				if (i <= 20)
@@ -200,8 +202,15 @@ $(function(){
 					// graphData.push({adjacencies: [],	id: data.relations[i].word, name: data.relations[i].word});
 					// adjacencies.push({"nodeTo": data.relations[i].word, "nodeFrom": data.word});
 
+					if (i == 0)
+						firstRel = data.relations[i].value;
+
 					graph.addNode(data.relations[i].word);
-					graph.addLink(data.word, data.relations[i].word);
+					graph.addLink(data.word, data.relations[i].word, {
+						word1: data.relations[i].word,
+						word2: data.word,
+						value: 1 - data.relations[i].value/firstRel
+					});
 				}
 				result += ('<tr><td>'+ (i + 1)+ '</td>');
 				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
@@ -254,4 +263,5 @@ $(function(){
 
 		$('#result').html(result);
 	}
+
 });

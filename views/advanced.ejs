@@ -55,7 +55,7 @@
 					}
 					return false;
 				});
-				$('#model_description>a[href="#close"]').click(function(){
+				$('#model_description>a[href="#close"], #grpah_options>a[href="#close"]').click(function(){
 					$(this).parent().hide();
 					return helpDisplayed = false;
 				});
@@ -102,12 +102,62 @@
 			</ul>
 		</form>
 
+		<div id="grpah_options">
+			<a href="#close">x</a>
+			<table>
+				<tr>
+					<td>
+						<label for="graph_option_gravity">Gravity</label>
+					</td>
+					<td>
+						<input type="text" id="graph_option_gravity" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="graph_option_springCoeff">springCoeff</label>
+					</td>
+					<td>
+						<input type="text" id="graph_option_springCoeff" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="graph_option_theta">theta</label>
+					</td>
+					<td>
+						<input type="text" id="graph_option_theta" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="graph_option_drag">drag</label>
+					</td>
+					<td>
+						<input type="text" id="graph_option_drag" />
+					</td>
+				</tr>
+				<tr class="graph_option_links_length_options">
+					<td colspan="2">
+						Spring Len = <input type="text" id="graph_option_links_length_type_a"  class="graph_small_option"/> * REL +
+						<input type="text" id="graph_option_links_length_type_b" class="graph_small_option" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="button" id="graph_apply_button" value="Apply" />
+					</td>
+				</tr>
+			</table>
+		</div>
+
 		<div id="graph_container">
 			<div>
 				<a href="#delete"><%= lingua.visualization.delete_last_node %></a>
 				<a href="#delete_free_nodes"><%= lingua.visualization.delete_all_free_node %></a>
 			</div>
 		</div>
+		
 		<div id="result">
 
 		</div>

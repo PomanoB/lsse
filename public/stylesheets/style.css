@@ -71,7 +71,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	border-left: 0;
 }
 
-#model_description
+#model_description, #grpah_options
 {
 	position: absolute;
 	width: 300px;
@@ -84,8 +84,9 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	margin-left: 10px;
 	background-color: #eee;
 	box-shadow: 3px 3px 6px;
+	z-index: 990;
 }
-#model_description>a[href="#close"]
+#model_description>a[href="#close"], #grpah_options>a[href="#close"]
 {
 	float: right;
 }
@@ -129,5 +130,16 @@ nav>ul>li:first-child, footer>ul>li:first-child
 }
 #graph_container>div
 {
-	display: none;
+	position: absolute;
+	background-color: #fff;
+}
+#grpah_options
+{
+	display: block;
+	position: absolute;
+	left: 300px;
+}
+.graph_small_option
+{
+	width: 50px;
 }

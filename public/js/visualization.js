@@ -156,12 +156,29 @@ $(function(){
 			lsse.search(word, $('#model').val(), 20, function(data){
 				if (data.totalRelations > 0)
 				{
-					var i;
+					var i, link;
+					// var a = parseFloat($('#graph_option_links_length_type_a').val());
+					// var b = parseFloat($('#graph_option_links_length_type_b').val());
+					var firstRel = -1;
+					// graph.beginUpdate();
+
 					for(i = 0; i < data.relations.length; i++)
 					{
-						if (!graph.hasLink(word, data.relations[i].word))
-							graph.addLink(word, data.relations[i].word, {secondary: true});
+						if (i == 0)
+							firstRel = data.relations[i].value;
+
+						link = graph.hasLink(word, data.relations[i].word);
+						if (!link)
+						{
+
+							link = graph.addLink(word, data.relations[i].word, {
+								secondary: true,
+								value: 1 - data.relations[i].value/firstRel
+							});
+						}
 					}
+					// graph.endUpdate();
+					$('#graph_apply_button').click();
 				}
 			});
 		}).click(function(){
@@ -231,4 +248,53 @@ $(function(){
 	renderer.run();
 
 
+	var graphOptions = [
+		'gravity',
+		'springCoeff',
+		'theta',
+		'drag'
+	];
+	var i;
+	for(i = 0; i < graphOptions.length; i++)
+	{
+		$('#graph_option_' + graphOptions[i]).val(layout[graphOptions[i]]());
+	}
+
+	$('#graph_option_links_length_type_a').val(0);
+	$('#graph_option_links_length_type_b').val(layout.springLength());
+
+	$('#graph_apply_button').click(function(){
+		graph.beginUpdate();
+		for(i = 0; i < graphOptions.length; i++)
+		{
+			layout[graphOptions[i]](parseFloat($('#graph_option_' + graphOptions[i]).val()));
+		}
+
+		var a = parseFloat($('#graph_option_links_length_type_a').val());
+		var b = parseFloat($('#graph_option_links_length_type_b').val());
+
+		graph.forEachLink(function(link){
+			link.force_directed_spring.length = a * link.data.value + b;
+		});
+
+		graph.endUpdate();
+	//	layout.run();
+	//	renderer.run();
+	//	graph.fire('resize');
+		graph.addNode('dffsdfasfdsafd');
+		graph.removeNode('dffsdfasfdsafd');
+	});
+
+	$('#graph_toogle_rel_length_button').click(function(){
+		
+
+		var baseLength = layout.springLength();
+
+		
+		
+	});
+
+	$('#graph_option_links_length_type').change(function(){
+		$('tr.graph_option_links_length_options').toggle();
+	});
 });
