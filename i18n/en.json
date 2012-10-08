@@ -9,6 +9,7 @@
 		"hide_images": "Hide images"
 	},
 	"title": "Lexico-Semantic Search Engine",
+	"idea": "finds semantically related words",
 	"about": {
 		"title": "About",
 		"description": "This system is a kind of \"lexico-semantic search engine\". Given a text query it provides a list of related words. A traditional search engine provides as a results a list of related documents. The current version is based on two semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second relies on a text corpus. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be)",
