@@ -26,7 +26,7 @@
 		"not_found_try_perhaps": "Nothing found for \"%s\". Try:",
 		"results_count": "Results count",
 		"results": "results",
-		"for_example": "Find semtically related words. For example"
+		"for_example": "System finds semtically related words. For example"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",
