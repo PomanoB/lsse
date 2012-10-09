@@ -266,11 +266,12 @@ LSSE.prototype.suggest = function(word, limit, callback)
 	});
 }
 
-LSSE.prototype.saveRelevance = function(word, model, relevance){
+LSSE.prototype.saveRelevance = function(word, model, relevance, user){
 	this.relevance.insert({
 		word: word, 
 		model: model, 
-		relevance: relevance
+		relevance: relevance,
+		user: user
 	});
 }
 

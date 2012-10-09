@@ -157,7 +157,12 @@ lsse.openDb(db, function(err){
 		});
 
 		socket.on('save relevance', function (data) {
-			lsse.saveRelevance(data.word, data.model, data.relevance);
+			var address = this.handshake.address;
+			lsse.saveRelevance(data.word, data.model, data.relevance, {
+				ip: address.address + ":" + address.port,
+				useragent: this.handshake.headers['user-agent'],
+				time: Math.floor((new Date()).getTime()/1000)
+			});
 		});
 	});
 });
