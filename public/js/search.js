@@ -47,13 +47,20 @@ $(function(){
 	if (advanced)
 		switchImages();
 
-	$('select.relevance_select').change(function(){
+	// $('select.relevance_select').change(function(){
 
-		$(this).parents('div.relevance').hide();
+	// 	$(this).parents('div.relevance').hide();
 
-		var relevance = parseInt($(this).val());
+	// 	var relevance = parseInt($(this).val());
+	// 	if (relevance <= 3 && relevance >= 1)
+	// 		lsse.saveRelevance(relevance);
+	// });
+	
+	$('ul.relevance_select>li').click(function(){
+		var relevance = parseInt($(this).data('relevance'));
 		if (relevance <= 3 && relevance >= 1)
 			lsse.saveRelevance(relevance);
+		$(this).parents('div.relevance').hide();
 	});
 
 	$('#input_form').submit(function(){

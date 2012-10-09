@@ -114,3 +114,25 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	display: none;
 	max-width: 400px;
 }
+ul.relevance_select
+{
+	list-style-type: none;
+}
+ul.relevance_select>li
+{
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	background-image: url(/images/smile.png);
+	background-repeat: no-repeat;
+	margin: 5px;
+	cursor: pointer;
+}
+ul.relevance_select>li.relevance_mix
+{
+	background-position: -60px 0;
+}
+ul.relevance_select>li.relevance_bad
+{
+	background-position: -120px 0;
+}

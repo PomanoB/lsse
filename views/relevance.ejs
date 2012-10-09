@@ -1,12 +1,10 @@
 <div class="relevance">
-	<div><%= lingua.relevance.please_evaluate_quality %>:</div>
-	<select class="relevance_select">
-		<option value="0" disabled="true" ><%= lingua.relevance.quality_of_result %>:</option>
-		<option value="1"><%= lingua.relevance.relevant %></option>
-		<option value="2"><%= lingua.relevance.mix %></option>
-		<option value="3"><%= lingua.relevance.non_relevant %></option>
-		<option value="3"><%= lingua.relevance.other %></option>
-	</select>
+	<div><%- lingua.relevance.please_evaluate_quality %>:</div>
+	<ul class="relevance_select">
+		<li class="relevance_cool" data-relevance="1" title="<%= lingua.relevance.relevant %>"></li><!-- 
+	--><li class="relevance_mix" data-relevance="2" title="<%= lingua.relevance.mix %>"></li><!-- 
+	--><li class="relevance_bad" data-relevance="3" title="<%= lingua.relevance.non_relevant %>"></li>
+	</ul>
 	<p>
 		<%= lingua.relevance.description %>
 	</p>
