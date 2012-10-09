@@ -46,7 +46,7 @@ var wordsCollection = null;
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word', function(req, res){
-
+	
 	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), 0, function(err, item) {
 		var result = null;
 
@@ -154,6 +154,10 @@ lsse.openDb(db, function(err){
 			lsse.suggest(data.word.toLowerCase(), 10, function(words){
 				socket.emit('suggest result', words);
 			})
+		});
+
+		socket.on('save relevance', function (data) {
+			lsse.saveRelevance(data.word, data.model, data.relevance);
 		});
 	});
 });

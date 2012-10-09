@@ -6,6 +6,7 @@ var LSSE = function(){
 	this.words = null;
 	this.relations = null;
 	this.lemms = null;
+	this.relevance = null;
 };
 
 LSSE.prototype.getPerhaps = function(word){
@@ -230,8 +231,8 @@ LSSE.prototype.dbOpened = function(err, db){
 	}
 
 	var t = this;
-	var collestions = ['words', 'relations', 'lemms'];
-	async.map(collestions, db.collection.bind(db), function(err, results){
+	var collestions = ['words', 'relations', 'lemms', 'relevance'];
+	async.map(collestions, db.createCollection.bind(db), function(err, results){
 		if (err)
 		{
 			t.callback(err);
@@ -262,6 +263,14 @@ LSSE.prototype.suggest = function(word, limit, callback)
 			result.push(items[i].word);
 		}
 		callback(result);
+	});
+}
+
+LSSE.prototype.saveRelevance = function(word, model, relevance){
+	this.relevance.insert({
+		word: word, 
+		model: model, 
+		relevance: relevance
 	});
 }
 

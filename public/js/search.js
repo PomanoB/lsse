@@ -47,6 +47,15 @@ $(function(){
 	if (advanced)
 		switchImages();
 
+	$('select.relevance_select').change(function(){
+
+		$(this).parents('div.relevance').hide();
+
+		var relevance = parseInt($(this).val());
+		if (relevance <= 3 && relevance >= 1)
+			lsse.saveRelevance(relevance);
+	});
+
 	$('#input_form').submit(function(){
 		$('#result').empty();
 		$('#show_all').hide();
@@ -199,9 +208,13 @@ $(function(){
 			result += '</table>';
 			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
+
+			$('div.relevance').show().find('select').val(0);
 		}
 		else
 		{
+			$('div.relevance').hide();
+
 			var pLen = data.perhaps.length;
 			if (pLen > 0)
 			{

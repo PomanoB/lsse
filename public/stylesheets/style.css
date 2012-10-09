@@ -106,3 +106,11 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	color: #888;
 }
+
+.relevance
+{
+	/*position: absolute;*/
+	float: right;
+	display: none;
+	max-width: 400px;
+}
