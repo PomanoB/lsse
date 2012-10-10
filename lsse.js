@@ -250,7 +250,7 @@ LSSE.prototype.dbOpened = function(err, db){
 LSSE.prototype.suggest = function(word, limit, callback)
 {
 
-	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9]/, ''))}, {word: 1, freq: 1})
+	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9\s]/, ''))}, {word: 1, freq: 1})
 				.sort({freq: -1, word: 1}).limit(limit).toArray(function(err, items){
 		if (err)
 		{
