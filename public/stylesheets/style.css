@@ -113,6 +113,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	float: right;
 	display: none;
 	max-width: 400px;
+	margin-top: 20px;
 }
 ul.relevance_select
 {

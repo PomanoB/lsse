@@ -9,7 +9,7 @@
 		"hide_images": "Hide images"
 	},
 	"relevance": {
-		"please_evaluate_quality": "Please, evaluate quality of result. Please remember that you provide your own opinion on the quality of the results. If the words in the results sound related to you -- use 1. If not at all -- use 3. The words in the results should be semantically related to the query in a broad sense. They can be synonyms, hyponyms, co-hyponyms, strong associations...",
+		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",
 		"quality_of_result": "quality of result",
 		"relevant": "relevant -- most of the results are relevant for you",
 		"mix": "mix -- some results are relevant some are not",
