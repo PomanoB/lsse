@@ -1,7 +1,19 @@
 var lsse;
+var graph;
+
 $(function(){
 	var socket = io.connect();
 	lsse = new LSSE(socket, '/find');
+
+	graph = new Visualization({
+		container: $('#graph_container').get(0),
+	//	click: function(){console.log(this, arguments)},
+		dblclick: function(node){
+			lsse.search(node.id, lsse.lastQuery.model, 20, function(data){
+				graph.addData(data, 20, false);
+			}, true);
+		}
+	});
 
 	var showImages = false;
 
@@ -145,7 +157,6 @@ $(function(){
 			currentHighLight = -1;
 			suggestLength = 0;
 			var word = $('#input_word').val().replace(/[^a-zA-Z0-9\s]/, '');
-			console.log("word = \"" + word + "\"");
 			if (word.length >= 2)
 			{
 				lsse.suggest(word, function(words){
@@ -169,6 +180,12 @@ $(function(){
 		// $('#input_word').val($(this).text());
 		// $('#input_form').submit();
 	})
+
+	$('#grpah_options>a[href="#close"]').click(function(){
+		$(this).parent().hide();
+		return false;
+	});
+
 
 	if (location.hash != "")
 	{
@@ -202,25 +219,14 @@ $(function(){
 		var result;
 		
 		$('#graph_container>div').show();
-		graph.clear();
-		graph.addNode(data.word, {parent: true});
-
-		// graph.graph.empty();
-
-		// var result;
-		// var adjacencies = [];
-		// var graphData = [
-		// 	{
-		// 		adjacencies: adjacencies,
-		// 		id: data.word,
-		// 		name: data.word
-		// 	}
-		// ];	
-
 		
-
+		graph.clear();
+		
 		if (data.totalRelations > 0)
 		{
+			graph.addData(data, 20, true);
+			graph.update();
+
 			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
 			var i;
 			result += '<table>';
@@ -228,21 +234,6 @@ $(function(){
 
 			for(i = 0; i < data.relations.length; i++)
 			{
-				if (i <= 20)
-				{
-					// graphData.push({adjacencies: [],	id: data.relations[i].word, name: data.relations[i].word});
-					// adjacencies.push({"nodeTo": data.relations[i].word, "nodeFrom": data.word});
-
-					if (i == 0)
-						firstRel = data.relations[i].value;
-
-					graph.addNode(data.relations[i].word);
-					graph.addLink(data.word, data.relations[i].word, {
-						word1: data.relations[i].word,
-						word2: data.word,
-						value: 1 - data.relations[i].value/firstRel
-					});
-				}
 				result += ('<tr><td>'+ (i + 1)+ '</td>');
 				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
@@ -282,21 +273,6 @@ $(function(){
 				result = lingua.not_found;
 		}
 
-		// graph.loadJSON(graphData);
-		// graph.computeIncremental({
-		// 	iter: 40,
-		// 	property: 'end',
-		// 	onComplete: function(){
-		// 		console.log('done');
-		// 		graph.animate({
-		// 			modes: ['linear'],
-		// 			transition: $jit.Trans.Elastic.easeOut,
-		// 			duration: 2500
-		// 		});
-		// 	}
-		// });
-
 		$('#result').html(result);
 	}
-
 });

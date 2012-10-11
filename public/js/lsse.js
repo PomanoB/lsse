@@ -9,20 +9,23 @@ var LSSE = function(socket, apiAdress)
 
 	this.suggestResults = {};
 
-	this.saveRelevance = function(relevance){
+	this.saveRelevance = function(word, model, relevance){
 		socket.emit('save relevance', { word: this.lastQuery.word, model: this.lastQuery.model, relevance: relevance});
 	}
 
-	this.search = function(word, model, limit, callback){
+	this.search = function(word, model, limit, callback, dontLog){
 
-		if (!this.logCompleted)
+		if (!dontLog)
 		{
-			this.completeLog();
+			if (!this.logCompleted)
+			{
+				this.completeLog();
+			}
+			this.lastQuery.model = model;
+			this.lastQuery.word = word;
+			this.queryTime = (new Date()).getTime();
+			this.logCompleted = false;
 		}
-		this.lastQuery.model = model;
-		this.lastQuery.word = word;
-		this.queryTime = (new Date()).getTime();
-		this.logCompleted = false;
 
 		if (socket)
 		{

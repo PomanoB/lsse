@@ -1,0 +1,104 @@
+<div id="grpah_options">
+	<a href="#close">x</a>
+	<table>
+		<tr>
+			<td>
+				<label for="graph_option_gravity"><%= lingua.visualization.gravity %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_gravity" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_springCoeff"><%= lingua.visualization.springCoeff %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_springCoeff" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_theta"><%= lingua.visualization.theta %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_theta" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_drag"><%= lingua.visualization.drag %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_drag" />
+			</td>
+		</tr>
+		<tr class="graph_option_links_length_options">
+			<td><%= lingua.visualization.spring_len %> = </td>
+			<td>
+				<input type="text" id="graph_option_springLengthA"  class="graph_small_option"/> * <%= lingua.visualization.rel %> +
+				<input type="text" id="graph_option_springLengthB" class="graph_small_option" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" id="graph_apply_button" value="<%= lingua.visualization.apply %>" />
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="graph_container">
+	<div>
+		<a href="#delete"><%= lingua.visualization.delete_last_node %></a>
+		<a href="#delete_free_nodes"><%= lingua.visualization.delete_all_free_node %></a>
+		<br />
+		<a href="#show_options"><%= lingua.visualization.show_options %></a>
+	</div>
+</div>
+
+<script>
+
+
+$(function(){
+
+	$('#graph_container>div>a[href="#delete"]').click(function(){
+		graph.removeCurrentNode();
+		return false;
+	});
+	$('#graph_container>div>a[href="#delete_free_nodes"]').click(function(){
+		graph.removeFreeNodes();
+		return false;
+	});
+	$('#graph_container>div>a[href="#show_options"]').click(function(){
+		$('#grpah_options').toggle();
+		return false;
+	});
+
+	var graphOptions = [
+		'gravity',
+		'springCoeff',
+		'theta',
+		'drag',
+		'springLengthA',
+		'springLengthB'
+	];
+	var i;
+	for(i = 0; i < graphOptions.length; i++)
+	{
+		$('#graph_option_' + graphOptions[i]).val(graph[graphOptions[i]]());
+	}
+
+	$('#graph_apply_button').click(function(){
+
+		var i;
+		for(i = 0; i < graphOptions.length; i++)
+		{
+			graph[graphOptions[i]]($('#graph_option_' + graphOptions[i]).val());
+		}
+
+		graph.update();
+	});
+});
+
+</script>

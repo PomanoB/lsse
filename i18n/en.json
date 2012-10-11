@@ -10,7 +10,15 @@
 	},
 	"visualization": {
 		"delete_last_node": "delete last node",
-		"delete_all_free_node": "delete free nodes"
+		"delete_all_free_node": "delete free nodes",
+		"show_options": "options",
+		"gravity": "Gravity",
+		"springCoeff": "springCoeff",
+		"theta": "theta",
+		"drag": "drag",
+		"spring_len": "Spring len",
+		"rel": "REL",
+		"apply": "Apply"
 	},
 	"relevance": {
 		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",

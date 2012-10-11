@@ -136,9 +136,11 @@ nav>ul>li:first-child, footer>ul>li:first-child
 }
 #grpah_options
 {
-	display: block;
+	display: none;
 	position: absolute;
-	left: 300px;
+	left: 550px;
+	margin-top: -50px;
+	width: 350px;
 }
 .graph_small_option
 {
@@ -148,10 +150,13 @@ nav>ul>li:first-child, footer>ul>li:first-child
 .relevance
 {
 	/*position: absolute;*/
-	float: right;
 	display: none;
 	max-width: 400px;
-	margin-top: 20px;
+	margin-top: -100px;
+	z-index: 999;
+	background-color: #fff;
+	position: absolute;
+	right: 10px;
 }
 ul.relevance_select
 {
