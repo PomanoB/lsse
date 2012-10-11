@@ -6,6 +6,7 @@ var LSSE = function(){
 	this.words = null;
 	this.relations = null;
 	this.lemms = null;
+	this.relevance = null;
 };
 
 LSSE.prototype.getPerhaps = function(word){
@@ -230,8 +231,8 @@ LSSE.prototype.dbOpened = function(err, db){
 	}
 
 	var t = this;
-	var collestions = ['words', 'relations', 'lemms'];
-	async.map(collestions, db.collection.bind(db), function(err, results){
+	var collestions = ['words', 'relations', 'lemms', 'relevance'];
+	async.map(collestions, db.createCollection.bind(db), function(err, results){
 		if (err)
 		{
 			t.callback(err);
@@ -249,7 +250,7 @@ LSSE.prototype.dbOpened = function(err, db){
 LSSE.prototype.suggest = function(word, limit, callback)
 {
 
-	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9]/, ''))}, {word: 1, freq: 1})
+	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9\s]/, ''))}, {word: 1, freq: 1})
 				.sort({freq: -1, word: 1}).limit(limit).toArray(function(err, items){
 		if (err)
 		{
@@ -262,6 +263,15 @@ LSSE.prototype.suggest = function(word, limit, callback)
 			result.push(items[i].word);
 		}
 		callback(result);
+	});
+}
+
+LSSE.prototype.saveRelevance = function(word, model, relevance, user){
+	this.relevance.insert({
+		word: word, 
+		model: model, 
+		relevance: relevance,
+		user: user
 	});
 }
 

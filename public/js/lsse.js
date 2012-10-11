@@ -9,6 +9,10 @@ var LSSE = function(socket, apiAdress)
 
 	this.suggestResults = {};
 
+	this.saveRelevance = function(relevance){
+		socket.emit('save relevance', { word: this.lastQuery.word, model: this.lastQuery.model, relevance: relevance});
+	}
+
 	this.search = function(word, model, limit, callback){
 
 		if (!this.logCompleted)

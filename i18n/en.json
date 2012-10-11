@@ -12,7 +12,17 @@
 		"delete_last_node": "delete last node",
 		"delete_all_free_node": "delete free nodes"
 	},
+	"relevance": {
+		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",
+		"quality_of_result": "quality of result",
+		"relevant": "relevant -- most of the results are relevant for you",
+		"mix": "mix -- some results are relevant some are not",
+		"non_relevant": "non-relevant -- most of the results are not relevant",
+		"other": "other",
+		"description": "Please remember that you provide your own opinion on the quality of the results. If the words in the results sound related to you -- use 1. If not at all -- use 3. The words in the results should be semantically related to the query in a broad sense. They can be synonyms, hyponyms, co-hyponyms, strong associations..."
+	},
 	"title": "Lexico-Semantic Search Engine",
+	"idea": "finds semantically related words",
 	"about": {
 		"title": "About",
 		"description": "This system is a kind of \"lexico-semantic search engine\". Given a text query it provides a list of related words. A traditional search engine provides as a results a list of related documents. The current version is based on two semantic similarity measures -- Serelex and PatternSim. The first relies on definitions of words, while the second relies on a text corpus. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be)",
@@ -29,7 +39,7 @@
 		"not_found_try_perhaps": "Nothing found for \"%s\". Try:",
 		"results_count": "Results count",
 		"results": "results",
-		"for_example": "For example"
+		"for_example": "System finds semantically related words. For example"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",

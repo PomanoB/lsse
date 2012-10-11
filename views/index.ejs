@@ -37,6 +37,7 @@
 	<body>
 		<% include nav %>
 		<h2><%= lingua.title %></h2>
+		
 		<form action="?" id="input_form">
 			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
 			<input type="hidden" name="model" id="model" />
@@ -48,6 +49,8 @@
 				<li>human</li>
 			</ul>
 		</form>
+
+		<% include relevance %>
 
 		<div id="grpah_options">
 			<a href="#close">x</a>

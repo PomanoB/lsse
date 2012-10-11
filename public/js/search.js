@@ -43,13 +43,32 @@ $(function(){
 		"local speciality"
 	];
 
+	var suggestTimeout = null;
+
 	if (advanced)
 		switchImages();
+
+	// $('select.relevance_select').change(function(){
+
+	// 	$(this).parents('div.relevance').hide();
+
+	// 	var relevance = parseInt($(this).val());
+	// 	if (relevance <= 3 && relevance >= 1)
+	// 		lsse.saveRelevance(relevance);
+	// });
+	
+	$('ul.relevance_select>li').click(function(){
+		var relevance = parseInt($(this).data('relevance'));
+		if (relevance <= 3 && relevance >= 1)
+			lsse.saveRelevance(relevance);
+		$(this).parents('div.relevance').hide();
+	});
 
 	$('#input_form').submit(function(){
 		$('#result').empty();
 		$('#show_all').hide();
 		$('#suggest_results').hide();
+		clearTimeout(suggestTimeout);
 
 		lsse.search($('#input_word').val(), $('#model').val(), 20, displayResults);
 		return false;
@@ -90,7 +109,7 @@ $(function(){
 		$('#input_form').submit();
 	});
 
-	var suggestTimeout = null;
+	
 	var currentHighLight = -1;
 	var suggestLength = 0;
 	$('#input_word').keydown(function(e){
@@ -98,7 +117,11 @@ $(function(){
 		if (e.keyCode == 13)
 		{
 			if (currentHighLight != -1)
-				$(this).val($('#suggest_results>li').eq(currentHighLight).text());
+			{
+				location.hash = '#' + $('#suggest_results>li').eq(currentHighLight).text();
+				return false;
+			}
+				// $(this).val($('#suggest_results>li').eq(currentHighLight).text());
 			return;
 		}
 		else
@@ -121,7 +144,8 @@ $(function(){
 		setTimeout(function(){
 			currentHighLight = -1;
 			suggestLength = 0;
-			var word = $('#input_word').val().replace(/[^a-zA-Z0-9]/, '');
+			var word = $('#input_word').val().replace(/[^a-zA-Z0-9\s]/, '');
+			console.log("word = \"" + word + "\"");
 			if (word.length >= 2)
 			{
 				lsse.suggest(word, function(words){
@@ -141,8 +165,9 @@ $(function(){
 	$('#switch_images').click(switchImages);
 
 	$(document).on("click", "#suggest_results>li", function(){
-		$('#input_word').val($(this).text());
-		$('#input_form').submit();
+		location.hash = '#' + $(this).text();
+		// $('#input_word').val($(this).text());
+		// $('#input_form').submit();
 	})
 
 	if (location.hash != "")
@@ -172,6 +197,10 @@ $(function(){
 
 	function displayResults(data)
 	{
+	
+		$('#suggest_results').hide();
+		var result;
+		
 		$('#graph_container>div').show();
 		graph.clear();
 		graph.addNode(data.word, {parent: true});
@@ -187,6 +216,8 @@ $(function(){
 		// 		name: data.word
 		// 	}
 		// ];	
+
+		
 
 		if (data.totalRelations > 0)
 		{
@@ -222,9 +253,13 @@ $(function(){
 			result += '</table>';
 			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
+
+			$('div.relevance').show().find('select').val(0);
 		}
 		else
 		{
+			$('div.relevance').hide();
+
 			var pLen = data.perhaps.length;
 			if (pLen > 0)
 			{
