@@ -144,7 +144,7 @@ $(function(){
 			currentHighLight = -1;
 			suggestLength = 0;
 			var word = $('#input_word').val().replace(/[^a-zA-Z0-9\s]/, '');
-			console.log("word = \"" + word + "\"");
+			// console.log("word = \"" + word + "\"");
 			if (word.length >= 2)
 			{
 				lsse.suggest(word, function(words){
