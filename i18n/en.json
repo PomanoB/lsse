@@ -37,6 +37,7 @@
 		"source_code": "Source code",
 		"this_site": "this site",
 		"publications": "Publications",
+		"simeval": "Extracted relations and evaluation scripts",
 		"api_description": "You can access the system without any limitations as following: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. This request should return a set of words related to 'ubuntu' in JSON format:"
 	},
 	"search": {
