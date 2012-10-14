@@ -51,10 +51,11 @@ app.get('/find/:model/:word/:limit?', function(req, res){
 	
 	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), parseInt(req.params.limit), function(err, item) {
 
-		if (err)
+		if (err || !item)
 		{
 			res.send({word: req.params.word, model: req.params.model, totalRelations: 0});
-			console.log(err);
+			if (err)
+				console.log(err);
 		}
 		else if (item)
 		{
