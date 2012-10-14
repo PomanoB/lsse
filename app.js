@@ -47,9 +47,9 @@ var dataModels = require('./data_models').models;
 
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
-app.get('/find/:model/:word', function(req, res){
+app.get('/find/:model/:word/:limit?', function(req, res){
 	
-	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), 0, function(err, item) {
+	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), parseInt(req.params.limit), function(err, item) {
 
 		if (err)
 		{
