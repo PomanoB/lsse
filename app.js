@@ -43,26 +43,44 @@ app.configure('development', function(){
 
 var wordsCollection = null;
 
+var dataModels = require('./data_models').models;
+
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word', function(req, res){
 	
 	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), 0, function(err, item) {
-		var result = null;
 
 		if (err)
 		{
+			res.send({word: req.params.word, model: req.params.model, totalRelations: 0});
 			console.log(err);
 		}
 		else if (item)
 		{
-			result = item;
+			res.send(item);
 		}
-		res.send(result);
+		
 	})
 });
 
-var dataModels = require('./data_models').models;
+var modelsListForAPI = null;
+app.get('/models', function(req, res){
+
+	if (modelsListForAPI == null)
+	{
+		var i;
+		modelsListForAPI = [];
+		for(i = 0; i < dataModels.length; i++)
+		{
+			modelsListForAPI.push({
+				name: dataModels[i].name, 
+				alias: dataModels[i].alias
+			});
+		}
+	}
+	res.send(modelsListForAPI);
+});
 
 var mongo = require('mongodb'),
 	Server = mongo.Server,
