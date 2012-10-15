@@ -180,3 +180,14 @@ ul.relevance_select>li.relevance_bad
 {
 	background-position: -120px 0;
 }
+
+.social_buttons
+{
+	position: fixed;
+	bottom: 10px;
+	right: 0;
+}
+#vk_like
+{
+	display: inline;
+}

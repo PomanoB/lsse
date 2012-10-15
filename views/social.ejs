@@ -1,0 +1,49 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?57"></script>
+
+<script type="text/javascript">
+  VK.init({
+	apiId: 3177930, 
+	onlyWidgets: true, 
+	pageUrl: 'http://serelex.it-claim.ru',
+	pageImage: 'http://serelex.it-claim.ru/images/serelex.png'
+  });
+</script>
+
+
+<div class="social_buttons">
+	
+	<div>
+		<div class="fb-like" data-href="http://serelex.it-claim.ru" data-send="true" data-width="450" data-show-faces="true"></div>
+
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://serelex.it-claim.ru" data-lang="<%= locale %>" data-size="large">Твитнуть</a>
+	</div>
+	<div>
+		<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+
+		<div id="vk_like"></div>
+		<script type="text/javascript">
+			VK.Widgets.Like("vk_like", {type: "full"});
+		</script>
+	</div>
+</div>
+
+<script type="text/javascript">
+  window.___gcfg = {lang: '<%= locale %>'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
