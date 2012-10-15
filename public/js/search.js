@@ -197,6 +197,8 @@ $(function(){
 	function displayResults(data)
 	{
 		$('#suggest_results').hide();
+		$('.social_buttons').show();
+		
 		var result;
 
 		if (data.totalRelations > 0)
