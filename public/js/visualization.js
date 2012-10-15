@@ -1,9 +1,15 @@
+var LinkType = {
+	PrimaryLink: 1,
+	SecondaryLink: 2,
+	UserLoadedLink: 3
+}
 
 var Visualization = function(options){
 
 	var defOptions = {
 		primaryLinkColor: '#000',
 		secondaryLinkColor: '#888',
+		userLinkColor: '#888',
 		parentNodeColor: '#000',
 		nodeColor: '#00B7FF',
 
@@ -15,9 +21,12 @@ var Visualization = function(options){
 		container: null,
 		dblclick: null,
 		click: null,
+
+		show2ndLinks: false
 	}
 
 	this.options = {};
+	this.parentData = null;
 
 	for(var opt in defOptions)
 	{
@@ -65,6 +74,11 @@ var Visualization = function(options){
 	this.renderer.run();
 };
 
+Visualization.prototype.show2ndLinks = function(show){
+
+}
+
+
 Visualization.prototype.update = function(){
 
 	var a = this.options.springLengthA;
@@ -92,7 +106,7 @@ Visualization.prototype.springLengthB = function(value){
 	else
 		return this.options.springLengthB;
 };
-Visualization.prototype.addData = function(data, limit, parent){
+Visualization.prototype.addData = function(data, limit, type){
 	
 	var i, firstRel;
 
@@ -111,10 +125,12 @@ Visualization.prototype.addData = function(data, limit, parent){
 		{
 			graph.addLink(data.word, data.relations[i].word, {
 				value: 1 - data.relations[i].value/firstRel,
-				secondary: parent === false
+				type: type
 			});
 		}
 	}
+	if (type == LinkType.PrimaryLink)
+		this.parentData = data;
 }
 
 Visualization.prototype.removeFreeNodes = function(){
@@ -128,7 +144,26 @@ Visualization.prototype.removeCurrentNode = function(){
 	this.graph.removeNode(this.currentNode);
 };
 Visualization.prototype.makeLink = function(link){
-	return Viva.Graph.svg('line').attr('stroke', link.data && link.data.secondary ? this.options.secondaryLinkColor : this.options.primaryLinkColor);
+	var color = this.options.primaryLinkColor;
+
+	if (link.data && link.data.type)
+	{
+
+		switch (link.data.type)
+		{
+			case LinkType.PrimaryLink:
+				color = this.options.primaryLinkColor;
+				break;
+			case LinkType.SecondaryLink:
+				color = this.options.secondaryLinkColor;
+				break;
+			case LinkType.UserLoadedLink:
+				color = this.options.userLinkColor;
+				break;
+		}
+		console.log(link, color);
+	}
+	return Viva.Graph.svg('line').attr('stroke', color);
 };
 Visualization.prototype.placeNode = function(nodeUI, pos){
 	nodeUI.attr('transform', 'translate(' + (pos.x - nodeUI.width/2) + ',' + (pos.y - nodeUI.height/2) + ')');

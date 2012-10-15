@@ -10,7 +10,7 @@ $(function(){
 	//	click: function(){console.log(this, arguments)},
 		dblclick: function(node){
 			lsse.search(node.id, lsse.lastQuery.model, 20, function(data){
-				graph.addData(data, 20, false);
+				graph.addData(data, 20, LinkType.UserLoadedLink);
 			}, true);
 		}
 	});
@@ -225,7 +225,7 @@ $(function(){
 		
 		if (data.totalRelations > 0)
 		{
-			graph.addData(data, 20, true);
+			graph.addData(data, 20, LinkType.PrimaryLink);
 			graph.update();
 
 			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';

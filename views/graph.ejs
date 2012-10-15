@@ -41,6 +41,14 @@
 			</td>
 		</tr>
 		<tr>
+			<td>
+				<label for="graph_option_show_2nd">asd</label>
+			</td>
+			<td>
+				<input type="checkbox" id="graph_option_show_2nd" />
+			</td>
+		</tr>
+		<tr>
 			<td colspan="2">
 				<input type="button" id="graph_apply_button" value="<%= lingua.visualization.apply %>" />
 			</td>
@@ -96,7 +104,8 @@ $(function(){
 		{
 			graph[graphOptions[i]]($('#graph_option_' + graphOptions[i]).val());
 		}
-
+		
+		graph.show2ndLinks($('#graph_option_show_2nd').prop('checked'));
 		graph.update();
 	});
 });
