@@ -18,6 +18,7 @@
 		"drag": "drag",
 		"spring_len": "Spring len",
 		"rel": "REL",
+		"show_2nd": "Show secondary links",
 		"apply": "Apply"
 	},
 	"relevance": {

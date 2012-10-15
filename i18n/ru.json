@@ -18,6 +18,7 @@
 		"drag": "drag",
 		"spring_len": "Длинна связей",
 		"rel": "REL",
+		"show_2nd": "Показывать вторичные связи",
 		"apply": "Применить"
 	},
 	"relevance": {

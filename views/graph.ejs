@@ -42,7 +42,7 @@
 		</tr>
 		<tr>
 			<td>
-				<label for="graph_option_show_2nd">asd</label>
+				<label for="graph_option_show_2nd"><%= lingua.visualization.show_2nd %></label>
 			</td>
 			<td>
 				<input type="checkbox" id="graph_option_show_2nd" />
@@ -106,8 +106,61 @@ $(function(){
 		}
 		
 		graph.show2ndLinks($('#graph_option_show_2nd').prop('checked'));
-		graph.update();
-	});
-});
 
+		graph.update();
+
+		toogle2ndLinks();
+
+		$('#grpah_options').hide();
+	});
+
+});
+function toogle2ndLinks(){
+
+	if (!graph.parentData)
+		return;
+
+	var parentWords = [];
+	var i;
+	for(i = 0; i < graph.parentData.relations.length && i <= graph.options.limit2ndLinks; i++)
+		parentWords.push(graph.parentData.relations[i].word);
+	
+	if (graph.show2ndLinks())
+	{
+		for(i = 0; i < graph.parentData.relations.length && i <= graph.options.limit2ndLinks; i++)
+		{
+			lsse.search(graph.parentData.relations[i].word, graph.parentData.model, graph.options.limit2ndLinks, function(data){
+				var j, len = data.relations.length;
+				for(j = 0; j < len; j++)
+				{
+					if (parentWords.indexOf(data.relations[j].word) == -1)
+					{
+						data.relations.splice(j, 1);
+						len --;
+						j --;
+					}	
+				}
+
+				graph.addData(data, graph.options.limit2ndLinks, LinkType.SecondaryLink);
+			}, true);
+		}		
+	}
+	else
+	{
+		var j, link;
+		for(i = 0; i < parentWords.length; i++)
+		{
+			for(j = 0; j < parentWords.length; j++)
+			{
+				if (i == j)
+					continue;
+				link = graph.hasLink(parentWords[i], parentWords[j]);
+
+				if (link /* && link.data && link.data.type == LinkType.SecondaryLink */)
+					graph.removeLink(link);
+			}
+		}
+	}
+
+}
 </script>

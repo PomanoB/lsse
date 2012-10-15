@@ -107,20 +107,20 @@ lsse.openDb(db, function(err){
 	
 	io.sockets.on('connection', function (socket) {
 		socket.on('get relationships', function (data) {
-			data.word = data.word.toLowerCase();
-			data.model = data.model.toLowerCase();
+			data.word = data.word.toString().toLowerCase();
+			data.model = data.model.toString().toLowerCase();
 
 			lsse.getBestRelations(data.word, data.model, data.limit, function(err, item){
 				if (err)
 				{
 					console.log(err);
-					socket.emit('result', {totalRelations: 0, word: data.word});
+					socket.emit('result_' + data.searchId, {totalRelations: 0, word: data.word});
 					return;
 				}
 				if (item)
 				{
 					item.word = data.word;
-					socket.emit('result', item);
+					socket.emit('result_' + data.searchId, item);
 					return;
 				}
 
@@ -144,7 +144,7 @@ lsse.openDb(db, function(err){
 						if (err)
 						{
 							console.log(err);
-							socket.emit('result', {totalRelations: 0});
+							socket.emit('result_' + data.searchId, {totalRelations: 0});
 							return;
 						}
 						var perhaps = [], i;
@@ -158,7 +158,7 @@ lsse.openDb(db, function(err){
 								});
 							}
 						}
-						socket.emit('result', {totalRelations: 0, perhaps: perhaps, word: data.word});
+						socket.emit('result_' + data.searchId, {totalRelations: 0, perhaps: perhaps, word: data.word});
 					});
 
 				});

@@ -249,6 +249,9 @@ $(function(){
 				$('#show_all').show();
 
 			$('div.relevance').show().find('select').val(0);
+
+			if(graph.show2ndLinks())
+				toogle2ndLinks();
 		}
 		else
 		{

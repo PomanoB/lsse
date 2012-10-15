@@ -22,7 +22,8 @@ var Visualization = function(options){
 		dblclick: null,
 		click: null,
 
-		show2ndLinks: false
+		show2ndLinks: false,
+		limit2ndLinks: 20,
 	}
 
 	this.options = {};
@@ -59,7 +60,7 @@ var Visualization = function(options){
 
 	var i;
 
-	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'clear', 'forEachNode', 'forEachLink'];
+	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'clear', 'forEachNode', 'forEachLink', 'removeLink'];
 	var layoutFunctions = ['gravity', 'springCoeff', 'theta', 'drag'];
 
 	for(i = 0; i < graphFunctions.length; i++)
@@ -75,7 +76,9 @@ var Visualization = function(options){
 };
 
 Visualization.prototype.show2ndLinks = function(show){
-
+	if (typeof show == "undefined")
+		return this.options.show2ndLinks;
+	return this.options.show2ndLinks = show;
 }
 
 
@@ -107,7 +110,7 @@ Visualization.prototype.springLengthB = function(value){
 		return this.options.springLengthB;
 };
 Visualization.prototype.addData = function(data, limit, type){
-	
+
 	var i, firstRel;
 
 	if (!limit)
@@ -161,7 +164,6 @@ Visualization.prototype.makeLink = function(link){
 				color = this.options.userLinkColor;
 				break;
 		}
-		console.log(link, color);
 	}
 	return Viva.Graph.svg('line').attr('stroke', color);
 };

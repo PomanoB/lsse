@@ -29,8 +29,9 @@ var LSSE = function(socket, apiAdress)
 
 		if (socket)
 		{
-			socket.once('result', callback);
-			socket.emit('get relationships', { word: word, model: model, limit: limit});
+			var searchId = Math.floor(Math.random() * 9999999);
+			socket.once('result_' + searchId, callback);
+			socket.emit('get relationships', { word: word, model: model, limit: limit, searchId: searchId});
 		}
 		else
 			$.getJSON(apiAdress + '/' + model + '/' + word).success(callback);
