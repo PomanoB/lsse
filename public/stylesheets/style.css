@@ -183,9 +183,14 @@ ul.relevance_select>li.relevance_bad
 
 .social_buttons
 {
-	position: fixed;
-	bottom: 10px;
+	position: absolute;
 	right: 0;
+	top: 150px;
+	display: none;
+}
+.fb-like
+{
+	top: -3px;
 }
 #vk_like
 {

@@ -1,10 +1,21 @@
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
+
+	var locales = {
+		"ru": "ru_RU",
+		"en": "en_US"
+	};
+	var currLocale = "<%= locale %>";
+	if (typeof locales[currLocale] != "undefined")
+		currLocale = locales[currLocale];
+	else
+		currLocale = "en_US";
+
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/" + currLocale + "/all.js#xfbml=1";
+	fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?57"></script>
@@ -18,22 +29,19 @@
   });
 </script>
 
-
 <div class="social_buttons">
 	
-	<div>
-		<div class="fb-like" data-href="http://serelex.it-claim.ru" data-send="true" data-width="450" data-show-faces="true"></div>
+	<div class="fb-like" data-href="http://serelex.it-claim.ru" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
 
-		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://serelex.it-claim.ru" data-lang="<%= locale %>" data-size="large">Твитнуть</a>
-	</div>
-	<div>
-		<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://serelex.it-claim.ru" data-lang="<%= locale %>">Твитнуть</a>
+	
+	<div id="vk_like"></div>
+	<script type="text/javascript">
+		VK.Widgets.Like("vk_like", {type: "mini", height: 20});
+	</script>
 
-		<div id="vk_like"></div>
-		<script type="text/javascript">
-			VK.Widgets.Like("vk_like", {type: "full"});
-		</script>
-	</div>
+	<div class="g-plusone" data-size="medium" data-href="http://serelex.it-claim.ru"></div>
+		
 </div>
 
 <script type="text/javascript">

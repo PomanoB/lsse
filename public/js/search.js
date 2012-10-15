@@ -217,6 +217,8 @@ $(function(){
 	{
 	
 		$('#suggest_results').hide();
+		$('.social_buttons').show();
+		
 		var result;
 		
 		$('#graph_container>div').show();
