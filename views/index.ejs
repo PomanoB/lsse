@@ -27,6 +27,8 @@
 
 			$(function(){
 				$('#model').val(defaultModel);
+
+				$('#graph_container>div').hide();
 			});
 			
 		</script>
@@ -46,7 +48,7 @@
 			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
 			<input type="hidden" name="model" id="model" />
 			<input type="submit" value="<%= lingua.search.search %>" />
-			<div id="example_search"><%= lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
+			<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
 			<ul id="suggest_results">
 				<li>dog</li>
 				<li>cat</li>

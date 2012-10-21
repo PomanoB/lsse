@@ -110,7 +110,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 
 #graph_container
 {
-	left: 560px;
+	left: 450px;
 	right: 20px;
 	top: 100px;
 	bottom: 10px;
@@ -132,6 +132,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 #graph_container>div
 {
 	position: absolute;
+	right: 0;
 	background-color: #fff;
 }
 #grpah_options
@@ -195,4 +196,10 @@ ul.relevance_select>li.relevance_bad
 #vk_like
 {
 	display: inline;
+}
+#show_help, #model
+{
+	z-index: 999;
+	position:relative;
+	background-color: #fff;
 }

@@ -8,7 +8,7 @@ var Visualization = function(options){
 
 	var defOptions = {
 		primaryLinkColor: '#000',
-		secondaryLinkColor: '#888',
+		secondaryLinkColor: '#DDD',
 		userLinkColor: '#888',
 		parentNodeColor: '#000',
 		nodeColor: '#00B7FF',
@@ -27,7 +27,7 @@ var Visualization = function(options){
 	}
 
 	this.options = {};
-	this.parentData = null;
+	this.secondLinksNodes = [];
 
 	for(var opt in defOptions)
 	{
@@ -60,7 +60,7 @@ var Visualization = function(options){
 
 	var i;
 
-	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'clear', 'forEachNode', 'forEachLink', 'removeLink'];
+	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'clear', 'forEachNode', 'forEachLink', 'removeLink', 'getNode'];
 	var layoutFunctions = ['gravity', 'springCoeff', 'theta', 'drag'];
 
 	for(i = 0; i < graphFunctions.length; i++)
@@ -111,17 +111,23 @@ Visualization.prototype.springLengthB = function(value){
 };
 Visualization.prototype.addData = function(data, limit, type){
 
-	var i, firstRel;
+	var i, firstRel = -1;
 
 	if (!limit)
 		limit = Infinity;
 
-	this.graph.addNode(data.word, {parent: parent === true});
+	this.graph.addNode(data.word, {parent: type === LinkType.PrimaryLink});
 
 	for(i = 0; i < data.relations.length && i <= limit; i++)
 	{
-		if (i == 0)
+		if (data.relations[i].word == "constructor" || data.relations[i].word == "prototype")
+			continue;
+
+		if (firstRel == -1)
 			firstRel = data.relations[i].value + 0.001;
+
+		if (type != LinkType.SecondaryLink && i < this.options.limit2ndLinks && this.secondLinksNodes.indexOf(data.relations[i].word) == -1)
+			this.secondLinksNodes.push(data.relations[i].word);
 
 		graph.addNode(data.relations[i].word);
 		if (!graph.hasLink(data.word, data.relations[i].word))
@@ -132,19 +138,25 @@ Visualization.prototype.addData = function(data, limit, type){
 			});
 		}
 	}
-	if (type == LinkType.PrimaryLink)
-		this.parentData = data;
 }
 
 Visualization.prototype.removeFreeNodes = function(){
-	var graph = this.graph;
+	var graph = this;
 	graph.forEachNode(function(node){
 		if (node.links.length <= 0)
-			graph.removeNode(node.id);
+		{	graph.removeNode(node.id);
+		
+			var i = graph.secondLinksNodes.indexOf(node.id);
+			if (i != -1)
+				graph.secondLinksNodes.splice(i, 1);
+		}
 	});
 };
 Visualization.prototype.removeCurrentNode = function(){
 	this.graph.removeNode(this.currentNode);
+	var i = this.secondLinksNodes.indexOf(this.currentNode);
+	if (i != -1)
+		this.secondLinksNodes.splice(i, 1);
 };
 Visualization.prototype.makeLink = function(link){
 	var color = this.options.primaryLinkColor;
@@ -190,21 +202,38 @@ Visualization.prototype.makeNode = function(node) {
 	{
 		ui.attr('fill', this.options.parentNodeColor);
 		ui.attr('class', 'parent node');
-	}	
+	}
 	else
 		ui.attr('fill', this.options.nodeColor);
 
-	$(ui).click(function(){
+	/*
+	.click(function(){
 		t.currentNode = $(this).text();
 
-		if (t.options.click)
-			t.options.click.call(t, t.graph.getNode(t.currentNode));
+	//	if (t.options.click)
+	//		t.options.click.call(t, t.graph.getNode(t.currentNode));
 
-	}).dblclick(function(){
+	})
+*/
+	$(ui).dblclick(function(){
 		t.currentNode = $(this).text();
 
 		if (t.options.dblclick)
 			t.options.dblclick.call(t, t.graph.getNode(t.currentNode));
+	}).mousedown(function(e){
+		if (e.button == 0)
+		{
+			this.clientX = e.clientX;
+			this.clientY = e.clientY;
+		}
+		t.currentNode = $(this).text();
+	}).mouseup(function(e){
+		if (e.button == 0 && this.clientX == e.clientX && this.clientY == e.clientY && t.options.click)
+		{
+			t.options.click.call(t, t.graph.getNode(t.currentNode));
+		}
+		this.clientX = null;
+		this.clientY = null;
 	});
 
 	return ui;

@@ -8,9 +8,11 @@ $(function(){
 	graph = new Visualization({
 		container: $('#graph_container').get(0),
 	//	click: function(){console.log(this, arguments)},
-		dblclick: function(node){
+		click: function(node){
 			lsse.search(node.id, lsse.lastQuery.model, 20, function(data){
 				graph.addData(data, 20, LinkType.UserLoadedLink);
+				if (graph.show2ndLinks())
+					show2ndLinks();
 			}, true);
 		}
 	});
@@ -221,7 +223,7 @@ $(function(){
 		
 		var result;
 		
-		$('#graph_container>div').show();
+	//	$('#graph_container>div').show();
 		
 		graph.clear();
 		
@@ -248,7 +250,7 @@ $(function(){
 			if (data.relations.length < data.totalRelations)
 				$('#show_all').show();
 
-			$('div.relevance').show().find('select').val(0);
+		//	$('div.relevance').show().find('select').val(0);
 
 			if(graph.show2ndLinks())
 				toogle2ndLinks();
