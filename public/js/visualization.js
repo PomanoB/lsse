@@ -60,7 +60,7 @@ var Visualization = function(options){
 
 	var i;
 
-	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'clear', 'forEachNode', 'forEachLink', 'removeLink', 'getNode'];
+	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'forEachNode', 'forEachLink', 'removeLink', 'getNode'];
 	var layoutFunctions = ['gravity', 'springCoeff', 'theta', 'drag'];
 
 	for(i = 0; i < graphFunctions.length; i++)
@@ -74,6 +74,11 @@ var Visualization = function(options){
 
 	this.renderer.run();
 };
+Visualization.prototype.clear = function(){
+	this.secondLinksNodes = [];
+	this.currentNode = "";
+	this.graph.clear();
+}
 
 Visualization.prototype.show2ndLinks = function(show){
 	if (typeof show == "undefined")
