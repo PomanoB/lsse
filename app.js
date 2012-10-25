@@ -124,8 +124,19 @@ lsse.openDb(db, function(err){
 					return;
 				}
 
-				var words = lsse.getPerhaps(data.word);
+				var words = [];
+				var corrected = lsse.correctWord(data.word, 2);
 
+				if (corrected.length > 0)
+				{
+					var i;
+					for(i = 0; i < corrected.length && i < 10; i++)
+						words.push(corrected[i].word);
+				}
+				else
+				{
+					words = lsse.getPerhaps(data.word);
+				}
 				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
 				    var i, j;
 				    for(i = 0; i < results.length; i++)
@@ -166,7 +177,6 @@ lsse.openDb(db, function(err){
 		});
 
 		socket.on('log', function (data) {
-			console.log(data);
 			data.user = {
 				ip: this.handshake.address.address + ":" + this.handshake.address.port,
 				useragent: this.handshake.headers['user-agent'],
