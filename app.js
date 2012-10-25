@@ -166,6 +166,12 @@ lsse.openDb(db, function(err){
 		});
 
 		socket.on('log', function (data) {
+			console.log(data);
+			data.user = {
+				ip: this.handshake.address.address + ":" + this.handshake.address.port,
+				useragent: this.handshake.headers['user-agent'],
+				socket_id: this.id
+			}
 			logger.writeLogEntry(data);
 		});
 

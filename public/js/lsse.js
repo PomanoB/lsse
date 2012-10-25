@@ -19,7 +19,7 @@ var LSSE = function(socket, apiAdress)
 		{
 			if (!this.logCompleted)
 			{
-				this.completeLog();
+				this.completeLog(word);
 			}
 			this.lastQuery.model = model;
 			this.lastQuery.word = word;
