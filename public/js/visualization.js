@@ -22,7 +22,7 @@ var Visualization = function(options){
 		dblclick: null,
 		click: null,
 
-		show2ndLinks: false,
+		show2ndLinks: true,
 		limit2ndLinks: 20,
 	}
 
