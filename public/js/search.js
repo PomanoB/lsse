@@ -20,6 +20,7 @@ $(function(){
 	var showImages = false;
 
 	var sampleSearch = [
+		"python",
 		"jaguar",
 		"blackberry",
 		"flash",		
