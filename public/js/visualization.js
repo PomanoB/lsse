@@ -3,14 +3,20 @@ var LinkType = {
 	SecondaryLink: 2,
 	UserLoadedLink: 3
 }
+var NodeType = {
+	ParentNode: 1,
+	NormalNode: 2,
+	UserClickNode: 3
+}
 
 var Visualization = function(options){
 
 	var defOptions = {
 		primaryLinkColor: '#000',
 		secondaryLinkColor: '#DDD',
-		userLinkColor: '#888',
+		userLinkColor: '#DDD',
 		highlightLinkColor: '#f00',
+		highlightNodeColor: '#f00',
 		parentNodeColor: '#000',
 		nodeColor: '#00B7FF',
 
@@ -127,7 +133,13 @@ Visualization.prototype.addData = function(data, limit, type){
 	if (!limit)
 		limit = Infinity;
 
-	this.graph.addNode(data.word, {parent: type === LinkType.PrimaryLink});
+	if (!this.graph.getNode(data.word))
+	{
+		this.graph.addNode(data.word, {
+			parent: type === LinkType.PrimaryLink, 
+			type: type === LinkType.PrimaryLink ? NodeType.ParentNode : NodeType.NormalNode
+		});
+	}
 
 	for(i = 0; i < data.relations.length && i <= limit; i++)
 	{
@@ -140,7 +152,13 @@ Visualization.prototype.addData = function(data, limit, type){
 		if (type != LinkType.SecondaryLink && i < this.options.limit2ndLinks && this.secondLinksNodes.indexOf(data.relations[i].word) == -1)
 			this.secondLinksNodes.push(data.relations[i].word);
 
-		graph.addNode(data.relations[i].word);
+		if (!this.graph.getNode(data.relations[i].word))
+		{
+			graph.addNode(data.relations[i].word, {
+				parent: false,
+				type: NodeType.NormalNode
+			});
+		}
 		if (!graph.hasLink(data.word, data.relations[i].word))
 		{
 			graph.addLink(data.word, data.relations[i].word, {

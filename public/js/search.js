@@ -14,6 +14,7 @@ $(function(){
 				if (graph.show2ndLinks())
 					show2ndLinks();
 			}, true);
+			node.data.type = NodeType.UserClickNode;
 			node.ui.attr('class', 'parent node').attr('fill', graph.options.parentNodeColor);
 			// if (!node.data.parent)
 			// {
@@ -27,11 +28,13 @@ $(function(){
 		mouseover: function(node){
 			graph.forEachLinkedNode(node.id, function(node, link){
 				link.ui.attr('stroke', graph.options.highlightLinkColor);
+				node.ui.attr('fill', graph.options.highlightNodeColor);				
 			});
 		},
 		mouseout: function(node){
 			graph.forEachLinkedNode(node.id, function(node, link){
 				link.ui.attr('stroke', graph.getLinkColorByType(link.data.type));
+				node.ui.attr('fill', (node.data.parent || node.data.type == NodeType.UserClickNode) ? graph.options.parentNodeColor : graph.options.nodeColor);	
 			});
 		}
 	});
