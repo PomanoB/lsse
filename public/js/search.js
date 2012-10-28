@@ -39,6 +39,19 @@ $(function(){
 	var showImages = false;
 
 	var sampleSearch = [
+		"python",
+		"jaguar",
+		"blackberry",
+		"flash",		
+		"brother",
+		"operating system",
+		"java",
+		"ruby",
+		"fedora",
+		"linux",
+		"queen",
+		"windows",
+		"zurich",
 		"fruit",
 		"vehicle",
 		"computational linguistics",
