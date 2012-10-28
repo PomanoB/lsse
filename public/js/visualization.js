@@ -10,6 +10,7 @@ var Visualization = function(options){
 		primaryLinkColor: '#000',
 		secondaryLinkColor: '#DDD',
 		userLinkColor: '#888',
+		highlightLinkColor: '#f00',
 		parentNodeColor: '#000',
 		nodeColor: '#00B7FF',
 
@@ -21,6 +22,8 @@ var Visualization = function(options){
 		container: null,
 		dblclick: null,
 		click: null,
+		mouseout: null,
+		mouseover: null,
 
 		show2ndLinks: true,
 		limit2ndLinks: 20,
@@ -60,7 +63,10 @@ var Visualization = function(options){
 
 	var i;
 
-	var graphFunctions = ['removeNode', 'addNode', 'hasLink', 'addLink', 'forEachNode', 'forEachLink', 'removeLink', 'getNode'];
+	var graphFunctions = ['removeNode', 'addNode', 
+							'hasLink', 'addLink', 'forEachNode', 
+							'forEachLink', 'removeLink', 'getNode', 'forEachLinkedNode'
+							];
 	var layoutFunctions = ['gravity', 'springCoeff', 'theta', 'drag'];
 
 	for(i = 0; i < graphFunctions.length; i++)
@@ -163,24 +169,32 @@ Visualization.prototype.removeCurrentNode = function(){
 	if (i != -1)
 		this.secondLinksNodes.splice(i, 1);
 };
+
+Visualization.prototype.getLinkColorByType = function(type){
+
+	var color = this.options.primaryLinkColor;
+	switch (type)
+	{
+		case LinkType.PrimaryLink:
+			color = this.options.primaryLinkColor;
+			break;
+		case LinkType.SecondaryLink:
+			color = this.options.secondaryLinkColor;
+			break;
+		case LinkType.UserLoadedLink:
+			color = this.options.userLinkColor;
+			break;
+	}
+
+	return color;
+}
+
 Visualization.prototype.makeLink = function(link){
 	var color = this.options.primaryLinkColor;
 
 	if (link.data && link.data.type)
 	{
-
-		switch (link.data.type)
-		{
-			case LinkType.PrimaryLink:
-				color = this.options.primaryLinkColor;
-				break;
-			case LinkType.SecondaryLink:
-				color = this.options.secondaryLinkColor;
-				break;
-			case LinkType.UserLoadedLink:
-				color = this.options.userLinkColor;
-				break;
-		}
+		color = this.getLinkColorByType(link.data.type);
 	}
 	return Viva.Graph.svg('line').attr('stroke', color);
 };
@@ -220,11 +234,11 @@ Visualization.prototype.makeNode = function(node) {
 
 	})
 */
-	$(ui).dblclick(function(){
+	$(ui).dblclick(function(e){
 		t.currentNode = $(this).text();
 
 		if (t.options.dblclick)
-			t.options.dblclick.call(t, t.graph.getNode(t.currentNode));
+			t.options.dblclick.call(t, t.graph.getNode(t.currentNode), e);
 	}).mousedown(function(e){
 		if (e.button == 0)
 		{
@@ -235,10 +249,17 @@ Visualization.prototype.makeNode = function(node) {
 	}).mouseup(function(e){
 		if (e.button == 0 && this.clientX == e.clientX && this.clientY == e.clientY && t.options.click)
 		{
-			t.options.click.call(t, t.graph.getNode(t.currentNode));
+			t.options.click.call(t, t.graph.getNode(t.currentNode), e);
 		}
 		this.clientX = null;
 		this.clientY = null;
+		
+	}).mouseout(function(e){
+		if (t.options.mouseout)
+			t.options.mouseout.call(t, t.graph.getNode($(this).text()), e);
+	}).mouseover(function(e){
+		if (t.options.mouseover)
+			t.options.mouseover.call(t, t.graph.getNode($(this).text()), e);
 	});
 
 	return ui;

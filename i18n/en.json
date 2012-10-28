@@ -6,7 +6,9 @@
 		"english": "In English",
 		"russian": "По-русски",
 		"show_images": "Show Images",
-		"hide_images": "Hide images"
+		"hide_images": "Hide images",
+		"hide_second_links": "Hide Secondary Links",
+		"show_second_links": "Show Secondary Links"
 	},
 	"visualization": {
 		"delete_last_node": "delete last node",
