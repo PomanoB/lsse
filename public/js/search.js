@@ -119,7 +119,9 @@ $(function(){
 		$('#suggest_results').hide();
 		clearTimeout(suggestTimeout);
 
-		lsse.search($('#input_word').val(), $('#model').val(), 20, displayResults);
+		var word = $('#input_word').val();
+		location.hash = "#" + word;
+		lsse.search(word, $('#model').val(), 20, displayResults);
 		return false;
 	});
 
@@ -154,8 +156,12 @@ $(function(){
 	});
 	
 	$(window).on('hashchange', function(){
-		$('#input_word').val(location.hash.slice(1));
-		$('#input_form').submit();
+		var hashWord = location.hash.slice(1);
+		if (lsse.lastQuery.word != hashWord)
+		{
+			$('#input_word').val(location.hash.slice(1));
+			$('#input_form').submit();
+		}
 	});
 
 	
@@ -323,7 +329,7 @@ $(function(){
 				for(i = 0; i < pLen; i++)
 				{
 					result += ('<li><a href="#' + data.perhaps[i].word + '">' + data.perhaps[i].word + '</a>');
-					result += (' - ' + data.perhaps[i].totalRelations + ' ' + lingua.results);
+					result += (' - ' + data.perhaps[i].totalRelations + ' ' + plural(data.perhaps[i].totalRelations, lingua.results));
 				}
 				result += "</ul>";
 			}
@@ -334,3 +340,10 @@ $(function(){
 		$('#result').html(result);
 	}
 });
+
+function plural(n, variants)
+{
+	return variants[(
+		(n % 10 == 1 && n % 100 != 11) ? 0 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)
+	)];
+}
