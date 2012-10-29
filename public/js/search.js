@@ -14,12 +14,47 @@ $(function(){
 				if (graph.show2ndLinks())
 					show2ndLinks();
 			}, true);
+			node.data.type = NodeType.UserClickNode;
+			node.ui.attr('class', 'parent node').attr('fill', graph.options.parentNodeColor);
+			// if (!node.data.parent)
+			// {
+			// 	node.data.parent = true;
+			// 	graph.forEachLinkedNode(node.id, function(node, link){
+			// 		link.data.type = LinkType.PrimaryLink;
+			// 		link.ui.attr('stroke', graph.getLinkColorByType(LinkType.PrimaryLink));
+			// 	})
+			// }
+		},
+		mouseover: function(node){
+			graph.forEachLinkedNode(node.id, function(node, link){
+				link.ui.attr('stroke', graph.options.highlightLinkColor);
+				node.ui.attr('fill', graph.options.highlightNodeColor);				
+			});
+		},
+		mouseout: function(node){
+			graph.forEachLinkedNode(node.id, function(node, link){
+				link.ui.attr('stroke', graph.getLinkColorByType(link.data.type));
+				node.ui.attr('fill', (node.data.parent || node.data.type == NodeType.UserClickNode) ? graph.options.parentNodeColor : graph.options.nodeColor);	
+			});
 		}
 	});
 
 	var showImages = false;
 
 	var sampleSearch = [
+		"python",
+		"jaguar",
+		"blackberry",
+		"flash",		
+		"brother",
+		"operating system",
+		"java",
+		"ruby",
+		"fedora",
+		"linux",
+		"queen",
+		"windows",
+		"zurich",
 		"fruit",
 		"vehicle",
 		"computational linguistics",
@@ -189,6 +224,21 @@ $(function(){
 		return false;
 	});
 
+
+	$('#switch_secondary_links').click(function(){
+		if (graph.show2ndLinks())
+		{
+			hide2ndLinks();
+			$(this).text(lingua.show_second_links);
+		}
+		else
+		{
+			show2ndLinks();
+			$(this).text(lingua.hide_second_links);
+		}	
+
+		return false;
+	});
 
 	if (location.hash != "")
 	{

@@ -21,7 +21,9 @@
 				results_count: "<%= lingua.search.results_count %>",
 				results: "<%= lingua.search.results %>",
 				show_images: "<%= lingua.nav.show_images %>",
-				hide_images: "<%= lingua.nav.hide_images %>"
+				hide_images: "<%= lingua.nav.hide_images %>",
+				hide_second_links: "<%= lingua.nav.hide_second_links %>",
+				show_second_links: "<%= lingua.nav.show_second_links %>"
 			};
 			var defaultModel = 'norm60-corpus-all';
 
@@ -29,6 +31,8 @@
 				$('#model').val(defaultModel);
 
 				$('#graph_container>div').hide();
+
+				$('#graph_container').css('left', '400px');
 			});
 			
 		</script>

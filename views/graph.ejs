@@ -116,6 +116,11 @@ $(function(){
 		$('#grpah_options').hide();
 	});
 
+	if (graph.show2ndLinks())
+		$('#switch_secondary_links').text(lingua.hide_second_links);
+	else
+		$('#switch_secondary_links').text(lingua.show_second_links);
+
 });
 
 function hide2ndLinks()
@@ -130,6 +135,7 @@ function hide2ndLinks()
 	{
 		graph.removeLink(removeLinks[i]);
 	}
+	graph.show2ndLinks(false);
 }
 
 function show2ndLinks()
@@ -150,6 +156,7 @@ function show2ndLinks()
 			}
 			graph.addData(data, graph.options.limit2ndLinks, LinkType.SecondaryLink);
 		}, true);
-	}	
+	}
+	graph.show2ndLinks(true);
 }
 </script>
