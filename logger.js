@@ -16,8 +16,13 @@ LsseLogger.prototype.pad = function (val, len) {
 };
 LsseLogger.prototype.writeLogEntry = function(data){
 	var date = new Date();
-	var fileName = this.logDir + '/' + this.pad(date.getDate()) + '_' + this.pad(date.getMonth()) + '_' + date.getFullYear() + '.log';
-	fs.appendFile(fileName, Math.floor(data.time/1000) + ';"' + data.query.model + '/' + data.query.word + '";"' + (typeof data.click == "undefined" ? '' : data.click) + '"\n');
+	var fileName = this.logDir + '/' + this.pad(date.getDate()) + '_' + this.pad(date.getMonth() + 1) + '_' + date.getFullYear() + '.log';
+	fs.appendFile(
+		fileName, 
+		Math.floor(data.time/1000) + ';"' + data.query.model + '/' + data.query.word + '";"' + 
+		(typeof data.click == "undefined" ? '' : data.click) + '";"' +
+		JSON.stringify(data.user).replace("\"", "\\\"") + 
+		'"\n');
 }
 
 module.exports = LsseLogger;

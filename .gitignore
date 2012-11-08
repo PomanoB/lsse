@@ -19,3 +19,5 @@ data/*
 
 *.sublime-project
 *.sublime-workspace
+
+test.js

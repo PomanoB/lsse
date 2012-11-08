@@ -1,4 +1,5 @@
 var async = require("async");
+var Trie = require("./tree");
 
 var ObjectID = require('mongodb').ObjectID;
 
@@ -7,7 +8,37 @@ var LSSE = function(){
 	this.relations = null;
 	this.lemms = null;
 	this.relevance = null;
+
+	this.searchTree = new Trie();
 };
+
+LSSE.prototype.correctWord = function(word, cost){
+
+	var results = this.searchTree.search(word, cost);
+
+	results.sort(function(a, b){
+		return a.cost - b.cost;
+	});
+	return results;
+}
+
+LSSE.prototype.loadTree = function(callback){
+	var t = this;
+	this.words.find().sort({word: 1}).toArray(function(err, items){
+		if(err) 
+		{
+			callback(err);
+			return;
+		}
+		var i;
+		for(i = 0; i < items.length; i++)
+		{
+			t.searchTree.insert(items[i].word);
+		}
+		
+		callback();
+	});
+}
 
 LSSE.prototype.getPerhaps = function(word){
 	var words = word.trim().split(/\s+/);
@@ -243,6 +274,8 @@ LSSE.prototype.dbOpened = function(err, db){
 		{
 			t.lsse[collestions[i]] = results[i];
 		}
+
+		// t.lsse.loadTree(t.callback)
 		t.callback(null);
 	});
 };
