@@ -77,7 +77,7 @@ LSSE.prototype.getLemma = function(word, callback){
 	});
 };
 
-LSSE.prototype.getBestRelations = function(word, model, limit, callback){
+LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
 	var t = this;
 
 	this.getLemma(word, function(err, lemms){
@@ -117,6 +117,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 				item.relations.sort(function(a, b){
 					return b.value - a.value;
 				});
+				item.relations.splice(0, skip);
 				item.relations.splice(limit, item.totalRelations - limit);
 			}
 
@@ -132,7 +133,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, callback){
 	});
 }
 
-LSSE.prototype.getRelations = function(word, model, limit, callback){
+LSSE.prototype.getRelations = function(word, model, limit, skip, callback){
 	var t = this;
 	this.loadRelations(word, model, function(err, item){
 		if (err)
@@ -150,7 +151,9 @@ LSSE.prototype.getRelations = function(word, model, limit, callback){
 			item.relations.sort(function(a, b){
 				return b.value - a.value;
 			});
-			item.relations.splice(limit, item.totalRelations - limit);
+
+			item.relations.splice(0, skip);
+			item.relations.splice(limit, item.totalRelations - limit - skip);
 		}
 
 		t.loadRelationsWords(item, function(err){

@@ -21,7 +21,7 @@ LsseLogger.prototype.writeLogEntry = function(data){
 		fileName, 
 		Math.floor(data.time/1000) + ';"' + data.query.model + '/' + data.query.word + '";"' + 
 		(typeof data.click == "undefined" ? '' : data.click) + '";"' +
-		JSON.stringify(data.user).replace("\"", "\\\"") + 
+		JSON.stringify(data.user).replace(/"/g, "\\\"") + 
 		'"\n');
 }
 

@@ -47,9 +47,28 @@ var dataModels = require('./data_models').models;
 
 app.get('/', routes.index);
 app.get('/page/:page', routes.page);
-app.get('/find/:model/:word/:limit?', function(req, res){
+app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
 	
-	lsse.getBestRelations(req.params.word.toLowerCase(), req.params.model.toLowerCase(), parseInt(req.params.limit), function(err, item) {
+	var data = {
+		time: (new Date()).getTime(),
+		query: {
+			model: req.params.model,
+			word: req.params.word
+		},
+		user: {
+			useragent: req.headers['user-agent'],
+			ip: req.connection.remoteAddress + ":" + req.connection.remotePort,
+			socket_id: req.headers['x-user-id'] || "API REQUEST"
+		}
+	}
+	logger.writeLogEntry(data);
+
+	lsse.getBestRelations(
+		req.params.word.toLowerCase(), 
+		req.params.model.toLowerCase(), 
+		parseInt(req.params.limit), 
+		parseInt(req.params.skip), 
+		function(err, item) {
 
 		if (err || !item)
 		{
@@ -110,7 +129,7 @@ lsse.openDb(db, function(err){
 			data.word = data.word.toString().toLowerCase();
 			data.model = data.model.toString().toLowerCase();
 
-			lsse.getBestRelations(data.word, data.model, data.limit, function(err, item){
+			lsse.getBestRelations(data.word, data.model, data.limit, data.skip || 0, function(err, item){
 				if (err)
 				{
 					console.log(err);
