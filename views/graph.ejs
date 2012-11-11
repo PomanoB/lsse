@@ -142,7 +142,7 @@ function show2ndLinks()
 {
 	for(i = 0; i < graph.secondLinksNodes.length; i++)
 	{
-		lsse.search(graph.secondLinksNodes[i], lsse.lastQuery.model, graph.options.limit2ndLinks, function(data){
+		lsse.search(graph.secondLinksNodes[i], lsse.lastQuery.model, 0, graph.options.limit2ndLinks, function(data){
 			var j, len = data.relations.length;
 			
 			for(j = 0; j < len; j++)

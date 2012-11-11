@@ -13,7 +13,7 @@ var LSSE = function(socket, apiAdress)
 		socket.emit('save relevance', { word: this.lastQuery.word, model: this.lastQuery.model, relevance: relevance});
 	}
 
-	this.search = function(word, model, limit, callback, dontLog){
+	this.search = function(word, model, skip, limit, callback, dontLog){
 
 		if (!dontLog)
 		{
@@ -31,7 +31,7 @@ var LSSE = function(socket, apiAdress)
 		{
 			var searchId = Math.floor(Math.random() * 9999999);
 			socket.once('result_' + searchId, callback);
-			socket.emit('get relationships', { word: word, model: model, limit: limit, searchId: searchId});
+			socket.emit('get relationships', { word: word, model: model, skip: skip, limit: limit, searchId: searchId});
 		}
 		else
 			$.getJSON(apiAdress + '/' + model + '/' + word).success(callback);

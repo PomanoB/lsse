@@ -9,7 +9,7 @@ $(function(){
 		container: $('#graph_container').get(0),
 	//	click: function(){console.log(this, arguments)},
 		click: function(node){
-			lsse.search(node.id, lsse.lastQuery.model, 20, function(data){
+			lsse.search(node.id, lsse.lastQuery.model, 0, 20, function(data){
 				graph.addData(data, 20, LinkType.UserLoadedLink);
 				if (graph.show2ndLinks())
 					show2ndLinks();
@@ -119,9 +119,10 @@ $(function(){
 		$('#suggest_results').hide();
 		clearTimeout(suggestTimeout);
 
+		currentSkip = 0;
 		var word = $('#input_word').val();
 		location.hash = "#" + word;
-		lsse.search(word, $('#model').val(), 20, displayResults);
+		lsse.search(word, $('#model').val(), 0, 20, displayResults);
 		return false;
 	});
 
@@ -141,10 +142,14 @@ $(function(){
 		$('#input_form').submit();
 	});
 
+	var currentSkip = 0;
+
 	$('#show_all').click(function(){
 		$('#show_all').hide();
 
-		lsse.search($('#input_word').val(), $('#model').val(), 0, displayResults);
+		currentSkip += 20;
+
+		lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults);
 
 		return false;
 	});
@@ -273,15 +278,14 @@ $(function(){
 
 	function displayResults(data)
 	{
-	
 		$('#suggest_results').hide();
 		$('.social_buttons').show();
 		
 		var result;
 		
 	//	$('#graph_container>div').show();
-		
-		graph.clear();
+		if (currentSkip == 0)
+			graph.clear();
 		
 		if (data.totalRelations > 0)
 		{
@@ -295,7 +299,7 @@ $(function(){
 
 			for(i = 0; i < data.relations.length; i++)
 			{
-				result += ('<tr><td>'+ (i + 1)+ '</td>');
+				result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
 				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 				if (advanced)
