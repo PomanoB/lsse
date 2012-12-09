@@ -1,6 +1,8 @@
 {
 	"nav": {
 		"main": "main",
+		"graph": "graph",
+		"images": "images",
 		"advanced": "advanced",
 		"about": "about",
 		"english": "In English",

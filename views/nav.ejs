@@ -6,13 +6,26 @@
 <nav>
 		<ul>
 			<li>
-				<a href="/"><%= lingua.nav.main %></a>
+				<a href="/" <%if (view == "index") {%> class="current" <%}%>  ><%= lingua.nav.graph %></a>
 			</li>
 			<li>
+				<a href="/page/images" <%if (view == "images") {%> class="current" <%}%> ><%= lingua.nav.images %></a>
+			</li>
+			<!-- <li>
 				<a href="/page/advanced"><%= lingua.nav.advanced %></a>
-			</li>
+			</li> -->
 			<li>
-				<a href="/page/about"><%= lingua.nav.about %></a>
+				<a href="/page/about" <%if (view == "about") {%> class="current" <%}%> ><%= lingua.nav.about %></a>
 			</li>
 		</ul>
 </nav>
+<script>
+	$(function(){
+		if (currentPage == "images_search")
+		{
+			$('#switch_images').hide();
+			$('#switch_secondary_links').hide();
+		}
+
+	});
+</script>

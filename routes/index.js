@@ -7,7 +7,8 @@
 
 exports.index = function(req, res){
   res.render('index', {
-	models: require('./../data_models').models 
+	models: require('./../data_models').models,
+	view: 'index'
   });
 };
 

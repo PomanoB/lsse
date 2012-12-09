@@ -33,6 +33,7 @@
 			   modelHelp["<%= model %>"] = "<%- lingua.models[model] %>";
 			<% } %>
 
+			var currentPage = 'advanced_search';
 
 		</script>
 
@@ -76,6 +77,10 @@
  		<% include counters %>
 	</head>
 	<body>
+		<div id="scroll_to_top">
+			<div></div>
+		</div>
+		
 		<% include nav %>
 		<h2><%= lingua.advanced.title %></h2>
 		<form action="?" id="input_form">

@@ -1,43 +1,11 @@
 var lsse;
-var graph;
+var graph = null;
+var displayResults = null;
+var currentSkip = 0;
 
 $(function(){
 	var socket = io.connect();
 	lsse = new LSSE(socket, '/find');
-
-	graph = new Visualization({
-		container: $('#graph_container').get(0),
-	//	click: function(){console.log(this, arguments)},
-		click: function(node){
-			lsse.search(node.id, lsse.lastQuery.model, 0, 20, function(data){
-				graph.addData(data, 20, LinkType.UserLoadedLink);
-				if (graph.show2ndLinks())
-					show2ndLinks();
-			}, true);
-			node.data.type = NodeType.UserClickNode;
-			node.ui.attr('class', 'parent node').attr('fill', graph.options.parentNodeColor);
-			// if (!node.data.parent)
-			// {
-			// 	node.data.parent = true;
-			// 	graph.forEachLinkedNode(node.id, function(node, link){
-			// 		link.data.type = LinkType.PrimaryLink;
-			// 		link.ui.attr('stroke', graph.getLinkColorByType(LinkType.PrimaryLink));
-			// 	})
-			// }
-		},
-		mouseover: function(node){
-			graph.forEachLinkedNode(node.id, function(node, link){
-				link.ui.attr('stroke', graph.options.highlightLinkColor);
-				node.ui.attr('fill', graph.options.highlightNodeColor);				
-			});
-		},
-		mouseout: function(node){
-			graph.forEachLinkedNode(node.id, function(node, link){
-				link.ui.attr('stroke', graph.getLinkColorByType(link.data.type));
-				node.ui.attr('fill', (node.data.parent || node.data.type == NodeType.UserClickNode) ? graph.options.parentNodeColor : graph.options.nodeColor);	
-			});
-		}
-	});
 
 	var showImages = false;
 
@@ -141,8 +109,6 @@ $(function(){
 	$('#model').change(function(){
 		$('#input_form').submit();
 	});
-
-	var currentSkip = 0;
 
 	$('#show_all').click(function(){
 		$('#show_all').hide();
@@ -251,12 +217,13 @@ $(function(){
 		return false;
 	});
 
-	if (location.hash != "")
-	{
-		$('#input_word').val(location.hash.slice(1));
-		$('#input_form').submit();
-	}
-
+	$(document).bind('scroll', function(){
+		$('#scroll_to_top').css('opacity', Math.min(1.0, $(window).scrollTop()/500));
+	});
+	$('#scroll_to_top').click(function(){
+		$('html, body').animate({scrollTop: 0}, 1000);
+	});
+	
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
 
@@ -275,50 +242,72 @@ $(function(){
 		}
 		return false;
 	}
+	
+	if (!displayResults)
+	{
+		displayResults = function(data)
+		{
+			var result;
+			
+		//	$('#graph_container>div').show();
+			if (currentSkip == 0)
+			{
+				graph.clear();
+				$('#result').empty();
+			}
+			
+			if (data.totalRelations > 0)
+			{
+				graph.addData(data, 20, LinkType.PrimaryLink);
+				graph.update();
 
-	function displayResults(data)
+				if (currentSkip == 0)
+				{
+					result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
+					result += '<table>';
+				}
+
+				var firstRel = -1;
+				var i;
+				for(i = 0; i < data.relations.length; i++)
+				{
+					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
+					result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
+					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
+					if (advanced)
+						result += (' - ' + data.relations[i].value);
+					result += '</td></tr>';
+				}
+				if (currentSkip == 0)
+					result += '</table>';
+
+				if (data.relations.length < data.totalRelations)
+					$('#show_all').show();
+
+			//	$('div.relevance').show().find('select').val(0);
+
+				if(graph.show2ndLinks())
+					show2ndLinks();
+				if (currentSkip == 0)
+					$('#result').html(result);
+				else
+					$('#result table>tbody').append(result);
+			}
+
+			return result;	
+		}
+	}
+
+	var _displayResults = displayResults;
+	displayResults = function(data)
 	{
 		$('#suggest_results').hide();
 		$('.social_buttons').show();
-		
-		var result;
-		
-	//	$('#graph_container>div').show();
-		if (currentSkip == 0)
-			graph.clear();
-		
-		if (data.totalRelations > 0)
+
+		var result = _displayResults(data);
+
+		if (data.totalRelations <= 0 && !result)
 		{
-			graph.addData(data, 20, LinkType.PrimaryLink);
-			graph.update();
-
-			result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
-			var i;
-			result += '<table>';
-			var firstRel = -1;
-
-			for(i = 0; i < data.relations.length; i++)
-			{
-				result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
-				result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
-				result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
-				if (advanced)
-					result += (' - ' + data.relations[i].value);
-				result += '</td></tr>';
-			}
-			result += '</table>';
-			if (data.relations.length < data.totalRelations)
-				$('#show_all').show();
-
-		//	$('div.relevance').show().find('select').val(0);
-
-			if(graph.show2ndLinks())
-				show2ndLinks();
-		}
-		else
-		{
-			$('div.relevance').hide();
-
 			var pLen = data.perhaps.length;
 			if (pLen > 0)
 			{
@@ -339,10 +328,18 @@ $(function(){
 			}
 			else
 				result = lingua.not_found;
-		}
 
-		$('#result').html(result);
+			$('#result').html(result);
+		}
 	}
+
+
+	if (location.hash != "")
+	{
+		$('#input_word').val(location.hash.slice(1));
+		$('#input_form').submit();
+	}
+
 });
 
 function plural(n, variants)

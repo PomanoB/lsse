@@ -35,6 +35,8 @@
 				$('#graph_container').css('left', '400px');
 			});
 			
+			var currentPage = 'graph_search';
+
 		</script>
 
 		<script src="/js/search.js"></script>
@@ -44,7 +46,9 @@
 
 	</head>
 	<body>
-
+		<div id="scroll_to_top">
+			<div></div>
+		</div>
 		<% include nav %>
 		<h2><%= lingua.title %></h2>
 		

@@ -1,6 +1,8 @@
 {
 	"nav": {
 		"main": "главная",
+		"graph": "граф",
+		"images": "картинки",
 		"advanced": "расширенный поиск",
 		"about": "о системе",
 		"english": "In English",

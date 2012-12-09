@@ -15,6 +15,10 @@ nav>ul, footer>ul, #suggest_results
 {
 	list-style-type: none;
 }
+nav>ul>li>a.current
+{
+	text-decoration: none;
+}
 nav>ul>li, footer>ul>li
 {
 	display: inline;
@@ -202,4 +206,32 @@ ul.relevance_select>li.relevance_bad
 	z-index: 999;
 	position:relative;
 	background-color: #fff;
+}
+
+
+#scroll_to_top
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 50px;
+	background-color: rgba(0, 183, 255, 0.1);
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+#scroll_to_top>div
+{
+	background-image: url(/images/scroll_to_top.png);
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 40px;
+	height: 15px;
+	top: 10px;
+	left: 5px;
+	position: relative;
+}
+#scroll_to_top:hover>div
+{
+	background-position: bottom;
 }

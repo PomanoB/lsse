@@ -8,6 +8,10 @@ var allowedPages = {
 		view: "advanced",
 		models: require('./../data_models').models,
 		modelStats: JSON.parse(fs.readFileSync('./stats.json'))
+	},
+	images: {
+		view: "images",
+		models: require('./../data_models').models,
 	}
 };
 
