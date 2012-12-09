@@ -47,6 +47,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	width: 162px;
 	position: absolute;
 	display: none;
+	z-index: 999;
 }
 #suggest_results>li
 {

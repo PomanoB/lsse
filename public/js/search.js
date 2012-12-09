@@ -115,7 +115,7 @@ $(function(){
 
 		currentSkip += 20;
 
-		lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults);
+		lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults, true);
 
 		return false;
 	});
@@ -223,7 +223,7 @@ $(function(){
 	$('#scroll_to_top').click(function(){
 		$('html, body').animate({scrollTop: 0}, 1000);
 	});
-	
+
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
 
@@ -304,8 +304,14 @@ $(function(){
 		$('#suggest_results').hide();
 		$('.social_buttons').show();
 
-		var result = _displayResults(data);
+		$('nav a.remember_word_link').each(function(){
+			var href = $(this).attr('href');
+			var anchor = href.split('#');
+			$(this).attr('href', anchor[0] + '#' + data.word)
+		});
 
+		var result = _displayResults(data);
+		
 		if (data.totalRelations <= 0 && !result)
 		{
 			var pLen = data.perhaps.length;

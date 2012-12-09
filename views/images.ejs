@@ -9,7 +9,7 @@
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-		
+		<script src="/js/jquery.imagesloaded.js"></script>
 		<script src="/js/vivagraph.js"></script>
 		<script src="/js/lsse.js"></script>
 
@@ -59,13 +59,14 @@
 		#result ul.images_search li
 		{
 			display: inline-block;
-			width: 250px;
-			height: 250px;
+			width: 175px;
+			height: 175px;
 			overflow: hidden;
 			background-repeat: no-repeat;
 			background-position: center;
 			margin: 5px;
 			position: relative;
+			cursor: pointer;
 		}
 
 		#result ul.images_search li img 
@@ -76,13 +77,12 @@
 		{
 			position: absolute;
 			bottom: 0;
-			height: 50px;
+			height: 40px;
 			background-color: rgba(20, 20, 20, 0.8);
 			color: #FFF;
-			font-size: 20px;
+			font-size: 16px;
 			padding: 10px;
-			width: 100%;
-			cursor: pointer;
+			width: 155px;
 		}
 	/*	#result ul.images_search li img 
 		{
@@ -119,8 +119,10 @@
 		<% include social %>
 
 		<script>
+			var allowScroll = true;
 			displayResults = function(data)
 			{
+				allowScroll = true;
 				var html = "";
 				if (data.totalRelations > 0)
 				{
@@ -130,9 +132,9 @@
 					for(i = 0; i < data.relations.length; i++)
 					{
 
-						html += ('<li><img src="http://' + data.relations[i].word.replace(/\s+/g, '_') + '.jpg.to/m" />'+
+						html += ('<li data-word="' + data.relations[i].word + '"><img src="http://' + data.relations[i].word.replace(/\s+/g, '_') + '.jpg.to/m" />'+
 
-								'<div data-word="' + data.relations[i].word + '">' + (currentSkip + i + 1) + '. ' + data.relations[i].word + '</a></div>' +
+								'<div>' + (currentSkip + i + 1) + '. ' + data.relations[i].word + '</a></div>' +
 
 							'</li>');
 					}
@@ -149,18 +151,18 @@
 							
 							if (w > h)
 							{
-								w = w * (250/h);
+								w = w * (175/h);
 								i.css({
-									height: '250px',
-									left: (250 - w)/2 + 'px'
+									height: '175px',
+									left: (175 - w)/2 + 'px'
 								});
 							}	
 							else
 							{
-								h = h * (250/w);
+								h = h * (175/w);
 								i.css({
-									width: '250px',
-									top: (250 - h)/2 + 'px'
+									width: '175px',
+									top: (175 - h)/2 + 'px'
 								});
 							}
 						});
@@ -171,10 +173,16 @@
 					else
 						$('#result ul.images_search').append(html);
 					
-					html.find('div').click(function(){
+					
+					html.find('img').parent().click(function(){
+
 						var word = $(this).data('word');
 						if (word)
+						{
+							currentSkip = 0;
+							allowScroll = false;
 							location.hash = word;
+						}
 					});
 					// $('#result ul.images_search').imagesLoaded(function() {
 					// 	$('#result li').wookmark({
@@ -192,47 +200,17 @@
 
 
 				$(document).bind('scroll', function(){
-					if  ($(window).scrollTop() + $(window).height() > $(document).height() - 100)
+					if ($(window).scrollTop() + $(window).height() > $(document).height() - 100 && allowScroll)
 					{
+						loadCompleted = false;
+
 						currentSkip += 20;
 
-						lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults);
+						lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults, true);
 					}
 				});
 			});
 
-			$.fn.imagesLoaded = function( callback ){
-			  var elems = this.find( 'img' ),
-			      elems_src = [],
-			      self = this,
-			      len = elems.length;
-
-			  if ( !elems.length ) {
-			    callback.call( this );
-			    return this;
-			  }
-
-			  elems.one('load error', function() {
-			    if ( --len === 0 ) {
-			      // Rinse and repeat.
-			      len = elems.length;
-			      elems.one( 'load error', function() {
-			        if ( --len === 0 ) {
-			          callback.call( self );
-			        }
-			      }).each(function() {
-			        this.src = elems_src.shift();
-			      });
-			    }
-			  }).each(function() {
-			    elems_src.push( this.src );
-			    // webkit hack from http://groups.google.com/group/jquery-dev/browse_thread/thread/eee6ab7b2da50e1f
-			    // data uri bypasses webkit log warning (thx doug jones)
-			    this.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-			  });
-
-			  return this;
-			};
 		</script>
 	</body>
 </html>
