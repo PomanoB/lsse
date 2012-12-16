@@ -124,6 +124,12 @@
 			{
 				allowScroll = true;
 				var html = "";
+
+				if (data.totalRelations > 20)
+					$('#show_all').show();
+				else
+					$('#show_all').hide();
+
 				if (data.totalRelations > 0)
 				{
 					if (currentSkip == 0)
