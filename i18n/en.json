@@ -44,7 +44,9 @@
 		"this_site": "this site",
 		"publications": "Publications",
 		"simeval": "Extracted relations and evaluation scripts",
-		"api_description": "You can access the system without any limitations as following: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. This request should return a set of words related to 'ubuntu' in JSON format:"
+		"api_description": "You can access the system without any limitations as following: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. This request should return a set of words related to 'ubuntu' in JSON format:",
+		"advanced": "Advanced Mode",
+		"advanced_description": "By default the system relies on the semantic similarity measure <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. You can search for similar words with other measures and compare results: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>"
 	},
 	"search": {
 		"input_word": "input word",
