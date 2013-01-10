@@ -145,12 +145,15 @@ lsse.openDb(db, function(err){
 
 				var words = [];
 				var corrected = lsse.correctWord(data.word, 2);
-			
+				var correctCost = {}
 				if (corrected.length > 0)
 				{
 					var i;
 					for(i = 0; i < corrected.length && i < 60; i++)
+					{
 						words.push(corrected[i].word);
+						correctCost[corrected[i].word + "123"] = corrected[i].cost;
+					}	
 				}
 				else
 				{
@@ -184,6 +187,13 @@ lsse.openDb(db, function(err){
 								return 1;
 							if (!b)
 								return 0;
+							var costA = correctCost[a.word + "123"];
+							var costB = correctCost[b.word + "123"];
+
+							if (costA && costB && costA != costB)
+							{
+								return costA - costB;
+							}
 							return b.totalRelations - a.totalRelations;
 						});
 						for(i = 0; i < results.length; i++)
