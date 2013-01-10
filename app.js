@@ -149,7 +149,7 @@ lsse.openDb(db, function(err){
 				if (corrected.length > 0)
 				{
 					var i;
-					for(i = 0; i < corrected.length && i < 10; i++)
+					for(i = 0; i < corrected.length && i < 60; i++)
 						words.push(corrected[i].word);
 				}
 				else
@@ -167,11 +167,11 @@ lsse.openDb(db, function(err){
 				    			words.push(results[i][j]);
 				    	}
 				    }
-
+				    // console.time("loadRel");
 			    	async.map(words, function(word, callback){
 						lsse.loadRelations(word, data.model, callback);
 					}, function(err, results){
-
+						// console.timeEnd("loadRel");
 						if (err)
 						{
 							console.log(err);
@@ -179,9 +179,16 @@ lsse.openDb(db, function(err){
 							return;
 						}
 						var perhaps = [], i;
+						results.sort(function(a, b){
+							if (!a)
+								return 1;
+							if (!b)
+								return 0;
+							return b.totalRelations - a.totalRelations;
+						});
 						for(i = 0; i < results.length; i++)
 						{
-							if (results[i])
+							if (results[i] && perhaps.length < 10)
 							{
 								perhaps.push({
 									word: results[i].word, 
