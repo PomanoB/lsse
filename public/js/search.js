@@ -217,11 +217,19 @@ $(function(){
 		return false;
 	});
 
+	var lastScroll = 0;
 	$(document).bind('scroll', function(){
 		$('#scroll_to_top').css('opacity', Math.min(1.0, $(window).scrollTop()/500));
 	});
 	$('#scroll_to_top').click(function(){
-		$('html, body').animate({scrollTop: 0}, 1000);
+		var currentScroll = $('body').scrollTop();
+		if (currentScroll)
+		{
+			lastScroll = currentScroll;
+			$('html, body').animate({scrollTop: 0}, 1000);
+		}
+		else
+			$('html, body').animate({scrollTop: lastScroll}, 1000);		
 	});
 
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
@@ -258,7 +266,7 @@ $(function(){
 			
 			if (data.totalRelations > 0)
 			{
-				graph.addData(data, 20, LinkType.PrimaryLink);
+				graph.addData(data, 20, currentSkip == 0 ? LinkType.PrimaryLink : LinkType.SecondaryLink);
 				graph.update();
 
 				if (currentSkip == 0)
