@@ -46,8 +46,9 @@
 		"simeval": "Извлеченные отношения и скрипты для оценки качества извлечения",
 		"api_description": "Вы можете использовать систему следующим образом без каких-либо ограничений: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. Данный запрос должен возвратить множество слов семантически связанных со словом 'ubuntu' в формате JSON:",
 		"advanced": "Расширенный режим",
-		"advanced_description": "По-умолчанию система использует метрику семантической близости <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. Вы можете искать слова с помощью альтернативных метрик и сравнивать их результаты: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>"
-
+		"advanced_description": "По-умолчанию система использует метрику семантической близости <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. Вы можете искать слова с помощью альтернативных метрик и сравнивать их результаты: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>",
+		"application": "Serelex для Windows 8 и Windows Phone",
+		"application_description": "Так же доступно приложение Serelex для Windows 8, котрое позволяет осуществлять простой поиск и навигацию по результатам благодаря отображению изображений для каждого слова. <a href=\"http://apps.microsoft.com/windows/app/lsse/48dc239a-e116-4234-87fd-ac90f030d72c\">Скриншоты и описание в Магазине Windows</a><br/>Версия для Windows Phone отличается тем, что позволяет сразу произвести поиск в Google для любого термина из результатов поиска. Скришоты и подробное описание доступны в магазине приложений Windows Phone:<br /><a href=\"http://www.windowsphone.com/s?appid=dbc7d458-a3da-42bf-8da1-de49915e0318\"><img src=\"/images/wp_qrcode.png\" alt=\"QR code\" style=\"width: 100px\" /></a>"
 	},
 	"search": {
 		"input_word": "введите слово",
