@@ -50,21 +50,40 @@
 			<div></div>
 		</div>
 		<% include nav %>
-		<h2><%= lingua.title %></h2>
 		
-		<form action="?" id="input_form">
-			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
-			<input type="hidden" name="model" id="model" />
-			<input type="submit" value="<%= lingua.search.search %>" />
-			<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
-			<ul id="suggest_results">
-				<li>dog</li>
-				<li>cat</li>
-				<li>human</li>
-			</ul>
-		</form>
-
-		<% include relevance %>
+		<div id="top_header_conatiner">
+			<form action="?" id="input_form">
+				<div><%= lingua.search.system_search %></div>
+				<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
+				<input type="hidden" name="model" id="model" />
+				<input type="submit" value="<%= lingua.search.search %>" />
+				<ul id="suggest_results">
+					<li>dog</li>
+					<li>cat</li>
+					<li>human</li>
+				</ul>
+				<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
+			</form>
+			
+			<div class="top_header_switch">
+				<div>Показать как:</div>
+				<ul>
+					<li><a href="#" class="active">граф</a></li><!--
+					--><li><a href="#">изображения</a></li>
+				</ul>
+			</div>
+			
+			<div class="top_header_switch">
+				<div>Вторичные связи:</div>
+				<ul>
+					<li><a href="#" class="active">вкл</a></li><!--
+					--><li><a href="#">выкл</a></li>
+				</ul>
+			</div>
+			
+			<div class="clearfix"></div>
+		</div>
+	
 
 		<% include graph %>
 

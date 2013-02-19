@@ -64,7 +64,8 @@
 			"two": "results",
 			"many": "results"
 		},
-		"for_example": "System finds semantically related words.<br /> For example"
+		"system_search": "System finds semantically related words",
+		"for_example": "For example"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",
