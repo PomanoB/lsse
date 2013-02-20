@@ -63,7 +63,9 @@ $(function(){
 	var suggestTimeout = null;
 
 	if (advanced)
-		switchImages();
+		turnIconsOn();
+	else
+		turnIconsOff();
 
 	// $('select.relevance_select').change(function(){
 
@@ -188,7 +190,17 @@ $(function(){
 		}, 200);
 	});
 
-	$('#switch_images').click(switchImages);
+	// $('#switch_images').click(switchImages);
+
+	$('#icons_switcher a').click(function(){
+
+		if ($(this).attr('href') == "#on")
+			turnIconsOn();
+		else
+			turnIconsOff();
+
+		return false;
+	});
 
 	$(document).on("click", "#suggest_results>li", function(){
 		location.hash = '#' + $(this).text();
@@ -202,20 +214,20 @@ $(function(){
 	});
 
 
-	$('#switch_secondary_links').click(function(){
-		if (graph.show2ndLinks())
-		{
-			hide2ndLinks();
-			$(this).text(lingua.show_second_links);
-		}
-		else
-		{
-			show2ndLinks();
-			$(this).text(lingua.hide_second_links);
-		}	
+	// $('#switch_secondary_links').click(function(){
+	// 	if (graph.show2ndLinks())
+	// 	{
+	// 		hide2ndLinks();
+	// 		$(this).text(lingua.show_second_links);
+	// 	}
+	// 	else
+	// 	{
+	// 		show2ndLinks();
+	// 		$(this).text(lingua.hide_second_links);
+	// 	}	
 
-		return false;
-	});
+	// 	return false;
+	// });
 
 	var lastScroll = 0;
 	$(document).bind('scroll', function(){
@@ -235,20 +247,21 @@ $(function(){
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
 
-	function switchImages()
+	function turnIconsOn()
 	{
-		showImages = !showImages;
-		if(showImages)
-		{
-			$('#switch_images').text(lingua.hide_images);
-			$('img.result_icon').show();
-		}
-		else
-		{
-			$('#switch_images').text(lingua.show_images);
-			$('img.result_icon').hide();
-		}
-		return false;
+		showImages = true;
+		$('img.result_icon').show();
+
+		$('#icons_switcher a').removeClass('current');
+		$('#icons_switcher a[href="#on"]').addClass('current');
+	}
+	function turnIconsOff()
+	{
+		showImages = false;
+		$('img.result_icon').hide();
+
+		$('#icons_switcher a').removeClass('current');
+		$('#icons_switcher a[href="#off"]').addClass('current');
 	}
 	
 	if (!displayResults)
@@ -312,7 +325,7 @@ $(function(){
 		$('#suggest_results').hide();
 		$('.social_buttons').show();
 
-		$('nav a.remember_word_link').each(function(){
+		$('a.remember_word_link').each(function(){
 			var href = $(this).attr('href');
 			var anchor = href.split('#');
 			$(this).attr('href', anchor[0] + '#' + data.word)

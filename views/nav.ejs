@@ -11,14 +11,14 @@
 			</li>		
 		</ul>
 </nav>
-<a href="?language=<%= locale == "ru" ? "en" : "ru" %>" id="switch_lang"><%= locale == "ru" ? lingua.nav.english : lingua.nav.russian %></a>
-<div id="logo">
+<a href="?language=<%= locale == "ru" ? "en" : "ru" %>" id="switch_lang" class="remember_word_link"><%= locale == "ru" ? lingua.nav.english : lingua.nav.russian %></a>
+<a id="logo" href="/">
 	<img src="/images/logo.png" alt="Serelex" />
 	<div>
 		<span>SERE</span>LEX
 	</div>
 	<span>лексико-семантическая поисковая система</span>
 	
-</div>
+</a>
 <% include social %>
 <div style="border-bottom: 1px solid #00B7FF;margin-top: 10px; clear: both;"></div>

@@ -24,8 +24,11 @@
 		"drag": "drag",
 		"spring_len": "Spring len",
 		"rel": "REL",
-		"show_2nd": "Show secondary links",
-		"apply": "Apply"
+		"on": "On",
+		"off": "Off",
+		"option_2nd": "Secondary links:",
+		"apply": "Apply",
+		"option_icons": "Icons"
 	},
 	"relevance": {
 		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",
@@ -50,7 +53,9 @@
 		"advanced": "Advanced Mode",
 		"advanced_description": "By default the system relies on the semantic similarity measure <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. You can search for similar words with other measures and compare results: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>",
 		"application": "Serelex for Windows 8 and Windows Phone",
-		"application_description": "Serelex is available for Windows 8! This app allows easy search and navigation by displaying the results of images for each word. <a href=\"http://apps.microsoft.com/windows/app/lsse/48dc239a-e116-4234-87fd-ac90f030d72c\">Screenshots and descriptions in the Windows Store</a><br />Version for Windows Phone is different because you can immediately search in Google for any term from the search results. Screenshots and description is avialable in the Windows Phone App+Games Store:<br /><a href=\"http://www.windowsphone.com/s?appid=dbc7d458-a3da-42bf-8da1-de49915e0318\"><img src=\"/images/wp_qrcode.png\" alt=\"QR code\" style=\"width: 100px\" /></a>"
+		"application_description": "Serelex is available for Windows 8! This app allows easy search and navigation by displaying the results of images for each word. <a href=\"http://apps.microsoft.com/windows/app/lsse/48dc239a-e116-4234-87fd-ac90f030d72c\">Screenshots and descriptions in the Windows Store</a><br />Version for Windows Phone is different because you can immediately search in Google for any term from the search results. Screenshots and description is avialable in the Windows Phone App+Games Store:<br /><a href=\"http://www.windowsphone.com/s?appid=dbc7d458-a3da-42bf-8da1-de49915e0318\"><img src=\"/images/wp_qrcode.png\" alt=\"QR code\" style=\"width: 100px\" /></a>",
+		"contacts": "Contacts",
+		"contacts_detail": "For all questions please contact Alexander Panchenko (<span class='text2985 text2985_ap'> </span>) or Pavel Romanov (<span class='text2985 text2985_pr'> </span>)"
 	},
 	"search": {
 		"input_word": "input word",

@@ -129,7 +129,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 {
 	left: 450px;
 	right: 20px;
-	/*top: 100px;*/
+	top: 200px;
 	bottom: 10px;
 	position: absolute;
 }
@@ -273,6 +273,8 @@ ul.relevance_select>li.relevance_bad
 #logo
 {
 	margin-top: 5px;
+	text-decoration: none;
+	color: #858585;
 }
 #logo>img
 {
@@ -337,7 +339,19 @@ ul.relevance_select>li.relevance_bad
 	text-decoration: none;
 	font-weight: bold;
 }
-.top_header_switch>ul>li>a.active
+.top_header_switch>ul>li>a.current
 {
 	color: #858585;
 }
+
+.text2985
+{
+	background-image: url('/images/text2985.png');
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.text2985_ap { width: 210px; background-position: 0 1px;}
+.text2985_pr { width: 163px; background-position: 0 -16px;}

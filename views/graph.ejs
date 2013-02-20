@@ -41,14 +41,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<label for="graph_option_show_2nd"><%= lingua.visualization.show_2nd %></label>
-			</td>
-			<td>
-				<input type="checkbox" id="graph_option_show_2nd" />
-			</td>
-		</tr>
-		<tr>
 			<td colspan="2">
 				<input type="button" id="graph_apply_button" value="<%= lingua.visualization.apply %>" />
 			</td>
@@ -117,6 +109,18 @@ $(function(){
 		return false;
 	});
 
+	$('#2nd_link_switcher a').click(function(){
+
+		var show = $(this).attr('href') == "#on";
+		graph.show2ndLinks(show);
+		if (show)
+			show2ndLinks();
+		else
+			hide2ndLinks();
+
+		return false;
+	});
+
 	var graphOptions = [
 		'gravity',
 		'springCoeff',
@@ -139,22 +143,25 @@ $(function(){
 			graph[graphOptions[i]]($('#graph_option_' + graphOptions[i]).val());
 		}
 		
-		graph.show2ndLinks($('#graph_option_show_2nd').prop('checked'));
+	//	graph.show2ndLinks($('#graph_option_show_2nd').prop('checked'));
 
 		graph.update();
 
-		if (graph.show2ndLinks())
-			show2ndLinks();
-		else
-			hide2ndLinks();
+		// if (graph.show2ndLinks())
+		// 	show2ndLinks();
+		// else
+		// 	hide2ndLinks();
 
 		$('#grpah_options').hide();
 	});
 
-	if (graph.show2ndLinks())
-		$('#switch_secondary_links').text(lingua.hide_second_links);
-	else
-		$('#switch_secondary_links').text(lingua.show_second_links);
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#off"]').addClass('current');
+	
+	// if (graph.show2ndLinks())
+	// 	$('#switch_secondary_links').text(lingua.hide_second_links);
+	// else
+	// 	$('#switch_secondary_links').text(lingua.show_second_links);
 
 });
 
@@ -171,6 +178,9 @@ function hide2ndLinks()
 		graph.removeLink(removeLinks[i]);
 	}
 	graph.show2ndLinks(false);
+
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#off"]').addClass('current');
 }
 
 function show2ndLinks()
@@ -193,5 +203,8 @@ function show2ndLinks()
 		}, true);
 	}
 	graph.show2ndLinks(true);
+
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#on"]').addClass('current');
 }
 </script>

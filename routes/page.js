@@ -12,7 +12,13 @@ var allowedPages = {
 	images: {
 		view: "images",
 		models: require('./../data_models').models,
-	}
+	},
+	download: {
+		view: "download"
+	},
+	contacts: {
+		view: "contacts"
+	},
 };
 
 exports.page = function(req, res){

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= lingua.about.title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+ 		<% include counters %>
+	</head>
+	<body>
+		<% include nav %>
+		<h3><%= lingua.about.source_code %></h2>
+		<ul>
+			<li>Serelex -- <a target="_blank" href="https://github.com/jgc128/Serelex">https://github.com/jgc128/Serelex</a></li>
+			<li>PatternSim -- <a target="_blank" href="https://github.com/cental/patternsim">https://github.com/cental/patternsim</a></li>
+			<li>Lexico-Semantic Search Engine (<%= lingua.about.this_site %>) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
+			<li><%= lingua.about.simeval %> -- <a target="_blank" href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/">http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/</a></li>
+		</ul>
+		
+		<h3><%= lingua.about.application %></h3>
+		<div>
+			<%- lingua.about.application_description %>
+		</div>
+	</body>
+</html>
