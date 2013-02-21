@@ -1,6 +1,6 @@
 {
 	"nav": {
-		"main": "main",
+		"main": "Main",
 		"graph": "graph",
 		"images": "images",
 		"advanced": "advanced",
@@ -28,7 +28,8 @@
 		"off": "Off",
 		"option_2nd": "Secondary links:",
 		"apply": "Apply",
-		"option_icons": "Icons"
+		"option_icons": "Icons",
+		"show_as": "Show as"
 	},
 	"relevance": {
 		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",
@@ -41,6 +42,7 @@
 	},
 	"title": "Lexico-Semantic Search Engine",
 	"idea": "finds semantically related words",
+	"logo_text": "lexico-semantic search engine",
 	"about": {
 		"title": "About",
 		"description": "A traditional search engine, given a text query, provides as a results a list of related documents. This system is a \"lexico-semantic search engine\". Given a query it returns a list of related words. This way you can discover meaning of words in an interactive manner, search for synonyms and more. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be). <br/> This system is a result of a colloboration between <a href=\"http://www.uclouvain.be/\">Universite catholique de Louvain</a> (UCL) and <a href=\"http://www.bmstu.ru/\">Bauman Moscow State Technical University</a> (BMSTU). Several people contributed to the project: Alexander Panchenko (UCL), Alexey Romanov (BMSTU), Andrey Philippovich (BMSTU), Cedrick Fairon (UCL), Hubert Naets (UCL), Laeticia Browers (UCL), Olga Morozova (UCL), Sergey Adeykin (BMSTU), Pavel Romanov (BMSTU) and Yuri Philippovich (BMSTU). We would like to thank the following organizations for support: <a href=\"http://www.wbi.be/\">Wallonie-Brussels International</a>, <a href=\"http://www.uclouvain.be/cental\">Center for Natural Language Processing</a> of UCL, <a href=\"http://www.it-claim.ru/\">IT-CLAIM</a> of BMSTU and <a href=\"http://grant.rfh.ru/rfh\">Russian Humanities Foundation</a>.",

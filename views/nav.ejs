@@ -1,6 +1,9 @@
 <nav>
 		<ul>
 			<li>
+				<a href="/" <%if (view == "index") {%> class="current" <%}%> ><%= lingua.nav.main %></a>
+			</li>
+			<li>
 				<a href="/page/about" <%if (view == "about") {%> class="current" <%}%> ><%= lingua.nav.about %></a>
 			</li>	
 			<li>
@@ -17,7 +20,7 @@
 	<div>
 		<span>SERE</span>LEX
 	</div>
-	<span>лексико-семантическая поисковая система</span>
+	<span><%= lingua.logo_text %></span>
 	
 </a>
 <% include social %>
