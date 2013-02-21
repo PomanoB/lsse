@@ -8,6 +8,10 @@ a
 {
 	color: #00B7FF;
 }
+h3, h2
+{
+	margin-top: 5px;
+}
 #result
 {
 	padding: 20px 40px 10px 40px;
@@ -280,6 +284,7 @@ ul.relevance_select>li.relevance_bad
 {
 	float: left;
 	height: 60px;
+	margin-right: 10px;
 }
 #logo>div
 {
