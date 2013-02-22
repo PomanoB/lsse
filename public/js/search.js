@@ -251,6 +251,7 @@ $(function(){
 	{
 		showImages = true;
 		$('img.result_icon').show();
+		$('g.node>image').css('display', 'block');
 
 		$('#icons_switcher a').removeClass('current');
 		$('#icons_switcher a[href="#on"]').addClass('current');
@@ -259,6 +260,7 @@ $(function(){
 	{
 		showImages = false;
 		$('img.result_icon').hide();
+		$('g.node>image').hide();
 
 		$('#icons_switcher a').removeClass('current');
 		$('#icons_switcher a[href="#off"]').addClass('current');

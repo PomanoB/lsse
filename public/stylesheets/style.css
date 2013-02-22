@@ -360,3 +360,9 @@ ul.relevance_select>li.relevance_bad
 }
 .text2985_ap { width: 210px; background-position: 0 1px;}
 .text2985_pr { width: 163px; background-position: 0 -16px;}
+
+
+g.node>image
+{
+	display: none;
+}

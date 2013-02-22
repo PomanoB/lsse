@@ -145,22 +145,22 @@ lsse.openDb(db, function(err){
 
 				var words = [];
 				
-				var corrected = lsse.correctWord(data.word, 2);
-				var correctCost = {}
-				if (corrected.length > 0)
-				{
-					var i;
-					for(i = 0; i < corrected.length && i < 60; i++)
-					{
-						words.push(corrected[i].word);
-						correctCost[corrected[i].word + "123"] = corrected[i].cost;
-					}	
-				}
-				else
-				{
-					words = lsse.getPerhaps(data.word);
-				}
-				// words = lsse.getPerhaps(data.word);
+				// var corrected = lsse.correctWord(data.word, 2);
+				// var correctCost = {}
+				// if (corrected.length > 0)
+				// {
+				// 	var i;
+				// 	for(i = 0; i < corrected.length && i < 60; i++)
+				// 	{
+				// 		words.push(corrected[i].word);
+				// 		correctCost[corrected[i].word + "123"] = corrected[i].cost;
+				// 	}	
+				// }
+				// else
+				// {
+				// 	words = lsse.getPerhaps(data.word);
+				// }
+				words = lsse.getPerhaps(data.word);
 				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
 				    var i, j;
 				    for(i = 0; i < results.length; i++)
