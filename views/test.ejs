@@ -121,9 +121,9 @@
 			$.getJSON('/def/' + data.word, function(response){
 				var html = '';
 				if (response.word)
-					html += '<strong>' + response.word + '</strong> - ' + response.description + '<br /><br /><br />';
+					html += '<strong>' + response.word + '</strong> - ' + response.description;
 
-				html += '<%= lingua.search.search_in %>:<ul>';
+				html += '<div><%= lingua.search.search_in %>...</div><ul>';
 				for(var name in searchIn)
 				{
 					if (searchIn.hasOwnProperty(name))

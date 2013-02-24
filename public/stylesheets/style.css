@@ -377,9 +377,16 @@ g.node>image
 	background-color: #fff;
 	padding: 5px;
 }
+#info_panel>div
+{
+	margin-top: 10px;
+	color: #858585;
+}
 #info_panel ul
 {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
+	border-top: 1px solid #858585;
+	padding-top: 10px;
 }
