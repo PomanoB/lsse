@@ -112,7 +112,7 @@
 		var searchIn = {
 			'Google': 'https://google.com/search?q=%s',
 			'Thesaurus.com': 'http://thesaurus.com/browse/%s?s=t',
-			'ldoceonline.com': 'http://www.ldoceonline.com/search/?q=%s'
+			'Longman Dictionary': 'http://www.ldoceonline.com/search/?q=%s'
 		};
 
 		displayResults = function(data)
@@ -121,7 +121,8 @@
 			$.getJSON('/def/' + data.word, function(response){
 				var html = '';
 				if (response.word)
-					html += '<strong>' + response.word + '</strong> - ' + response.description;
+					html += '<strong>' + response.word + '</strong> - ' + response.description + 
+							' - <a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 
 				html += '<div><%= lingua.search.search_in %>...</div><ul>';
 				for(var name in searchIn)

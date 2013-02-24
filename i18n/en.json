@@ -73,7 +73,8 @@
 		},
 		"system_search": "System finds semantically related words",
 		"for_example": "For example",
-		"search_in": "Search in"
+		"search_in": "Search in",
+		"wikipedia": "Wikipedia"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",
