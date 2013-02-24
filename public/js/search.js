@@ -2,12 +2,13 @@ var lsse;
 var graph = null;
 var displayResults = null;
 var currentSkip = 0;
+var showImages = false;
 
 $(function(){
 	var socket = io.connect();
 	lsse = new LSSE(socket, '/find');
 
-	var showImages = false;
+	
 
 	var sampleSearch = [
 		"python",

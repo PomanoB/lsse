@@ -2,8 +2,9 @@ var express = require('express')
 	, routes = require('./routes')
 	, http = require('http')
 	, lingua  = require('lingua')
-	, async = require('async');
-	
+	, async = require('async')
+	, request = require('request');
+
 var LSSE = require('./lsse');
 var lsse = new LSSE();
 
@@ -46,6 +47,24 @@ var wordsCollection = null;
 var dataModels = require('./data_models').models;
 
 app.get('/', routes.index);
+app.get('/def/:word', function(req, res){
+
+	request('http://en.wikipedia.org/w/api.php?action=opensearch&format=xml&limit=1&search=' + encodeURIComponent(req.params.word), {
+		headers: {'User-Agent': 'LSSE'}
+	}, function (error, response, body) {
+		if (response.statusCode == 200)
+		{
+			var r = /<Text .*?>(.*)<\/Text>.*<Description .*?>([\s\S]*)<\/Description>/gim;
+			var result = r.exec(body);
+			if (r != null)
+				res.send({word: result[1], description: result[2]});
+			else
+				res.send({word: undefined, description: undefined});
+		}
+		else
+			res.send({word: undefined, description: undefined});
+	})
+});
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
 	
@@ -145,22 +164,22 @@ lsse.openDb(db, function(err){
 
 				var words = [];
 				
-				var corrected = lsse.correctWord(data.word, 2);
-				var correctCost = {}
-				if (corrected.length > 0)
-				{
-					var i;
-					for(i = 0; i < corrected.length && i < 60; i++)
-					{
-						words.push(corrected[i].word);
-						correctCost[corrected[i].word + "123"] = corrected[i].cost;
-					}	
-				}
-				else
-				{
-					words = lsse.getPerhaps(data.word);
-				}
-				// words = lsse.getPerhaps(data.word);
+				// var corrected = lsse.correctWord(data.word, 2);
+				// var correctCost = {}
+				// if (corrected.length > 0)
+				// {
+				// 	var i;
+				// 	for(i = 0; i < corrected.length && i < 60; i++)
+				// 	{
+				// 		words.push(corrected[i].word);
+				// 		correctCost[corrected[i].word + "123"] = corrected[i].cost;
+				// 	}	
+				// }
+				// else
+				// {
+				// 	words = lsse.getPerhaps(data.word);
+				// }
+				words = lsse.getPerhaps(data.word);
 				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
 				    var i, j;
 				    for(i = 0; i < results.length; i++)

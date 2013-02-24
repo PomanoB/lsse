@@ -4,6 +4,11 @@ var allowedPages = {
 	about: {
 		view: "about"
 	},
+	test: {
+		view: "test",
+		models: require('./../data_models').models,
+		modelStats: JSON.parse(fs.readFileSync('./stats.json'))
+	},
 	advanced: {
 		view: "advanced",
 		models: require('./../data_models').models,
@@ -18,7 +23,7 @@ var allowedPages = {
 	},
 	contacts: {
 		view: "contacts"
-	},
+	}
 };
 
 exports.page = function(req, res){
