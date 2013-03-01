@@ -390,3 +390,8 @@ g.node>image
 	border-top: 1px solid #858585;
 	padding-top: 10px;
 }
+
+dt>h3
+{
+	margin-top: 1em;
+}
