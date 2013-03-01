@@ -57,7 +57,9 @@
 		"application": "Serelex для Windows 8 и Windows Phone",
 		"application_description": "Так же доступно приложение Serelex для Windows 8, котрое позволяет осуществлять простой поиск и навигацию по результатам благодаря отображению изображений для каждого слова. <a href=\"http://apps.microsoft.com/windows/app/lsse/48dc239a-e116-4234-87fd-ac90f030d72c\">Скриншоты и описание в Магазине Windows</a><br/><br/>Версия для Windows Phone отличается тем, что позволяет сразу произвести поиск в Google для любого термина из результатов поиска. Скришоты и подробное описание доступны в магазине приложений Windows Phone:<br /><br/><a href=\"http://www.windowsphone.com/s?appid=dbc7d458-a3da-42bf-8da1-de49915e0318\"><img src=\"/images/wp_qrcode.png\" alt=\"QR code\" style=\"width: 100px\" /></a>",
 		"contacts": "Контакты",
-		"contacts_detail": "По всем вопросам обращайтесь к Александру Панченко (<span class='text2985 text2985_ap'> </span>) или Павлу Романову (<span class='text2985 text2985_pr'> </span>)"
+		"contacts_detail": "По всем вопросам обращайтесь к Александру Панченко (<span class='text2985 text2985_ap'> </span>) или Павлу Романову (<span class='text2985 text2985_pr'> </span>)",
+		"design": "Дизайн",
+		"design_description": "Дизайн разработал Максим Колесов (<a href=\"http://midstripe.com/\" target=\"_blank\">Midstripe Teurgy</a>)"
 	},
 	"search": {
 		"input_word": "введите слово",
