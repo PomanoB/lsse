@@ -125,9 +125,13 @@
 
 			$.getJSON('/def/' + data.word, function(response){
 				var html = '';
-				if (response.word)
-					html += '<strong>' + response.word + '</strong> — ' + response.description + 
-							' — <a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+				if (response.en || (lang == 'ru' && response.ru))
+				{
+					if (response.image)
+						html += '<img src="' + response.image + '" alt="" style="width: 200px;display: block;"/>'
+					html += '<strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
+							' — <a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+				}
 
 				html += '<div><%= lingua.search.search_in %>...</div><ul>';
 				for(var name in searchIn)

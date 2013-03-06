@@ -6,6 +6,7 @@ var express = require('express')
 	, request = require('request');
 
 var LSSE = require('./lsse');
+var dbPedia = require('./dbpedia');
 var lsse = new LSSE();
 
 var LsseLogger = require('./logger');
@@ -49,21 +50,13 @@ var dataModels = require('./data_models').models;
 app.get('/', routes.index);
 app.get('/def/:word', function(req, res){
 
-	request('http://en.wikipedia.org/w/api.php?action=opensearch&format=xml&limit=1&search=' + encodeURIComponent(req.params.word), {
-		headers: {'User-Agent': 'LSSE'}
-	}, function (error, response, body) {
-		if (response.statusCode == 200)
-		{
-			var r = /<Text .*?>(.*)<\/Text>.*<Description .*?>([\s\S]*)<\/Description>/gim;
-			var result = r.exec(body);
-			if (result != null)
-				res.send({word: result[1], description: result[2]});
-			else
-				res.send({word: undefined, description: undefined});
-		}
+	dbPedia.getDefinition(req.params.word, function(err, result){
+		if (!err && result != null)
+			res.send(result);
 		else
-			res.send({word: undefined, description: undefined});
-	})
+			res.send({en: null, ru: null, image: null, word: req.params.word});
+		
+	});
 });
 app.get('/page/:page', routes.page);
 app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
@@ -164,8 +157,8 @@ lsse.openDb(db, function(err){
 
 				var words = [];
 				
-				var corrected = lsse.correctWord(data.word, 2);
 				var correctCost = {}
+				var corrected = lsse.correctWord(data.word, 2);
 				if (corrected.length > 0)
 				{
 					var i;
