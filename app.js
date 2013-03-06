@@ -56,7 +56,7 @@ app.get('/def/:word', function(req, res){
 		{
 			var r = /<Text .*?>(.*)<\/Text>.*<Description .*?>([\s\S]*)<\/Description>/gim;
 			var result = r.exec(body);
-			if (r != null)
+			if (result != null)
 				res.send({word: result[1], description: result[2]});
 			else
 				res.send({word: undefined, description: undefined});
