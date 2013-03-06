@@ -69,6 +69,8 @@ $(function(){
 				graph.addData(data, 20, LinkType.UserLoadedLink);
 				if (graph.show2ndLinks())
 					show2ndLinks();
+				if (showImages)
+					turnIconsOn();
 			}, true);
 			node.data.type = NodeType.UserClickNode;
 			node.ui.attr('class', 'parent node').attr('fill', graph.options.parentNodeColor);

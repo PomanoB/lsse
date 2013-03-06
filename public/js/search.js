@@ -4,6 +4,25 @@ var displayResults = null;
 var currentSkip = 0;
 var showImages = false;
 
+function turnIconsOn()
+{
+	showImages = true;
+	// $('img.result_icon').show();
+	$('g.node>image').css('display', 'block');
+
+	$('#icons_switcher a').removeClass('current');
+	$('#icons_switcher a[href="#on"]').addClass('current');
+}
+function turnIconsOff()
+{
+	showImages = false;
+	// $('img.result_icon').hide();
+	$('g.node>image').hide();
+
+	$('#icons_switcher a').removeClass('current');
+	$('#icons_switcher a[href="#off"]').addClass('current');
+}
+
 $(function(){
 	var socket = io.connect();
 	lsse = new LSSE(socket, '/find');
@@ -248,25 +267,6 @@ $(function(){
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
 
-	function turnIconsOn()
-	{
-		showImages = true;
-		$('img.result_icon').show();
-		$('g.node>image').css('display', 'block');
-
-		$('#icons_switcher a').removeClass('current');
-		$('#icons_switcher a[href="#on"]').addClass('current');
-	}
-	function turnIconsOff()
-	{
-		showImages = false;
-		$('img.result_icon').hide();
-		$('g.node>image').hide();
-
-		$('#icons_switcher a').removeClass('current');
-		$('#icons_switcher a[href="#off"]').addClass('current');
-	}
-	
 	if (!displayResults)
 	{
 		displayResults = function(data)
@@ -296,7 +296,7 @@ $(function(){
 				for(i = 0; i < data.relations.length; i++)
 				{
 					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
-					result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
+				//	result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 					if (advanced)
 						result += (' - ' + data.relations[i].value);
@@ -316,6 +316,7 @@ $(function(){
 					$('#result').html(result);
 				else
 					$('#result table>tbody').append(result);
+
 			}
 
 			return result;	
@@ -336,6 +337,9 @@ $(function(){
 
 		var result = _displayResults(data);
 		
+		if (showImages)
+			turnIconsOn();
+
 		if (data.totalRelations <= 0 && !result)
 		{
 			var pLen = data.perhaps.length;
