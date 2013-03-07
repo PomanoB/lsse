@@ -128,7 +128,7 @@
 				if (response.en || (lang == 'ru' && response.ru))
 				{
 					if (response.image)
-						html += '<img src="' + response.image + '" alt="" style="width: 200px;display: block;"/>'
+						html += '<img src="' + response.image + '" alt="" style="width: 200px;display: block;margin-bottom: 10px;"/>'
 					html += '<strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
 							' — <a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 				}
