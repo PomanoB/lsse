@@ -129,10 +129,16 @@
 				{
 					if (response.image)
 						html += '<img src="' + response.image + '" alt="" style="width: 200px;display: block;margin-bottom: 10px;"/>'
-					html += '<strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
-							' — <a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
+							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 				}
-
+				if (response.disambiguates.length > 0)
+				{
+					html += '<div>Другие значения:<ul>';
+					var i;
+					for(i = 0; i < response.disambiguates.length; i++)
+						html += '<li><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+				}
 				html += '<div><%= lingua.search.search_in %>...</div><ul>';
 				for(var name in searchIn)
 				{
