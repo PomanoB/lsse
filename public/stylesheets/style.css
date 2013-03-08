@@ -92,7 +92,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	border-left: 0;
 }
 
-#model_description, #grpah_options
+#model_description, #grpah_options, .infobox
 {
 	position: absolute;
 	width: 300px;
@@ -107,7 +107,7 @@ nav>ul>li:first-child, footer>ul>li:first-child
 	box-shadow: 3px 3px 6px;
 	z-index: 990;
 }
-#model_description>a[href="#close"], #grpah_options>a[href="#close"]
+#model_description>a[href="#close"], #grpah_options>a[href="#close"], .infobox>a[href="#close"]
 {
 	float: right;
 }
@@ -394,4 +394,12 @@ g.node>image
 dt>h3
 {
 	margin-top: 1em;
+}
+.disambiguates_info
+{
+	/*display: block;*/
+	right: 300px;
+	margin-top: 20px;
+	position: fixed;
+	width: 400px;
 }

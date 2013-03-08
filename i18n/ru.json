@@ -76,7 +76,9 @@
 		"system_search": "Система находит семантически связанные слова",
 		"for_example": "Например",
 		"search_in": "Искать в",
-		"wikipedia": "Википедия"
+		"wikipedia": "Википедия",
+		"disambiguates": "Другие значения",
+		"show_all_disambiguates": "Показать все значения"
 	},
 	"advanced": {
 		"title": "Лексико-семантическая поисковая система",

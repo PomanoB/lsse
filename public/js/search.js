@@ -232,6 +232,10 @@ $(function(){
 		$(this).parent().hide();
 		return false;
 	});
+	$('div.infobox>a[href="#close"]').click(function(){
+		$(this).parent().hide();
+		return false;
+	});
 
 
 	// $('#switch_secondary_links').click(function(){

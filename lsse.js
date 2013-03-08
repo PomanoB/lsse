@@ -278,8 +278,8 @@ LSSE.prototype.dbOpened = function(err, db){
 			t.lsse[collestions[i]] = results[i];
 		}
 
-		// t.lsse.loadTree(t.callback)
-		t.callback(null);
+		t.lsse.loadTree(t.callback)
+		// t.callback(null);
 	});
 };
 

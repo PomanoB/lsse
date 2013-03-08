@@ -39,6 +39,8 @@
 			
 			var currentPage = 'graph_search';
 
+			var showDisambiguates = 5;
+
 		</script>
 
 		<script src="/js/search.js"></script>
@@ -100,6 +102,11 @@
 			
 
 		</div>
+		<div class="infobox disambiguates_info">
+			<a href="#close">x</a>
+			<div>
+			</div>
+		</div>
 
 		<% include graph %>
 
@@ -108,6 +115,26 @@
 		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 
 		<script>
+
+		$(function(){
+			$('#info_panel').on('click', 'a.show_all_disambiguates', function(e){
+				$('ul.disambiguates_list>li').show();
+				$(e.target).hide();
+				return false;
+			});
+			$('#info_panel').on('click', 'ul.disambiguates_list a', function(e){
+				var word = decodeURIComponent($(e.target).attr('href').slice(29));
+				$.getJSON('/def/' + word, function(response){
+					if (response.en || (lang == 'ru' && response.ru))
+					{
+						var html = '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
+							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+						$('div.disambiguates_info').show().find('div').html(html);
+					}
+				});
+				return false;
+			})
+		})
 
 		var searchIn = {
 			'Google': 'https://google.com/search?q=%s',
@@ -134,10 +161,18 @@
 				}
 				if (response.disambiguates.length > 0)
 				{
-					html += '<div>Другие значения:<ul>';
+
+					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
 					var i;
 					for(i = 0; i < response.disambiguates.length; i++)
-						html += '<li><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+					{
+						html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+					}
+					html += '</ul>';
+					if (i > showDisambiguates)
+						html += '<a href="#show_all" class="show_all_disambiguates"><%= lingua.search.show_all_disambiguates %></a>';
+					html += '</div>';
+
 				}
 				html += '<div><%= lingua.search.search_in %>...</div><ul>';
 				for(var name in searchIn)
