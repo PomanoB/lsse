@@ -3,7 +3,8 @@ var express = require('express')
 	, http = require('http')
 	, lingua  = require('lingua')
 	, async = require('async')
-	, request = require('request');
+	, request = require('request')
+	, fs = require('fs');
 
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
@@ -57,8 +58,62 @@ app.get('/def/:word', function(req, res){
 			res.send({en: null, ru: null, image: null, word: req.params.word});
 		
 	});
-});
+}); 
 app.get('/page/:page', routes.page);
+
+var defaultModel = 'norm60-corpus-all';
+app.get('/suggest/:suggest', function(req, res){
+	var searchWord = req.params.suggest.toLowerCase();
+	var result = [searchWord, [], [], []];
+	var hostName = req.headers['host'] || "serelex.it-claim.ru";
+	lsse.suggest(searchWord, 20, function(words){
+		async.map(words, function(word, callback){
+			lsse.loadRelations(word, defaultModel, callback);
+		}, function(err, results){
+			
+			if (!err)
+			{
+				var i;
+				for(i = 0; i < results.length; i++)
+				{
+					if (results[i] != null)
+					{
+						result[1].push(results[i].word);
+						result[2].push(results[i].totalRelations == 1 ? "1 result" : results[i].totalRelations + " results");
+						result[3].push("http://" + hostName + "/#" + results[i].word);
+					}
+				}
+			}
+			res.set('Content-Type', 'application/x-suggestions+json');
+			res.send(JSON.stringify(result));
+		});
+	})
+});
+
+var searchEngineInfoCache = {};
+app.get('/SearchEngineInfo.xml', function(req, res){
+	console.log(req.headers['host']);
+	var hostName = req.headers['host'] || "serelex.it-claim.ru";
+	if (searchEngineInfoCache.hasOwnProperty(hostName))
+	{
+		res.setHeader('Content-Type', 'application/opensearchdescription+xml');
+		res.send(searchEngineInfoCache[hostName]);
+	}	
+	else
+	{
+		fs.readFile("./SearchEngineInfo.xml", "utf-8", function(err, data){
+			if (err)
+			{
+				res.status(500).send();
+				return;
+			}
+			res.setHeader('Content-Type', 'application/opensearchdescription+xml');
+			searchEngineInfoCache[hostName] = data.replace(/{siteUrl}/g, hostName);
+			res.send(searchEngineInfoCache[hostName]);
+		});
+	}
+});
+
 app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
 	
 	var data = {
