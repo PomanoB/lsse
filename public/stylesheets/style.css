@@ -27,7 +27,7 @@ nav>ul>li>a
 	font-weight: bold;
 	text-decoration: none;
 	color: #858585;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	padding-left: 10px;
 	padding-right: 10px;
 	border-right: 1px solid #00B7FF;
@@ -291,6 +291,8 @@ ul.relevance_select>li.relevance_bad
 	position: absolute;
 	margin-top: -22px;
 	margin-left: 77px;
+	font-weight: bold;
+	font-size: 1.1em;
 }
 
 

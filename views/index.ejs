@@ -34,7 +34,7 @@
 
 				$('#graph_container>div').hide();
 
-				$('#graph_container').css('left', '400px');
+				$('#graph_container').css('left', '350px');
 			});
 			
 			var currentPage = 'graph_search';
@@ -162,7 +162,7 @@
 				if (response.en || (lang == 'ru' && response.ru))
 				{
 					if (response.image)
-						html += '<img src="' + response.image + '" alt="" style="width: 200px;display: block;margin-bottom: 10px;"/>'
+						html += '<img src="' + response.image + '" alt="" style="max-width: 200px;max-height: 200px;display: block;margin-bottom: 10px;"/>'
 					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
 							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 				}
