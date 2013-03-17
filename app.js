@@ -92,7 +92,6 @@ app.get('/suggest/:suggest', function(req, res){
 
 var searchEngineInfoCache = {};
 app.get('/SearchEngineInfo.xml', function(req, res){
-	console.log(req.headers['host']);
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
 	if (searchEngineInfoCache.hasOwnProperty(hostName))
 	{
