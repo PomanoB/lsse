@@ -29,7 +29,8 @@
 		"option_2nd": "Secondary links:",
 		"apply": "Apply",
 		"option_icons": "Icons",
-		"show_as": "Show as"
+		"show_as": "Show as",
+		"info_panel": "Info panel"
 	},
 	"relevance": {
 		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",

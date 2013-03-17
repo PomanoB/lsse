@@ -94,6 +94,14 @@
 				</ul>
 			</div>
 
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.info_panel %></div>
+				<ul id="info_panel_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
 			<div class="clearfix"></div>
 		</div>
 		
@@ -182,7 +190,9 @@
 					}
 				}
 				
-				$('#info_panel').html(html).show();		
+				$('#info_panel').html(html);
+				if (showInfoPanel)
+					$('#info_panel').show();
 			});
 
 			var result;

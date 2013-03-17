@@ -3,6 +3,7 @@ var graph = null;
 var displayResults = null;
 var currentSkip = 0;
 var showImages = false;
+var showInfoPanel = true;
 
 function turnIconsOn()
 {
@@ -107,8 +108,8 @@ $(function(){
 		$('#result').empty();
 		$('#show_all').hide();
 		$('#suggest_results').hide();
-		$('#info_panel').hide();
-		
+		$('#info_panel').html('').hide();
+
 		clearTimeout(suggestTimeout);
 
 		currentSkip = 0;
@@ -213,6 +214,26 @@ $(function(){
 	});
 
 	// $('#switch_images').click(switchImages);
+
+	$('#info_panel_switcher a').click(function(){
+
+		if ($(this).attr('href') == "#on")
+		{
+			$('#info_panel').show();
+			showInfoPanel = true;
+		}	
+		else
+		{
+			$('#info_panel').hide();
+			showInfoPanel = false;
+		}	
+
+		$('#info_panel_switcher a').removeClass('current');
+		$('#info_panel_switcher a[href="#' + (showInfoPanel ? 'on' : 'off') + '"]').addClass('current');
+
+		return false;
+	});
+	$('#info_panel_switcher a[href="#on"]').addClass('current');
 
 	$('#icons_switcher a').click(function(){
 
