@@ -41,7 +41,7 @@
 		"description": "Please remember that you provide your own opinion on the quality of the results. If the words in the results sound related to you -- use 1. If not at all -- use 3. The words in the results should be semantically related to the query in a broad sense. They can be synonyms, hyponyms, co-hyponyms, strong associations..."
 	},
 	"title": "Lexico-Semantic Search Engine",
-	"idea": "finds semantically related words",
+	"idea": "Finds semantically related words",
 	"logo_text": "lexico-semantic search engine",
 	"about": {
 		"title": "About",

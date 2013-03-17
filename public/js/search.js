@@ -107,6 +107,8 @@ $(function(){
 		$('#result').empty();
 		$('#show_all').hide();
 		$('#suggest_results').hide();
+		$('#info_panel').hide();
+		
 		clearTimeout(suggestTimeout);
 
 		currentSkip = 0;
