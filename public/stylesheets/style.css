@@ -286,6 +286,10 @@ ul.relevance_select>li.relevance_bad
 	color: #858585;
 	display: block;
 }
+#logo>img
+{
+	border: 0;
+}
 #logo>div
 {
 	position: absolute;

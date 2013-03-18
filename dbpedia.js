@@ -12,7 +12,16 @@ var dbPedia = {
 			// console.log(response.statusCode, body);
 			if (response.statusCode == 200)
 			{
-				var data = JSON.parse(body);
+				var data
+				try
+				{
+					data = JSON.parse(body);
+				}
+				catch(e)
+				{
+					callback('Invalid JSON!', null);
+					return;
+				}
 				var name = 'http://dbpedia.org/resource/' + word;
 				if (typeof data[name] == "undefined")
 				{
