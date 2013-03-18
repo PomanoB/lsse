@@ -166,7 +166,7 @@
 					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
 							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 				}
-				if (response.disambiguates.length > 0)
+				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
 
 					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
