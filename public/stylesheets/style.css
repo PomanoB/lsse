@@ -411,3 +411,11 @@ dt>h3
 	display: inline-block;
 	padding-right: 5px;
 }
+
+#info_panel img.info_panel_image
+{
+	max-width: 200px;
+	max-height: 200px;
+	display: block;
+	margin: 0 auto 10px auto;
+}

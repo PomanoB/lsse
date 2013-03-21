@@ -161,8 +161,18 @@
 				if (response.en || (lang == 'ru' && response.ru))
 				{
 					if (response.image)
-						html += '<img src="' + response.image + '" alt="" style="max-width: 200px;max-height: 200px;display: block;margin-bottom: 10px;"/>'
-					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
+						html += '<img class="info_panel_image" src="' + response.image + '" alt="" />'
+					
+					var wordDef = lang == 'ru' && response.ru != null ? response.ru : response.en;
+					var originalDef = wordDef;
+					var wordDefWords = wordDef.split(/\s+/);
+					if (wordDefWords.length > 50)
+					{
+						wordDefWords.splice(50);
+						wordDefWords.push("...");
+						wordDef = wordDefWords.join(' ');
+					}
+					html += '<div><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + wordDef + 
 							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
