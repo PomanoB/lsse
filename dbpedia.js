@@ -12,6 +12,7 @@ var dbPedia = {
 			// console.log(response.statusCode, body);
 			if (response.statusCode == 200)
 			{
+			//	fs.writeFileSync('3.js', body);
 				var data
 				try
 				{
@@ -23,6 +24,7 @@ var dbPedia = {
 					return;
 				}
 				var name = 'http://dbpedia.org/resource/' + word;
+				var i;
 				if (typeof data[name] == "undefined")
 				{
 					callback('Not found1!', null);
@@ -30,7 +32,7 @@ var dbPedia = {
 				}
 				if (typeof data[name]['http://dbpedia.org/ontology/wikiPageDisambiguates'] != "undefined")
 				{
-					var dis = [], i, wikiPageDisambiguates = data[name]['http://dbpedia.org/ontology/wikiPageDisambiguates'];
+					var dis = [], wikiPageDisambiguates = data[name]['http://dbpedia.org/ontology/wikiPageDisambiguates'];
 					for(i = 0; i < wikiPageDisambiguates.length; i++)
 						dis.push(wikiPageDisambiguates[i].value.substring(28));
 
@@ -40,25 +42,57 @@ var dbPedia = {
 				}
 				if (typeof data[name]['http://dbpedia.org/ontology/abstract'] == "undefined")
 				{
-					callback('Not found2!', null);
+					if (typeof data[name]["http://dbpedia.org/ontology/wikiPageRedirects"] == "undefined" || !data[name]["http://dbpedia.org/ontology/wikiPageRedirects"].length)
+					{
+						callback('Not found2!', null);
+						return;
+					}
+					dbPedia.getDefinition(
+						data[name]["http://dbpedia.org/ontology/wikiPageRedirects"][0].value.substring(28),
+						callback
+					);
 					return;
 				}
-				var result = {word: word, en: null, ru: null, image: null, disambiguates: []}, i, abstract = data[name]['http://dbpedia.org/ontology/abstract'];
+				var result = {
+					word: word, 
+					definition: {
+						en: null,
+						ru: null
+					},
+					labels: {
+						en: null,
+						ru: null
+					}, 
+					image: null, 
+					disambiguates: []
+				};
+				var abstract = data[name]['http://dbpedia.org/ontology/abstract'];
 				if (typeof disambiguates != "undefined")
 					result.disambiguates = disambiguates;
 
 				for(i = 0; i < abstract.length; i++)
 				{
 					if (abstract[i].lang == "en" || abstract[i].lang == "ru")
-						result[abstract[i].lang] = abstract[i].value
+						result['definition'][abstract[i].lang] = abstract[i].value
 				}
+				if (typeof data[name]["http://www.w3.org/2000/01/rdf-schema#label"] != "undefined" && data[name]["http://www.w3.org/2000/01/rdf-schema#label"].length)
+				{
+					var langNames = data[name]["http://www.w3.org/2000/01/rdf-schema#label"];
+					for(i = 0; i < langNames.length; i++)
+					{
+						if (langNames[i].lang == "en" || langNames[i].lang == "ru")
+							result['labels'][langNames[i].lang] = langNames[i].value
+					}
+
+				}
+				
 				if (typeof data[name]['http://dbpedia.org/ontology/thumbnail'] != "undefined")
 				{
 					result['image'] = data[name]['http://dbpedia.org/ontology/thumbnail'][0].value;
 				}
 				callback(null, result);
 				// console.log(body);
-				// fs.writeFileSync('3.js', body);
+				
 			}
 			else
 				callback('Not found3!', null);
@@ -69,6 +103,6 @@ module.exports = dbPedia;
 
 // dbPedia.getDefinition('Linux', function(error, result){
 // dbPedia.getDefinition('Morphology_(biology)', function(error, result){
-// dbPedia.getDefinition('Morphology', function(error, result){
-	// console.log(error, result);
+// dbPedia.getDefinition('Stanford', function(error, result){
+// 	console.log(error, result);
 // })

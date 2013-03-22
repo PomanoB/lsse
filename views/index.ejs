@@ -158,12 +158,29 @@
 
 			$.getJSON('/def/' + data.word, function(response){
 				var html = '';
-				if (response.en || (lang == 'ru' && response.ru))
+				var definition = '', url = {lang: 'en', label: response.word.replace(/_/g, ' ')};
+
+				if (lang == 'ru' && response.definition.ru)
+					definition = response.definition.ru;
+				else
+				if (response.definition.en)
+					definition = response.definition.en;
+
+				if (lang == 'ru' && response.labels.ru)
+				{
+					url.label = response.labels.ru;
+					url.lang = 'ru';
+				}
+				else
+				if (response.labels.en)
+					url.label = response.labels.en;
+
+				if (definition)
 				{
 					if (response.image)
-						html += '<img src="' + response.image + '" alt="" style="max-width: 200px;max-height: 200px;display: block;margin-bottom: 10px;"/>'
-					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
-							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+						html += '<img src="' + response.image + '" alt="" style="max-width: 200px;max-height: 200px;display: block;margin-bottom: 10px;"/>';
+					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + url.label + '</strong> — ' + ( definition ) + 
+							'</div><a target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
