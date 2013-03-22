@@ -55,7 +55,22 @@ app.get('/def/:word', function(req, res){
 		if (!err && result != null)
 			res.send(result);
 		else
-			res.send({en: null, ru: null, image: null, word: req.params.word});
+		{
+			res.send({
+				word: req.params.word, 
+				definition: {
+					en: null,
+					ru: null
+				},
+				labels: {
+					en: null,
+					ru: null
+				}, 
+				image: null, 
+				disambiguates: []
+			});
+		}
+		//	res.send({en: null, ru: null, image: null, word: req.params.word});
 		
 	});
 }); 

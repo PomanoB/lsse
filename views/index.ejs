@@ -121,7 +121,6 @@
 		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 
 		<script>
-
 		$(function(){
 			$('#info_panel').on('click', 'a.show_all_disambiguates', function(e){
 				$('ul.disambiguates_list>li').show();
@@ -212,8 +211,10 @@
 						html += '<li><a target="_blank" href="' + searchIn[name].replace('%s', data.word) + '">' + name + '</a></li>';
 					}
 				}
-				
-				$('#info_panel').html(html);
+				$('#info_panel').html(html).find('img.info_panel_image').error(function() { 
+					$(this).hide();
+				}).attr('src', response.image);
+
 				if (showInfoPanel)
 					$('#info_panel').show();
 			});
