@@ -177,14 +177,21 @@
 
 				if (definition)
 				{
+					var wordDefWords = definition.split(/\s+/);
+					if (wordDefWords.length > 50)
+					{
+						wordDefWords.splice(50);
+						wordDefWords.push("...");
+						definition = wordDefWords.join(' ');
+					}
+
 					if (response.image)
-						html += '<img src="' + response.image + '" alt="" style="max-width: 200px;max-height: 200px;display: block;margin-bottom: 10px;"/>';
-					html += '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + url.label + '</strong> — ' + ( definition ) + 
-							'</div><a target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
+						html += '<img class="info_panel_image" src="' + response.image + '" alt="" />';
+
+					html += '<div><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( definition ) + '</div><a target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
-
 					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
 					var i;
 					for(i = 0; i < response.disambiguates.length; i++)
