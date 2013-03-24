@@ -207,18 +207,49 @@
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
-					response.disambiguates.sort(function(a, b) {
-						return a.length - b.length;
-					});
+					// response.disambiguates.sort(function(a, b) {
+					// 	return a.length - b.length;
+					// });
 					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
-					var i;
-					for(i = 0; i < response.disambiguates.length; i++)
-					{
-						html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
-					}
+					var sortedDisambiguates = [];
+					$.when.apply($, $.map(response.disambiguates, function (disambiguate, i) {
+						return $.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?&prop=text&page=' + disambiguate, function(res){
+							if (!res.error)
+							{
+								sortedDisambiguates.push({
+									word: res.parse.title,
+									len: res.parse.text['*'].length
+								});
+							}
+						});
+					})).then(function(){
+						if (sortedDisambiguates.length > 0)
+						{
+							var html = '';
+							var i;
+							sortedDisambiguates.sort(function(a, b){
+								return b.len - a.len;
+							});
+							for(i = 0; i < sortedDisambiguates.length; i++)
+							{
+								html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(sortedDisambiguates[i].word.replace(/ /g, '_')) + '">' + sortedDisambiguates[i].word.replace('_', ' ') + '</a></li>';
+							}
+							$('#info_panel ul.disambiguates_list').html(html);
+							if (i > showDisambiguates)
+								$('#info_panel a.show_all_disambiguates').show();
+						}
+						else
+							$('#info_panel ul.disambiguates_list').hide();
+					})
+
+					// var i;
+					// for(i = 0; i < response.disambiguates.length; i++)
+					// {
+					// 	html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+					// }
 					html += '</ul>';
-					if (i > showDisambiguates)
-						html += '<a href="#show_all" class="show_all_disambiguates"><%= lingua.search.show_all_disambiguates %></a>';
+				//	if (i > showDisambiguates)
+					html += '<a href="#show_all" class="show_all_disambiguates" style="display: none;"><%= lingua.search.show_all_disambiguates %></a>';
 					html += '</div>';
 
 				}
