@@ -129,13 +129,29 @@
 			});
 			$('#info_panel').on('click', 'ul.disambiguates_list a', function(e){
 				var word = decodeURIComponent($(e.target).attr('href').slice(29));
+
 				$.getJSON('/def/' + word, function(response){
-					if (response.en || (lang == 'ru' && response.ru))
+				
+					var def = {
+						lang: "en", 
+						definition: response.definition.en,
+						label: word.replace(/_/g, ' ')
+					};
+					if (lang == "ru" && response.definition.ru != null)
 					{
-						var html = '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( lang == 'ru' && response.ru != null ? response.ru : response.en ) + 
-							'</div><a target="_blank" href="http://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(response.word) + '"><%= lingua.search.wikipedia %></a>';
+						def.definition = response.definition.ru;
+						def.lang = "ru";
+					}
+					if (response.labels[def.lang])
+						def.label = response.labels[def.lang];
+
+					if (def.definition)
+					{
+						var html = '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + def.label + '</strong> — ' + def.definition + 
+							'</div><a target="_blank" href="http://' + def.lang + '.wikipedia.org/wiki/' + encodeURIComponent(def.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
 						$('div.disambiguates_info').show().find('div').html(html);
 					}
+					
 				});
 				return false;
 			})
