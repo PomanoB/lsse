@@ -207,6 +207,9 @@
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
+					response.disambiguates.sort(function(a, b) {
+						return a.length - b.length;
+					});
 					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
 					var i;
 					for(i = 0; i < response.disambiguates.length; i++)
