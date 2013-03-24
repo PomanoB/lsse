@@ -2,17 +2,17 @@ var request = require('request'), fs = require('fs');
 
 var dbPedia = {
 
-	getDefinition: function(word, callback, disambiguates) {
+	getDefinition: function(word, callback, disambiguates, oldResult) {
 
 		word = word.charAt(0).toUpperCase() + word.slice(1);
 		word = word.replace(/ /g, '_');
-		request('http://dbpedia.org/data/' + encodeURIComponent(word) + '.json', {
+		request('http://dbpedia.org/data/' + word + '.json', {
 			headers: {'User-Agent': 'LSSE'}
 		}, function (error, response, body) {
 			// console.log(response.statusCode, body);
 			if (response.statusCode == 200)
 			{
-			//	fs.writeFileSync('3.js', body);
+				// fs.writeFileSync('3.js', body);
 				var data
 				try
 				{
@@ -36,8 +36,16 @@ var dbPedia = {
 					for(i = 0; i < wikiPageDisambiguates.length; i++)
 						dis.push(wikiPageDisambiguates[i].value.substring(28));
 
-					var newWord = dis[0];
-					dbPedia.getDefinition(newWord, callback, dis);
+					if (typeof oldResult != "undefined")
+					{
+						oldResult.disambiguates = dis;
+						callback(null, oldResult);
+					}
+					else
+					{
+						var newWord = dis[0];
+						dbPedia.getDefinition(newWord, callback, dis);
+					}
 					return;
 				}
 				if (typeof data[name]['http://dbpedia.org/ontology/abstract'] == "undefined")
@@ -90,7 +98,18 @@ var dbPedia = {
 				{
 					result['image'] = data[name]['http://dbpedia.org/ontology/thumbnail'][0].value;
 				}
-				callback(null, result);
+
+				if (typeof data[name + '_(disambiguation)'] != "undefined")
+				{
+					dbPedia.getDefinition(
+						word + '_(disambiguation)',
+						callback,
+						undefined,
+						result
+					);
+				}
+				else
+					callback(null, result);
 				// console.log(body);
 				
 			}
@@ -103,6 +122,6 @@ module.exports = dbPedia;
 
 // dbPedia.getDefinition('Linux', function(error, result){
 // dbPedia.getDefinition('Morphology_(biology)', function(error, result){
-// dbPedia.getDefinition('Stanford', function(error, result){
+// dbPedia.getDefinition('Moscow,_Indiana', function(error, result){
 // 	console.log(error, result);
 // })
