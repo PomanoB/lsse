@@ -1,7 +1,98 @@
 var request = require('request'), fs = require('fs');
+var PageRank = require('pagerank'), async = require('async');
 
 var dbPedia = {
-
+	
+	sort: function(result, callback){
+		async.parallel([
+			function(callback){
+				dbPedia.sortByWikipediaLength(result.disambiguates, callback);
+			},
+			function(callback){
+				dbPedia.sortByPageRank(result.disambiguates, callback);
+			}
+		], function(error, sortedResult){
+			// console.log(error, result);
+			var pageRank = {};
+			var pageLength = {};
+			var i;
+			for(i = 0; i < sortedResult[0].length; i++)
+				pageLength[ sortedResult[0][i].word ] = sortedResult[0][i].length;
+			for(i = 0; i < sortedResult[1].length; i++)
+				pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
+			var resultArray = [];
+			result.disambiguates.sort(function(a, b){
+				if (pageRank[b] > pageRank[a])
+					return 1;
+				if (pageRank[a] > pageRank[b])
+					return -1;	
+				return pageLength[b] > pageLength[a];
+			});
+			for(i = 0; i < result.disambiguates.length; i++)
+			{
+				resultArray[i] = {
+					word: result.disambiguates[i],
+					pageRank: pageRank[ result.disambiguates[i] ],
+					pageLength: pageLength[ result.disambiguates[i] ]
+				};
+			}
+			callback(error, resultArray);
+		});
+	},
+	sortByPageRank: function(words, callback){
+		async.map(words, function(word, callback){
+			new PageRank('http://en.wikipedia.org/wiki/' + word, function(error, pageRank) {
+				callback(error, {
+					word: word,
+					pageRank: pageRank ? pageRank : 0
+				});
+			});
+		}, function(err, result){
+			if (!err)
+			{
+				result.sort(function(a, b){
+					return b.pageRank - a.pageRank;
+				});
+			}
+			callback(err, result);
+		});
+	},
+	sortByWikipediaLength: function(words, callback){
+		async.map(words, function(word, callback){
+			
+			request('http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&page=' + word, {
+				headers: {'User-Agent': 'LSSE'}
+			}, function (error, response, body) {
+				if (response.statusCode != 200)
+				{
+					callback(null, {word: word, length: 0});
+					return;
+				}
+				var data
+				try
+				{
+					data = JSON.parse(body);
+				}
+				catch(e)
+				{
+					callback(null, {word: word, length: 0});
+					return;
+				}
+				if (data.error)
+				{
+					callback(null, {word: word, length: 0});
+					return;
+				}
+				callback(null, {word: word, length: data.parse.text['*'].length});
+			});
+			
+		}, function(err, result){
+			result.sort(function(a, b){
+				return b.length - a.length;
+			});
+			callback(err, result);
+		});
+	},
 	getDefinition: function(word, callback, disambiguates, oldResult) {
 
 		word = word.charAt(0).toUpperCase() + word.slice(1);
@@ -110,8 +201,6 @@ var dbPedia = {
 				}
 				else
 					callback(null, result);
-				// console.log(body);
-				
 			}
 			else
 				callback('Not found3!', null);
@@ -122,6 +211,8 @@ module.exports = dbPedia;
 
 // dbPedia.getDefinition('Linux', function(error, result){
 // dbPedia.getDefinition('Morphology_(biology)', function(error, result){
-// dbPedia.getDefinition('Moscow,_Indiana', function(error, result){
-// 	console.log(error, result);
+// dbPedia.getDefinition('Apple', function(error, result){
+	// dbPedia.sort(result, function(error, res){
+		// console.log(result, res);
+	// });
 // })

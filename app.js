@@ -53,7 +53,11 @@ app.get('/def/:word', function(req, res){
 
 	dbPedia.getDefinition(req.params.word, function(err, result){
 		if (!err && result != null)
-			res.send(result);
+		{
+			dbPedia.sort(result, function(){
+				res.send(result);
+			});
+		}
 		else
 		{
 			res.send({
