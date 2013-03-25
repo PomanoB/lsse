@@ -49,14 +49,18 @@ var wordsCollection = null;
 var dataModels = require('./data_models').models;
 
 app.get('/', routes.index);
+
+app.post('/sort/:word', function(req, res){
+	dbPedia.sort(req.body.data, function(){
+		res.send(req.body.data);
+	});
+});
 app.get('/def/:word', function(req, res){
 
 	dbPedia.getDefinition(req.params.word, function(err, result){
 		if (!err && result != null)
 		{
-			dbPedia.sort(result, function(){
-				res.send(result);
-			});
+			res.send(result);
 		}
 		else
 		{

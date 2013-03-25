@@ -3,13 +3,13 @@ var PageRank = require('pagerank'), async = require('async');
 
 var dbPedia = {
 	
-	sort: function(result, callback){
+	sort: function(data, callback){
 		async.parallel([
 			function(callback){
-				dbPedia.sortByWikipediaLength(result.disambiguates, callback);
+				dbPedia.sortByWikipediaLength(data, callback);
 			},
 			function(callback){
-				dbPedia.sortByPageRank(result.disambiguates, callback);
+				dbPedia.sortByPageRank(data, callback);
 			}
 		], function(error, sortedResult){
 			// console.log(error, result);
@@ -21,19 +21,19 @@ var dbPedia = {
 			for(i = 0; i < sortedResult[1].length; i++)
 				pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
 			var resultArray = [];
-			result.disambiguates.sort(function(a, b){
+			data.sort(function(a, b){
 				if (pageRank[b] > pageRank[a])
 					return 1;
 				if (pageRank[a] > pageRank[b])
 					return -1;	
 				return pageLength[b] > pageLength[a];
 			});
-			for(i = 0; i < result.disambiguates.length; i++)
+			for(i = 0; i < data.length; i++)
 			{
 				resultArray[i] = {
-					word: result.disambiguates[i],
-					pageRank: pageRank[ result.disambiguates[i] ],
-					pageLength: pageLength[ result.disambiguates[i] ]
+					word: data[i],
+					pageRank: pageRank[ data[i] ],
+					pageLength: pageLength[ data[i] ]
 				};
 			}
 			callback(error, resultArray);
