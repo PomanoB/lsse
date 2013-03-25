@@ -109,6 +109,7 @@ $(function(){
 		$('#show_all').hide();
 		$('#suggest_results').hide();
 		$('#info_panel').html('').hide();
+		$('div.disambiguates_info').hide();
 
 		clearTimeout(suggestTimeout);
 
