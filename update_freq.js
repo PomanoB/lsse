@@ -15,7 +15,8 @@ var mongo = require('mongodb'),
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('serelex2', server);
 
-var fileNames = ['./data/pairs-all-freq.csv', './data/conc-all-freq.csv', './data/corpus-all-freq.csv'];
+//var fileNames = ['./data/pairs-all-freq.csv', './data/conc-all-freq.csv', './data/corpus-all-freq.csv'];
+var fileNames = ['./data/corpus-freq-fr.csv'];
 
 db.open(function(err, db) {
 	if(err) 
