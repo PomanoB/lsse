@@ -1,4 +1,11 @@
-var dataModels = require('./data_models').models;
+// var dataModels = require('./data_models').models;
+var dataModels = [
+	{
+		name: "PatternSim: Fr",
+		alias: 'pairs-fr-raw',
+		fileName: 'data/pairs-fr-raw.csv'
+	}
+];
 var BufferedReader = require("buffered-reader");
 var fs = require("fs");
 

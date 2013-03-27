@@ -1,4 +1,5 @@
-var BufferedReader = require("buffered-reader");
+var reader = require ("buffered-reader");
+var DataReader = reader.DataReader;
 var fs = require("fs");
 
 var async = require("async");
@@ -61,7 +62,7 @@ db.open(function(err, db) {
 				}
 
 				async.forEach(fileData, function(file, callback){
-					new BufferedReader (file.name, { encoding: "utf8" })
+					new DataReader (file.name, { encoding: "utf8" })
 						.on ("error", function (error){
 							callback(error);
 						})
@@ -86,7 +87,7 @@ db.open(function(err, db) {
 						})
 						.on ("end", function (){
 							console.log("File", file.name, "complete processing");
-							this.close();
+					//		this.close();
 							callback();
 						})
 						.read ();

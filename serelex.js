@@ -1,5 +1,6 @@
 var fs = require("fs");
-var BufferedReader = require("buffered-reader");
+var reader = require ("buffered-reader");
+var DataReader = reader.DataReader;
 var util = require('util');
 
 var serelex = function() {
@@ -58,7 +59,7 @@ var serelex = function() {
 		this.data[alias] = {};
 		this.relationsCount[alias] = 0;
 
-		new BufferedReader (file, { encoding: "utf8" })
+		new DataReader (file, { encoding: "utf8" })
 			.on ("error", function (error){
 				callback(error);
 			})
@@ -78,7 +79,7 @@ var serelex = function() {
 				}
 			})
 			.on ("end", function (){
-				this.close();
+			//	this.close();
 				callback(false, t.getWordId(alias), t.data[alias]);
 			})
 			.read ();
