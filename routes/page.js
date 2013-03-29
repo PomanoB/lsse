@@ -4,11 +4,6 @@ var allowedPages = {
 	about: {
 		view: "about"
 	},
-	test: {
-		view: "test",
-		models: require('./../data_models').models,
-		modelStats: JSON.parse(fs.readFileSync('./stats.json'))
-	},
 	advanced: {
 		view: "advanced",
 		models: require('./../data_models').models,
@@ -27,6 +22,9 @@ var allowedPages = {
 };
 
 exports.page = function(req, res){
+	res.locals.useDb = req.params.db;
+	res.locals.useDbLink = res.locals.useDb ? ('/' + res.locals.useDb) : '';
+
 	if (typeof req.params.page != "undefined" && typeof allowedPages[req.params.page] != "undefined")
 		res.render(allowedPages[req.params.page].view, allowedPages[req.params.page]);
 	else

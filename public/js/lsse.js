@@ -1,5 +1,7 @@
-var LSSE = function(socket, apiAdress)
+var LSSE = function(socket, db)
 {
+	this.useDb = db ? db : null;
+
 	this.lastQuery = {
 		model: null,
 		word: null
@@ -31,10 +33,8 @@ var LSSE = function(socket, apiAdress)
 		{
 			var searchId = Math.floor(Math.random() * 9999999);
 			socket.once('result_' + searchId, callback);
-			socket.emit('get relationships', { word: word, model: model, skip: skip, limit: limit, searchId: searchId});
+			socket.emit('get relationships', { word: word, model: model, skip: skip, limit: limit, searchId: searchId, db: this.useDb});
 		}
-		else
-			$.getJSON(apiAdress + '/' + model + '/' + word).success(callback);
 	}
 
 	this.completeLog = function(click){
@@ -54,7 +54,7 @@ var LSSE = function(socket, apiAdress)
 				t.suggestResults[key] = words;
 				callback(words);
 			});
-			socket.emit('suggest', { word: word});
+			socket.emit('suggest', { word: word, db: this.useDb});
 		}
 		else
 			callback(this.suggestResults[key]);

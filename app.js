@@ -13,6 +13,8 @@ var lsse = new LSSE();
 var LsseLogger = require('./logger');
 var logger = new LsseLogger('logs');
 
+var defaultDb = null;
+
 var app = express();
 
 app.configure(function(){
@@ -48,7 +50,7 @@ var wordsCollection = null;
 
 var dataModels = require('./data_models').models;
 
-app.get('/', routes.index);
+app.get('/:db(en|fr)?', routes.index);
 
 app.post('/sort/:word', function(req, res){
 	dbPedia.sort(req.body.data, function(){
@@ -82,10 +84,10 @@ app.get('/def/:word', function(req, res){
 		
 	});
 }); 
-app.get('/page/:page', routes.page);
+app.get('/:db(en|fr)?/page/:page', routes.page);
 
 var defaultModel = 'norm60-corpus-all';
-app.get('/suggest/:suggest', function(req, res){
+app.get('/:db(en|fr)?/suggest/:suggest', function(req, res){
 	var searchWord = req.params.suggest.toLowerCase();
 	var result = [searchWord, [], [], []];
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
@@ -136,7 +138,7 @@ app.get('/SearchEngineInfo.xml', function(req, res){
 	}
 });
 
-app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
+app.get('/:db(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 	
 	var data = {
 		time: (new Date()).getTime(),
@@ -174,7 +176,7 @@ app.get('/find/:model/:word/:limit?/:skip?', function(req, res){
 });
 
 var modelsListForAPI = null;
-app.get('/models', function(req, res){
+app.get('/:db(en|fr)?/models', function(req, res){
 
 	if (modelsListForAPI == null)
 	{
@@ -313,7 +315,7 @@ lsse.openDb(db, function(err){
 		});
 
 		socket.on('suggest', function (data) {
-			lsse.suggest(data.word.toLowerCase(), 10, function(words){
+			lsse.suggest(data.word.toLowerCase(), data.db, 10, function(words){
 				socket.emit('suggest result', words);
 			})
 		});

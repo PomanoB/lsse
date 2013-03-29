@@ -134,6 +134,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
 }
 
 LSSE.prototype.getRelations = function(word, model, limit, skip, callback){
+
 	var t = this;
 	this.loadRelations(word, model, function(err, item){
 		if (err)
@@ -171,7 +172,6 @@ LSSE.prototype.loadRelations = function(word, model, callback){
 	var t = this;
 
 	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
-
 		if (err)
 		{
 			callback(err)
@@ -283,10 +283,12 @@ LSSE.prototype.dbOpened = function(err, db){
 	});
 };
 
-LSSE.prototype.suggest = function(word, limit, callback)
+LSSE.prototype.suggest = function(word, db, limit, callback)
 {
-
-	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9\s]/, ''))}, {word: 1, freq: 1})
+	var where = {word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9\s]/, ''))};
+	if (db)
+		where.db = db;
+	this.words.find(where, {word: 1, freq: 1})
 				.sort({freq: -1, word: 1}).limit(limit).toArray(function(err, items){
 		if (err)
 		{

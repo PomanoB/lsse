@@ -26,7 +26,7 @@ function turnIconsOff()
 
 $(function(){
 	var socket = io.connect();
-	lsse = new LSSE(socket, '/find');
+	lsse = new LSSE(socket, useDb);
 
 	
 
@@ -211,6 +211,8 @@ $(function(){
 						$('#suggest_results').hide();
 				});
 			}
+			else
+				$('#suggest_results').hide();
 		}, 200);
 	});
 
@@ -294,62 +296,6 @@ $(function(){
 
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
-
-	if (!displayResults)
-	{
-		displayResults = function(data)
-		{
-			var result;
-			
-		//	$('#graph_container>div').show();
-			if (currentSkip == 0)
-			{
-				graph.clear();
-				$('#result').empty();
-			}
-			
-			if (data.totalRelations > 0)
-			{
-				graph.addData(data, 20, currentSkip == 0 ? LinkType.PrimaryLink : LinkType.SecondaryLink);
-				graph.update();
-
-				if (currentSkip == 0)
-				{
-					result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
-					result += '<table>';
-				}
-
-				var firstRel = -1;
-				var i;
-				for(i = 0; i < data.relations.length; i++)
-				{
-					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
-				//	result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
-					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
-					if (advanced)
-						result += (' - ' + data.relations[i].value);
-					result += '</td></tr>';
-				}
-				if (currentSkip == 0)
-					result += '</table>';
-
-				if (data.relations.length < data.totalRelations)
-					$('#show_all').show();
-
-			//	$('div.relevance').show().find('select').val(0);
-
-				if(graph.show2ndLinks())
-					show2ndLinks();
-				if (currentSkip == 0)
-					$('#result').html(result);
-				else
-					$('#result table>tbody').append(result);
-
-			}
-
-			return result;	
-		}
-	}
 
 	var _displayResults = displayResults;
 	displayResults = function(data)

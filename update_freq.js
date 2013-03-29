@@ -7,6 +7,21 @@ var async = require("async");
 var Serelex = new require('./serelex');
 var serelex = new Serelex();
 
+if (process.argv.length < 3)
+{
+	console.log("Usage:", process.argv[0], process.argv[1], "<file name>", "[db]");
+	process.exit();
+}
+var fileName = process.argv[2];
+var wordsDb = process.argv.length >= 4 ? process.argv[3] : null;
+
+if (!fs.existsSync(fileName))
+{
+	console.log("File", fileName, "does not exists!");
+	process.exit();
+}
+
+var fileStat = fs.statSync(fileName);
 
 var mongo = require('mongodb'),
 	Server = mongo.Server,
@@ -16,7 +31,6 @@ var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('serelex2', server);
 
 //var fileNames = ['./data/pairs-all-freq.csv', './data/conc-all-freq.csv', './data/corpus-all-freq.csv'];
-var fileNames = ['./data/corpus-freq-fr.csv'];
 
 db.open(function(err, db) {
 	if(err) 
@@ -33,7 +47,7 @@ db.open(function(err, db) {
 			return;
 		}
 		console.log("Loading existing words...");
-		wordsCollection.find().toArray(function(err, items){
+		wordsCollection.find(wordsDb ? {db: wordsDb} : undefined).toArray(function(err, items){
 			if(err) 
 			{
 				console.log(err);
@@ -49,54 +63,38 @@ db.open(function(err, db) {
 
 			console.log("Complete...");
 
-			var fileData = [];
-			async.map(fileNames, fs.stat, function(err, results){
-				if (err) 
-					console.log(err);
-				for(var i = 0; i < results.length; i++)
-				{
-					fileData[i] = {
-						size: results[i].size, 
-						loaded: 0,
-						name: fileNames[i]
-					};
-				}
+			var fileSize = fileStat.size;
+			var fileLoaded = 0;
+			
+			new DataReader (fileName, { encoding: "utf8" })
+				.on ("error", function (error){
+					callback(error);
+					process.exit();
+				})
+				.on ("line", function (line, offset){
+					if (offset == -1)
+						offset = fileSize;
+					var progress = Math.floor(offset/fileSize*100);
+					if (progress != fileLoaded)
+					{
+						fileLoaded = progress;
+						console.log("File", fileName, "loading", progress, "%");
+					}
 
-				async.forEach(fileData, function(file, callback){
-					new DataReader (file.name, { encoding: "utf8" })
-						.on ("error", function (error){
-							callback(error);
-						})
-						.on ("line", function (line, offset){
-							if (offset == -1)
-								offset = file.size;
-							var progress = Math.floor(offset/file.size*100);
-							if (progress != file.loaded)
-							{
-								file.loaded = progress;
-								console.log("File", file.name, "loading", progress, "%");
-							}
+					var data = line.split(";");
+					if (data.length != 2)
+						return;
 
-							var data = line.split(";");
-							if (data.length != 2)
-								return;
-
-							if (typeof words[data[0] + "bnud"] != "undefined")
-							{
-								wordsCollection.update({word: data[0]}, {$set: {freq: parseInt(data[1])}});
-							}
-						})
-						.on ("end", function (){
-							console.log("File", file.name, "complete processing");
-					//		this.close();
-							callback();
-						})
-						.read ();
-				}, function(err){
-					if (err != null)
-						console.log(err);
-				});
-			});
+					if (typeof words[data[0] + "bnud"] != "undefined")
+					{
+						wordsCollection.update(wordsDb ? {word: data[0]} : {word: data[0], db: wordsDb}, {$set: {freq: parseInt(data[1])}});
+					}
+				})
+				.on ("end", function (){
+					console.log("File", fileName, "complete processing");
+			//		this.close();
+					
+				}).read ();
 		});
 	});
 });

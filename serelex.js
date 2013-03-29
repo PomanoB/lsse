@@ -12,9 +12,9 @@ var serelex = function() {
 	var t = this;
 
 	this.emptyResult = [];
-	
-	this.getWordId = function(word){
-		var key = word + "13ashdf";
+
+	this.getWordId = function(word, db){
+		var key = word + (db || "") + "13ashdf";
 		if (typeof this.wordId[key] == "undefined")
 		{
 			this.wordsArray.push(word);
@@ -23,14 +23,14 @@ var serelex = function() {
 		return this.wordId[key];
 	}
 	
-	this.getWordById = function(id){
+	this.getWordById = function(id, db){
 		return this.wordsArray[id];
 	}
 
-	this.setWordId = function(word, id)
+	this.setWordId = function(word, db, id)
 	{
 		this.wordsArray[id] = word;
-		this.wordId[word + "13ashdf"] = id;
+		this.wordId[word + (db || "") + "13ashdf"] = id;
 	}
 
 	this.addRelationship = function(alias, word, pair, value){
@@ -42,7 +42,7 @@ var serelex = function() {
 		this.data[alias][word].push([pair, parseFloat(value)]);
 	}
 
-	this.loadCSV = function(file, alias, callback){
+	this.loadCSV = function(file, alias, db, callback){
 		if (!fs.existsSync(file))
 		{
 			callback("File dont exsists!");
@@ -67,7 +67,7 @@ var serelex = function() {
 				var d = line.split(";");
 				if (d.length == 3)
 				{
-					t.addRelationship(alias, t.getWordId(d[0]), t.getWordId(d[1]), d[2]);
+					t.addRelationship(alias, t.getWordId(d[0], db), t.getWordId(d[1], db), d[2]);
 				}
 				if (offset == -1)
 					offset = stats.size;
@@ -80,7 +80,7 @@ var serelex = function() {
 			})
 			.on ("end", function (){
 			//	this.close();
-				callback(false, t.getWordId(alias), t.data[alias]);
+				callback(null, t.getWordId(alias), t.data[alias]);
 			})
 			.read ();
 	};

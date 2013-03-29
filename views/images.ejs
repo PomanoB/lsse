@@ -15,7 +15,9 @@
 
 		<script>
 			
-
+			var useDb = "<%- useDb %>";
+			var defaultModel = !useDb || useDb == 'en' ? 'norm60-corpus-all' : 'pairs-fr-raw';
+			
 			var advanced = false;
 			var lingua = {
 				not_found: "<%= lingua.search.not_found %>",
@@ -27,7 +29,7 @@
 				hide_second_links: "<%= lingua.nav.hide_second_links %>",
 				show_second_links: "<%= lingua.nav.show_second_links %>"
 			};
-			var defaultModel = 'norm60-corpus-all';
+			
 
 			$(function(){
 				$('#model').val(defaultModel);
@@ -117,8 +119,8 @@
 			<div class="top_header_switch">
 				<div><%= lingua.visualization.show_as %>:</div>
 				<ul>
-					<li><a href="/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
-					--><li><a href="/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a>
+					<li><a href="<%= useDbLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
+					--><li><a href="<%= useDbLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a>
 			</li></li>
 				</ul>
 			</div>
