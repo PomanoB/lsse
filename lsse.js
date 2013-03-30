@@ -77,7 +77,7 @@ LSSE.prototype.getLemma = function(word, callback){
 	});
 };
 
-LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
+LSSE.prototype.getBestRelations = function(word, model, db, limit, skip, callback){
 	var t = this;
 
 	this.getLemma(word, function(err, lemms){
@@ -87,7 +87,7 @@ LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
 			lemms.unshift(word);
 
 		async.map(lemms, function(lemma, callback){
-			t.loadRelations(lemma, model, callback);
+			t.loadRelations(lemma, model, db, callback);
 		}, function(err, results){
 			if (err)
 			{
@@ -168,7 +168,7 @@ LSSE.prototype.getRelations = function(word, model, limit, skip, callback){
 	});
 };
 
-LSSE.prototype.loadRelations = function(word, model, callback){
+LSSE.prototype.loadRelations = function(word, model, db, callback){
 	var t = this;
 
 	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
@@ -181,7 +181,7 @@ LSSE.prototype.loadRelations = function(word, model, callback){
 		var i, wordId = -1, modelId = -1;
 		for(i = 0; i < items.length; i++)
 		{
-			if (items[i].word == word)
+			if (items[i].word == word && ( (db && items[i].db == db) || (!db && !items[i].db)))
 				wordId = i;
 			else
 			if (items[i].word == model)

@@ -87,6 +87,12 @@ app.get('/def/:word', function(req, res){
 app.get('/:db(en|fr)?/page/:page', routes.page);
 
 var defaultModel = 'norm60-corpus-all';
+
+var model2Db = {
+	'norm60-corpus-all': null,
+	'pairs-fr-raw': 'fr'
+}
+
 app.get('/:db(en|fr)?/suggest/:suggest', function(req, res){
 	var searchWord = req.params.suggest.toLowerCase();
 	var result = [searchWord, [], [], []];
@@ -156,7 +162,8 @@ app.get('/:db(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 
 	lsse.getBestRelations(
 		req.params.word.toLowerCase(), 
-		req.params.model.toLowerCase(), 
+		req.params.model.toLowerCase(),
+		model2Db[req.params.model.toLowerCase()] || null,
 		parseInt(req.params.limit), 
 		parseInt(req.params.skip), 
 		function(err, item) {
@@ -220,7 +227,7 @@ lsse.openDb(db, function(err){
 			data.word = data.word.toString().toLowerCase();
 			data.model = data.model.toString().toLowerCase();
 
-			lsse.getBestRelations(data.word, data.model, data.limit, data.skip || 0, function(err, item){
+			lsse.getBestRelations(data.word, data.model, model2Db[data.model] || null, data.limit, data.skip || 0, function(err, item){
 				if (err)
 				{
 					console.log(err);
