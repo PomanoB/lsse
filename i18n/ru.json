@@ -1,8 +1,8 @@
 {
 	"nav": {
 		"main": "Главная",
-		"graph": "граф",
-		"images": "изображения",
+		"graph": "Граф",
+		"images": "Изображения",
 		"advanced": "расширенный поиск",
 		"about": "О системе",
 		"download": "Скачать",
@@ -14,7 +14,9 @@
 		"hide_second_links": "Спрятать вторичные связи",
 		"show_second_links": "Показать вторичные связи",
 		"logo_alt": "Serelex: Поиск семантически связных слов",
-		"lang_choose": "Язык базы"
+		"lang_choose": "Язык поиска",
+		"lang_fr": "Французский",
+		"lang_en": "Английский"
 	},
 	"visualization": {
 		"delete_last_node": "удалить последний узел",

@@ -117,7 +117,7 @@
 			</form>
 			
 			<div class="top_header_switch">
-				<div><%= lingua.visualization.show_as %>:</div>
+				<div><%= lingua.visualization.show_as %></div>
 				<ul>
 					<li><a href="<%= useDbLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
 					--><li><a href="<%= useDbLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
@@ -127,8 +127,8 @@
 			<div class="top_header_switch">
 				<div><%= lingua.nav.lang_choose %></div>
 				<ul>
-					<li><a class="remember_word_link<%if (!useDb) {%>  current<%}%>" href="/">En</a></li><!--
-					--><li><a class="remember_word_link<%if (useDb == "fr") {%>  current<%}%>" href="/fr">Fr</a></li>
+					<li><a class="remember_word_link<%if (!useDb) {%>  current<%}%>" href="/"><%= lingua.nav.lang_en %></a></li><!--
+					--><li><a class="remember_word_link<%if (useDb == "fr") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_fr %></a></li>
 				</ul>
 			</div>
 
