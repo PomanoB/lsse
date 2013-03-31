@@ -13,7 +13,8 @@
 		"hide_images": "Откл. картинки",
 		"hide_second_links": "Спрятать вторичные связи",
 		"show_second_links": "Показать вторичные связи",
-		"logo_alt": "Serelex: Поиск семантически связных слов"
+		"logo_alt": "Serelex: Поиск семантически связных слов",
+		"lang_choose": "Язык базы"
 	},
 	"visualization": {
 		"delete_last_node": "удалить последний узел",

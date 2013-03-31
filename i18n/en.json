@@ -13,7 +13,8 @@
 		"hide_images": "Hide images",
 		"hide_second_links": "Hide Secondary Links",
 		"show_second_links": "Show Secondary Links",
-		"logo_alt": "Serelex: Finds semantically related words"
+		"logo_alt": "Serelex: Finds semantically related words",
+		"lang_choose": "DB Language"
 	},
 	"visualization": {
 		"delete_last_node": "delete last node",
