@@ -99,7 +99,7 @@ app.get('/:db(en|fr)?/suggest/:suggest', function(req, res){
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
 	lsse.suggest(searchWord, 20, function(words){
 		async.map(words, function(word, callback){
-			lsse.loadRelations(word, defaultModel, callback);
+			lsse.loadRelations(word, defaultModel, model2Db[defaultModel], callback);
 		}, function(err, results){
 			
 			if (!err)
@@ -271,7 +271,7 @@ lsse.openDb(db, function(err){
 				    }
 				    // console.time("loadRel");
 			    	async.map(words, function(word, callback){
-						lsse.loadRelations(word, data.model, callback);
+						lsse.loadRelations(word, data.model, model2Db[data.model], callback);
 					}, function(err, results){
 						// console.timeEnd("loadRel");
 						if (err)
