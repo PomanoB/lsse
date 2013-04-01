@@ -63,7 +63,7 @@ var dbPedia = {
 			request('http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&page=' + word, {
 				headers: {'User-Agent': 'LSSE'}
 			}, function (error, response, body) {
-				if (response.statusCode != 200)
+				if (!response || response.statusCode != 200)
 				{
 					callback(null, {word: word, length: 0});
 					return;
@@ -101,7 +101,7 @@ var dbPedia = {
 			headers: {'User-Agent': 'LSSE'}
 		}, function (error, response, body) {
 			// console.log(response.statusCode, body);
-			if (response.statusCode == 200)
+			if (response && response.statusCode == 200)
 			{
 				// fs.writeFileSync('3.js', body);
 				var data
