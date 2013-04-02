@@ -56,7 +56,7 @@
 		"this_site": "этот сайт",
 		"publications": "Публикации",
 		"simeval": "Извлеченные отношения и скрипты для оценки качества извлечения",
-		"api_description": "Вы можете использовать систему следующим образом без каких-либо ограничений: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. Данный запрос должен возвратить множество слов семантически связанных со словом 'ubuntu' в формате JSON:",
+		"api_description": "Вы можете использовать API без каких-либо ограничений. Интерфейс к английской базе доступен по адресу <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. Интерфейс к французской базе доступен по адресу <a href='http://serelex.cental.be/find/pairsfr-efreq-rnum-cfreq-pnum/belgique'>http://serelex.cental.be/find/pairsfr-efreq-rnum-cfreq-pnum/belgique</a>. Первый запрос должен возвратить множество слов семантически связанных со словом 'ubuntu' в формате JSON:",
 		"advanced": "Расширенный режим",
 		"advanced_description": "По-умолчанию система использует метрику семантической близости <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. Вы можете искать слова с помощью альтернативных метрик и сравнивать их результаты: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>",
 		"application": "Serelex для Windows 8 и Windows Phone",

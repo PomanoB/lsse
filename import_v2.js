@@ -31,7 +31,7 @@ var mongo = require('mongodb'),
 	ObjectID = mongo.ObjectID;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex2', server);
+var db = new Db('serelex3', server);
 
 var words = {};
 

@@ -28,7 +28,7 @@ var mongo = require('mongodb'),
 	Db = mongo.Db;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex2', server);
+var db = new Db('serelex3', server);
 
 //var fileNames = ['./data/pairs-all-freq.csv', './data/conc-all-freq.csv', './data/corpus-all-freq.csv'];
 

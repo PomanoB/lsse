@@ -13,7 +13,7 @@ var lsse = new LSSE();
 var LsseLogger = require('./logger');
 var logger = new LsseLogger('logs');
 
-var defaultDb = null;
+var defaultDb = 'en';
 
 var app = express();
 
@@ -89,8 +89,8 @@ app.get('/:db(en|fr)?/page/:page', routes.page);
 var defaultModel = 'norm60-corpus-all';
 
 var model2Db = {
-	'norm60-corpus-all': null,
-	'pairs-fr-raw': 'fr'
+	'norm60-corpus-all': 'en',
+	'pairsfr-efreq-rnum-cfreq-pnum': 'fr'
 }
 
 app.get('/:db(en|fr)?/suggest/:suggest', function(req, res){
@@ -205,7 +205,7 @@ var mongo = require('mongodb'),
 	Db = mongo.Db;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex2', server);
+var db = new Db('serelex3', server);
 
 lsse.openDb(db, function(err){
 	if (err)
