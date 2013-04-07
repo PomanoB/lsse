@@ -14,8 +14,8 @@
 
 		<script>
 			
-			var useDb = "<%- useDb %>";
-			var defaultModel = !useDb || useDb == 'en' ? 'norm60-corpus-all' : 'pairsfr-efreq-rnum-cfreq-pnum';
+			var useLang = "<%- useLang %>";
+			var defaultModel = "<%- useModel %>";
 			
 
 			var lang = "<%= locale %>";
@@ -75,8 +75,8 @@
 			<div class="top_header_switch">
 				<div><%= lingua.visualization.show_as %></div>
 				<ul>
-					<li><a href="<%= useDbLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
-					--><li><a href="<%= useDbLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
+					<li><a href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
+					--><li><a href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
 				</ul>
 			</div>
 			
@@ -108,8 +108,8 @@
 			<div class="top_header_switch">
 				<div><%= lingua.nav.lang_choose %></div>
 				<ul>
-					<li><a class="remember_word_link<%if (!useDb) {%>  current<%}%>" href="/"><%= lingua.nav.lang_en %></a></li><!--
-					--><li><a class="remember_word_link<%if (useDb == "fr") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_fr %></a></li>
+					<li><a class="remember_word_link<%if (!useLang) {%>  current<%}%>" href="/"><%= lingua.nav.lang_en %></a></li><!--
+					--><li><a class="remember_word_link<%if (useLang == "fr") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_fr %></a></li>
 				</ul>
 			</div>
 

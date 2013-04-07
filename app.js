@@ -6,6 +6,8 @@ var express = require('express')
 	, request = require('request')
 	, fs = require('fs');
 
+var mysql = require('mysql');
+
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
 var lsse = new LSSE();
@@ -13,7 +15,7 @@ var lsse = new LSSE();
 var LsseLogger = require('./logger');
 var logger = new LsseLogger('logs');
 
-var defaultDb = 'en';
+var cfg = require('./config.js');
 
 var app = express();
 
@@ -30,6 +32,11 @@ app.configure(function(){
 
 	app.use(function(req, res, next){
 		res.locals.locale = res.lingua.locale;
+		next();
+	});
+
+	app.use(function(req, res, next){
+		res.locals.cfg = cfg;
 		next();
 	});
 
@@ -50,7 +57,7 @@ var wordsCollection = null;
 
 var dataModels = require('./data_models').models;
 
-app.get('/:db(en|fr)?', routes.index);
+app.get('/:lang(en|fr)?', routes.page);
 
 app.post('/sort/:word', function(req, res){
 	dbPedia.sort(req.body.data, function(){
@@ -84,41 +91,24 @@ app.get('/def/:word', function(req, res){
 		
 	});
 }); 
-app.get('/:db(en|fr)?/page/:page', routes.page);
+app.get('/:lang(en|fr)?/page/:page', routes.page);
 
-var defaultModel = 'norm60-corpus-all';
-
-var model2Db = {
-	'norm60-corpus-all': 'en',
-	'pairsfr-efreq-rnum-cfreq-pnum': 'fr'
-}
-
-app.get('/:db(en|fr)?/suggest/:suggest', function(req, res){
+app.get('/:lang(en|fr)?/suggest/:suggest', function(req, res){
 	var searchWord = req.params.suggest.toLowerCase();
 	var result = [searchWord, [], [], []];
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
-	lsse.suggest(searchWord, 20, function(words){
-		async.map(words, function(word, callback){
-			lsse.loadRelations(word, defaultModel, model2Db[defaultModel], callback);
-		}, function(err, results){
-			
-			if (!err)
-			{
-				var i;
-				for(i = 0; i < results.length; i++)
-				{
-					if (results[i] != null)
-					{
-						result[1].push(results[i].word);
-						result[2].push(results[i].totalRelations == 1 ? "1 result" : results[i].totalRelations + " results");
-						result[3].push("http://" + hostName + "/#" + results[i].word);
-					}
-				}
-			}
-			res.set('Content-Type', 'application/x-suggestions+json');
-			res.send(JSON.stringify(result));
-		});
-	})
+	lsse.suggest(searchWord, req.params.lang || "en", 20, function(words){
+		var i, results = [];
+		for(i = 0; i < words.length; i++)
+		{
+			result[1].push(words[i].word);
+			result[2].push("");
+			result[3].push("http://" + hostName + "/#" + words[i].word);
+		}
+		
+		res.set('Content-Type', 'application/x-suggestions+json');
+		res.send(JSON.stringify(result));
+	});
 });
 
 var searchEngineInfoCache = {};
@@ -144,7 +134,7 @@ app.get('/SearchEngineInfo.xml', function(req, res){
 	}
 });
 
-app.get('/:db(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
+app.get('/:lang(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 	
 	var data = {
 		time: (new Date()).getTime(),
@@ -163,7 +153,7 @@ app.get('/:db(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 	lsse.getBestRelations(
 		req.params.word.toLowerCase(), 
 		req.params.model.toLowerCase(),
-		model2Db[req.params.model.toLowerCase()] || null,
+		cfg.models[req.params.model.toLowerCase()] || null,
 		parseInt(req.params.limit), 
 		parseInt(req.params.skip), 
 		function(err, item) {
@@ -200,14 +190,10 @@ app.get('/:db(en|fr)?/models', function(req, res){
 	res.send(modelsListForAPI);
 });
 
-var mongo = require('mongodb'),
-	Server = mongo.Server,
-	Db = mongo.Db;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex3', server);
+var connection = mysql.createConnection(cfg.database);
 
-lsse.openDb(db, function(err){
+lsse.openDb(connection, function(err){
 	if (err)
 	{
 		console.log(err);
@@ -227,7 +213,7 @@ lsse.openDb(db, function(err){
 			data.word = data.word.toString().toLowerCase();
 			data.model = data.model.toString().toLowerCase();
 
-			lsse.getBestRelations(data.word, data.model, model2Db[data.model] || null, data.limit, data.skip || 0, function(err, item){
+			lsse.getBestRelations(data.word, data.model, cfg.models[data.model] || "en", data.limit, data.skip || 0, function(err, item){
 				if (err)
 				{
 					console.log(err);
@@ -271,7 +257,7 @@ lsse.openDb(db, function(err){
 				    }
 				    // console.time("loadRel");
 			    	async.map(words, function(word, callback){
-						lsse.loadRelations(word, data.model, model2Db[data.model], callback);
+						lsse.loadRelations(word, data.model, cfg.models[data.model], data.limit, data.skip || 0, callback);
 					}, function(err, results){
 						// console.timeEnd("loadRel");
 						if (err)
@@ -297,7 +283,7 @@ lsse.openDb(db, function(err){
 						});
 						for(i = 0; i < results.length; i++)
 						{
-							if (results[i] && perhaps.length < 10)
+							if (results[i].totalRelations && perhaps.length < 10)
 							{
 								perhaps.push({
 									word: results[i].word, 
@@ -322,8 +308,9 @@ lsse.openDb(db, function(err){
 		});
 
 		socket.on('suggest', function (data) {
-			lsse.suggest(data.word.toLowerCase(), data.db, 10, function(words){
-				socket.emit('suggest result', words);
+			lsse.suggest(data.word.toLowerCase(), data.lang, 10, function(words){
+
+				socket.emit('suggest result', words.map(function(item){return item.word}));
 			})
 		});
 

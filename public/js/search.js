@@ -26,7 +26,7 @@ function turnIconsOff()
 
 $(function(){
 	var socket = io.connect();
-	lsse = new LSSE(socket, useDb);
+	lsse = new LSSE(socket, useLang);
 
 	
 

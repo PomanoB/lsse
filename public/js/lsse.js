@@ -1,6 +1,6 @@
-var LSSE = function(socket, db)
+var LSSE = function(socket, lang)
 {
-	this.useDb = db ? db : null;
+	this.useLang = lang || "en";
 
 	this.lastQuery = {
 		model: null,
@@ -11,8 +11,11 @@ var LSSE = function(socket, db)
 
 	this.suggestResults = {};
 
+	/**
+	 * @deprecated
+	 */
 	this.saveRelevance = function(word, model, relevance){
-		socket.emit('save relevance', { word: this.lastQuery.word, model: this.lastQuery.model, relevance: relevance});
+	//	socket.emit('save relevance', { word: this.lastQuery.word, model: this.lastQuery.model, relevance: relevance});
 	}
 
 	this.search = function(word, model, skip, limit, callback, dontLog){
@@ -33,7 +36,7 @@ var LSSE = function(socket, db)
 		{
 			var searchId = Math.floor(Math.random() * 9999999);
 			socket.once('result_' + searchId, callback);
-			socket.emit('get relationships', { word: word, model: model, skip: skip, limit: limit, searchId: searchId, db: this.useDb});
+			socket.emit('get relationships', { word: word, model: model, skip: skip, limit: limit, searchId: searchId, db: this.useLang});
 		}
 	}
 
@@ -45,18 +48,18 @@ var LSSE = function(socket, db)
 	}
 
 	this.suggest = function(word, callback){
-		var key = word + "un12";
 		
-		if (typeof this.suggestResults[key] == "undefined")
+		
+		if (!this.suggestResults.hasOwnProperty(word))
 		{
 			var t = this;
 			socket.once('suggest result', function(words){
-				t.suggestResults[key] = words;
+				t.suggestResults[word] = words;
 				callback(words);
 			});
-			socket.emit('suggest', { word: word, db: this.useDb});
+			socket.emit('suggest', { word: word, lang: this.useLang});
 		}
 		else
-			callback(this.suggestResults[key]);
+			callback(this.suggestResults[word]);
 	}
 }
