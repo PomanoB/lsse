@@ -1,19 +1,20 @@
 var reader = require ("buffered-reader");
 var DataReader = reader.DataReader;
 var fs = require("fs");
+var mysql = require("mysql");
 
 var async = require("async");
 
 var Serelex = new require('./serelex');
 var serelex = new Serelex();
 
-if (process.argv.length < 3)
+if (process.argv.length < 4)
 {
-	console.log("Usage:", process.argv[0], process.argv[1], "<file name>", "[db]");
+	console.log("Usage:", process.argv[0], process.argv[1], "<file name>", "<lang>");
 	process.exit();
 }
 var fileName = process.argv[2];
-var wordsDb = process.argv.length >= 4 ? process.argv[3] : null;
+var wordLang = process.argv[3];
 
 if (!fs.existsSync(fileName))
 {
@@ -27,74 +28,115 @@ var mongo = require('mongodb'),
 	Server = mongo.Server,
 	Db = mongo.Db;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex3', server);
+var cfg = require('./config.js');
 
-//var fileNames = ['./data/pairs-all-freq.csv', './data/conc-all-freq.csv', './data/corpus-all-freq.csv'];
+var connection = mysql.createConnection(cfg.database);
 
-db.open(function(err, db) {
-	if(err) 
+connection.connect(function(err){
+	if (err)
 	{
 		console.log(err);
 		return;
 	}
 
-	db.collection('words', function(err, wordsCollection){
-		if(err) 
-		{
-			console.log(err);
-			db.close();
-			return;
-		}
-		console.log("Loading existing words...");
-		wordsCollection.find(wordsDb ? {db: wordsDb} : undefined).toArray(function(err, items){
-			if(err) 
+	var fileSize = fileStat.size;
+	var progress = 0;
+	var data = [];
+	var lines = [];
+	var currentLine = 0;
+	var currentQueries = 0;
+	var fileDone = false;
+	var lastTime = 0;
+	var query = "";
+	var i = 0;
+
+	// function updateWord()
+	// {
+	// 	if (lines.length > 0 && currentQueries <= 0)
+	// 	{
+	// 		currentQueries++;
+	// 		data = lines.shift();
+
+	// 		connection.query("UPDATE words SET frequency = ? WHERE word = ? AND lang = ?", [data[1], data[0], wordLang], function(err){
+	// 			if (err)
+	// 				console.log(err);
+	// 			currentQueries--;
+	// 			if (lines.length > 0 && currentQueries <= 0)
+	// 				process.nextTick(updateWord);
+	// 		});
+	// 	}
+	// }
+
+	var reader = new DataReader (fileName, { encoding: "utf8" });
+	reader.on ("error", function (error){
+			console.log(error);
+			process.exit();
+		})
+		.on ("line", function (line, offset){
+			if (offset == -1)
+				offset = fileSize;
+			progress = offset/fileSize*100|0;
+
+			currentTime = Date.now()/1000|0;
+
+			if (currentTime != lastTime)
 			{
-				console.log(err);
-				db.close();
+				lastTime = currentTime;
+				console.log("File", fileName, "loading", progress, "%");
+			}
+
+			data = line.split(";");
+			if (data.length != 2)
 				return;
-			}
-			
-			var i, words = {};
-			for(i = 0; i < items.length; i++)
-			{
-				words[items[i].word + "bnud"] = items[i].id;
-			}
 
-			console.log("Complete...");
+			// lines.push([data[0], data[1]|0]);
 
-			var fileSize = fileStat.size;
-			var fileLoaded = 0;
-			
-			new DataReader (fileName, { encoding: "utf8" })
-				.on ("error", function (error){
-					callback(error);
-					process.exit();
-				})
-				.on ("line", function (line, offset){
-					if (offset == -1)
-						offset = fileSize;
-					var progress = Math.floor(offset/fileSize*100);
-					if (progress != fileLoaded)
-					{
-						fileLoaded = progress;
-						console.log("File", fileName, "loading", progress, "%");
-					}
+			reader.pause();
+			connection.query("UPDATE words SET frequency = ? WHERE word = ? AND lang = ?", [data[1]|0, data[0], wordLang], function(err){
+				if (err)
+					console.log(err);
+				reader.resume();
+			});
 
-					var data = line.split(";");
-					if (data.length != 2)
-						return;
+			// if (lines.length >= 1000)
+			// {
+			// 	reader.pause();
+			// 	query = "";
+			// 	for(i = 0; i < lines.length; i++)
+			// 	{
+			// 		query += ("UPDATE words SET frequency = " + 
+			// 					connection.escape(lines[i][1]) + " WHERE word =  " + 
+			// 					connection.escape(lines[i][0]) + " AND lang =  " + 
+			// 					connection.escape(wordLang) + ";");
+			// 	}
+			// 	lines = [];
+			// 	connection.query(query, function(err){
+			// 		if (err)
+			// 			console.log(err);
+			// 		reader.resume();
+			// 	});
+			// }
+		})
+		.on ("end", function (){
+			// if (lines.length >= 0)
+			// {
+			// 	query = "";
+			// 	for(i = 0; i < lines.length; i++)
+			// 	{
+			// 		query += ("UPDATE words SET frequency = " + 
+			// 					connection.escape(lines[i][1]) + " WHERE word =  " + 
+			// 					connection.escape(lines[i][0]) + " AND lang =  " + 
+			// 					connection.escape(wordLang) + ";");
+			// 	}
+			// 	connection.query(query, function(err){
+			// 		if (err)
+			// 			console.log(err);
+			// 		connection.end();
+			// 	});
+			// }
+			// else
+			// 	connection.end();
+			connection.end();
+		}).read();
 
-					if (typeof words[data[0] + "bnud"] != "undefined")
-					{
-						wordsCollection.update(wordsDb ? {word: data[0]} : {word: data[0], db: wordsDb}, {$set: {freq: parseInt(data[1])}});
-					}
-				})
-				.on ("end", function (){
-					console.log("File", fileName, "complete processing");
-			//		this.close();
-					
-				}).read ();
-		});
-	});
 });

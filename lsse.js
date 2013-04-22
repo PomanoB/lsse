@@ -57,30 +57,30 @@ LSSE.prototype.getPerhaps = function(word){
 	return words;
 }
 
-LSSE.prototype.getLemma = function(word, callback){
+LSSE.prototype.getLemma = function(word, lang, callback){
 
-	callback(null, []);
-	return;
-	this.lemms.find({forms: word}).toArray(function(err, items){
-		if (err)
-		{
-			callback(err, []);
-			return;
+	this.connection.query(
+		"SELECT w.word FROM lemms l " +
+		"INNER JOIN words w ON w.id = l.word AND w.lang = ? " +
+		"WHERE l.lemm = (SELECT id FROM words WHERE word = ? AND lang = ?)", [lang, word, lang], 
+		function(err, results) {
+			if (err)
+			{
+				console.log(err, word);
+				callback(err, []);
+			}
+
+			callback(null, results.map(function(item){
+				return item.word;
+			}));
 		}
-		var lemms = [];
-		var i;
-		for(i = 0; i < items.length; i++)
-		{
-			lemms.push(items[i].lemma);
-		}
-		callback(null, lemms);
-	});
+	);
 };
 
 LSSE.prototype.getBestRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
 
-	this.getLemma(word, function(err, lemms){
+	this.getLemma(word, lang, function(err, lemms){
 		if (lemms.length == 0)
 			 lemms = [word];
 		else if (lemms.indexOf(word) == -1)

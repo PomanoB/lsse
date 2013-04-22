@@ -245,7 +245,9 @@ lsse.openDb(connection, function(err){
 					words = lsse.getPerhaps(data.word);
 				}
 				// words = lsse.getPerhaps(data.word);
-				async.map(words, lsse.getLemma.bind(lsse), function(err, results){
+				async.map(words, function(word, callback){
+					lsse.getLemma(word, cfg.models[data.model], callback)
+				}, function(err, results){
 				    var i, j;
 				    for(i = 0; i < results.length; i++)
 				    {

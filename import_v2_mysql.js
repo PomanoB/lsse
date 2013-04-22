@@ -5,7 +5,6 @@
 
 var BufferedReader = require("buffered-reader");
 var fs = require("fs");
-var sleep = require('sleep');
 
 if (process.argv.length < 4)
 {
