@@ -6,7 +6,7 @@ var express = require('express')
 	, request = require('request')
 	, fs = require('fs');
 
-var mysql = require('mysql');
+var msnodesql = require('msnodesql');
 
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
@@ -17,10 +17,15 @@ var logger = new LsseLogger('logs');
 
 var cfg = require('./config.js');
 
+process.on('uncaughtException', function (err) {
+  console.err('Caught exception: ' + err);
+});
+
+
 var app = express();
 
 app.configure(function(){
-	app.set('port', process.env.PORT || 80);
+	app.set('port', process.env.PORT || 8080);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
 
@@ -135,7 +140,7 @@ app.get('/SearchEngineInfo.xml', function(req, res){
 });
 
 app.get('/:lang(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
-	
+	/*
 	var data = {
 		time: (new Date()).getTime(),
 		query: {
@@ -149,6 +154,7 @@ app.get('/:lang(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 		}
 	}
 	logger.writeLogEntry(data);
+	*/
 
 	lsse.getBestRelations(
 		req.params.word.toLowerCase(), 
@@ -191,9 +197,17 @@ app.get('/:db(en|fr)?/models', function(req, res){
 });
 
 
-var connection = mysql.createConnection(cfg.database);
+//var connStr = "Driver={SQL Server Native Client 11.0};Server=tcp:pb6m8r9n7a.database.windows.net,1433;Database=serelex;Uid=dae@pb6m8r9n7a;Pwd=Qaz12345;Encrypt=yes;Connection Timeout=30;";
+var connStr = 
+	"Driver={"+cfg.database.driver+"};"+
+	"Server="+cfg.database.server+";"+
+	"Database="+cfg.database.database+";"+
+	"Uid="+cfg.database.user+";"+
+	"Pwd="+cfg.database.password+";"+
+	"Encrypt=yes;"+
+	"Connection Timeout=30;";
 
-lsse.openDb(connection, function(err){
+lsse.openDb(msnodesql, connStr, function(err){
 	if (err)
 	{
 		console.log(err);
@@ -301,12 +315,20 @@ lsse.openDb(connection, function(err){
 		});
 
 		socket.on('log', function (data) {
+			/*
+			var ipStr;
+			if(typeof this.handshake.address === 'undefined')
+				ipStr =  '[Undefined]';
+			else
+				ipStr = this.handshake.address.address + ":" + this.handshake.address.port;
+				
 			data.user = {
-				ip: this.handshake.address.address + ":" + this.handshake.address.port,
+				ip:ipStr,
 				useragent: this.handshake.headers['user-agent'],
 				socket_id: this.id
 			}
 			logger.writeLogEntry(data);
+			*/
 		});
 
 		socket.on('suggest', function (data) {
@@ -315,7 +337,8 @@ lsse.openDb(connection, function(err){
 				socket.emit('suggest result', words.map(function(item){return item.word}));
 			})
 		});
-
+		
+		/*
 		socket.on('save relevance', function (data) {
 			var address = this.handshake.address;
 			lsse.saveRelevance(data.word, data.model, data.relevance, {
@@ -324,5 +347,6 @@ lsse.openDb(connection, function(err){
 				time: Math.floor((new Date()).getTime()/1000)
 			});
 		});
+		*/
 	});
 });
