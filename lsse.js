@@ -59,10 +59,11 @@ LSSE.prototype.getPerhaps = function(word){
 
 LSSE.prototype.getLemma = function(word, lang, callback){
 
-	this.connection.query(
-		"SELECT w.word FROM lemms l " +
-		"INNER JOIN words w ON w.id = l.word AND w.lang = ? " +
-		"WHERE l.lemm = (SELECT id FROM words WHERE word = ? AND lang = ?)", [lang, word, lang], 
+	var query = "SELECT w.word FROM lsse.lemms l " +
+		"INNER JOIN lsse.words w ON w.id = l.word AND w.lang = ? " +
+		"WHERE l.lemm = (SELECT id FROM lsse.words WHERE word = ? AND lang = ?)";
+	
+	this.connection.query(query, [lang, word, lang], 
 		function(err, results) {
 			if (err)
 			{
@@ -119,62 +120,83 @@ LSSE.prototype.getBestRelations = function(word, model, lang, limit, skip, callb
 LSSE.prototype.loadRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
 
-	var query = "\
-	SELECT SQL_CALC_FOUND_ROWS w.word, r.value\
-	FROM relations r\
-	INNER JOIN words w  ON w.id = r.relation\
-	WHERE r.word = (SELECT id FROM words WHERE word = ? AND lang = ? LIMIT 1)\
-		AND\
-	r.model = (SELECT id FROM models WHERE name = ? LIMIT 1)\
-	ORDER BY r.value DESC ";
-	if (skip >= 0)
-		query += "LIMIT ?, ?";
-	else
-	if (limit >= 0)
-		query += "LIMIT ?";
-	query += "; SELECT FOUND_ROWS() AS `total`";
+	var query = " \
+DECLARE @word INT; \
+DECLARE @model INT; \
+SELECT TOP 1 @word = id \
+FROM lsse.words \
+WHERE word = ? AND lang = ?; \
+SELECT TOP 1 @model = id \
+FROM lsse.models \
+WHERE name = ?; \
+SELECT COUNT(*) AS total FROM lsse.relations r INNER JOIN lsse.words w ON w.id = r.relation WHERE r.word = @word AND r.model = @model; \
+SELECT w.word, r.value \
+FROM lsse.relations r \
+INNER JOIN lsse.words w \
+ON w.id = r.relation \
+WHERE r.word = @word AND r.model = @model \
+ORDER BY r.value DESC \
+OFFSET ? ROWS FETCH NEXT ? ROWS ONLY; \
+";
 	
-	this.connection.query(query, [word, lang, model, skip|0, limit|0], function(err, results) {
- 		
- 		if (err)
- 		{
- 			callback(err);
- 			return;
- 		}
- 		var result = {
- 			word: word,
- 			model: model,
- 			totalRelations: results[1][0].total,
- 			relations: []
- 		}
- 		var i;
- 		for(i = 0; i < results[0].length; i++)
- 		{
- 			result.relations.push({
- 				word: results[0][i].word,
- 				value: results[0][i].value
- 			});
- 		}
- 		callback(null, result);
+	var total = 0;
+	
+	this.connection.query(query, [word, lang, model, skip|0, limit|20], function(err, results, more) {
+		
+		if (err)
+		{
+			callback(err);
+			return;
+		}
+
+		if(more) // First query
+		{
+			total = results[0].total;
+		}
+		else // Second query with results
+		{
+			var result = {
+				word: word,
+				model: model,
+				totalRelations: total,
+				relations: []
+			}
+			var i;
+			for(i = 0; i < results.length; i++)
+			{
+				result.relations.push({
+					word: results[i].word,
+					value: results[i].value
+				});
+			}
+			
+			callback(null, result);
+		}
 	});
 };
 
-LSSE.prototype.openDb = function(connection, callback){
+LSSE.prototype.openDb = function(msnodesql, connStr, callback){
 
-	this.connection = connection;
-	this.connection.connect(function(err) {
-	//	t.lsse.loadTree(t.callback)
-		// t.callback(null);
+	msnodesql.open(connStr, (function (err, conn) {
+		this.connection = conn;
+		
+		setInterval((function(){
+			this.connection.query("SELECT 1",function(err, result){console.log("Ping DB!");});
+		}).bind(this), 1000 * 60 * 25);		
+		
 		callback(err);
-	});
+	}).bind(this));	
 };
 
 LSSE.prototype.suggest = function(word, lang, limit, callback)
 {
 	word = word.replace(/[%_']/g, '');
-	var query = "SELECT word FROM words WHERE lang = ? AND word LIKE '" + word + "%' ORDER BY frequency DESC";
+	var query = "SELECT ";
 	if (limit)
-		query += " LIMIT " + (limit|0);
+		query += " TOP " + (limit|20);
+		
+	query += " word FROM lsse.words WHERE lang = ? AND word LIKE '" + word + "%' ORDER BY frequency DESC";
+	
 	this.connection.query(query, [lang], function(err, results){
 		if (err)
 			callback([]);
