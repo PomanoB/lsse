@@ -10,12 +10,11 @@
     "ejs": "*",
     "socket.io": "*",
     "buffered-reader": "*",
-    "mongodb": "*",
+    "msnodesql":"*",
     "lingua": "*",
     "async": "*",
     "request": "*",
     "sax": "*",
-    "mysql": "2.0.0-alpha7",
 	"pagerank": "*"
   }
 }
