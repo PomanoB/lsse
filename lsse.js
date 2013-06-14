@@ -9,7 +9,6 @@ var LSSE = function(){
 };
 
 LSSE.prototype.correctWord = function(word, cost){
-	return [];
 	var results = this.searchTree.search(word, cost);
 
 	results.sort(function(a, b){
@@ -19,6 +18,21 @@ LSSE.prototype.correctWord = function(word, cost){
 }
 
 LSSE.prototype.loadTree = function(callback){
+
+	// callback();
+	// return;
+	var query = this.connection.query('SELECT word FROM `words`');
+	query
+	.on('result', function(row) {
+		this.searchTree.insert(row.word);
+	}.bind(this))
+	.on('end', function() {
+		callback();
+	})
+	.on('error', function(err){
+		callback(err);
+	});
+/*
 	callback();
 	return;
 	var t = this;
@@ -36,6 +50,7 @@ LSSE.prototype.loadTree = function(callback){
 		
 		callback();
 	});
+*/
 }
 
 LSSE.prototype.getPerhaps = function(word){
@@ -162,11 +177,11 @@ LSSE.prototype.loadRelations = function(word, model, lang, limit, skip, callback
 LSSE.prototype.openDb = function(connection, callback){
 
 	this.connection = connection;
-	this.connection.connect(function(err) {
-	//	t.lsse.loadTree(t.callback)
+	this.connection.connect((function(err) {
+		this.loadTree(callback);
 		// t.callback(null);
-		callback(err);
-	});
+		// callback(err);
+	}).bind(this));
 };
 
 LSSE.prototype.suggest = function(word, lang, limit, callback)

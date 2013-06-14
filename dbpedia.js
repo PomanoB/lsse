@@ -156,11 +156,13 @@ var dbPedia = {
 					word: word, 
 					definition: {
 						en: null,
-						ru: null
+						ru: null,
+						fr: null
 					},
 					labels: {
 						en: null,
-						ru: null
+						ru: null,
+						fr: null
 					}, 
 					image: null, 
 					disambiguates: []
@@ -171,7 +173,7 @@ var dbPedia = {
 
 				for(i = 0; i < abstract.length; i++)
 				{
-					if (abstract[i].lang == "en" || abstract[i].lang == "ru")
+					if (abstract[i].lang == "en" || abstract[i].lang == "ru" || abstract[i].lang == "fr")
 						result['definition'][abstract[i].lang] = abstract[i].value
 				}
 				if (typeof data[name]["http://www.w3.org/2000/01/rdf-schema#label"] != "undefined" && data[name]["http://www.w3.org/2000/01/rdf-schema#label"].length)
@@ -179,7 +181,7 @@ var dbPedia = {
 					var langNames = data[name]["http://www.w3.org/2000/01/rdf-schema#label"];
 					for(i = 0; i < langNames.length; i++)
 					{
-						if (langNames[i].lang == "en" || langNames[i].lang == "ru")
+						if (langNames[i].lang == "en" || langNames[i].lang == "ru" || langNames[i].lang == "fr")
 							result['labels'][langNames[i].lang] = langNames[i].value
 					}
 

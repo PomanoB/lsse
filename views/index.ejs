@@ -37,7 +37,7 @@
 
 				$('#graph_container>div').hide();
 
-				$('#graph_container').css('left', '350px');
+				$('#graph_container').css('left', '290px');
 			});
 			
 			var currentPage = 'graph_search';
@@ -180,6 +180,14 @@
 			'Collins Dictionary': 'http://www.collinsdictionary.com/dictionary/english/%s'
 		};
 
+		var langPriority = [];
+		langPriority.push("en");
+		if (useLang != "en")
+			langPriority.push(useLang);
+		if (lang != "en")
+			langPriority.push(lang);		
+		
+
 		displayResults = function(data)
 		{
 
@@ -187,20 +195,19 @@
 				var html = '';
 				var definition = '', url = {lang: 'en', label: response.word.replace(/_/g, ' ')};
 
-				if (lang == 'ru' && response.definition.ru)
-					definition = response.definition.ru;
-				else
-				if (response.definition.en)
-					definition = response.definition.en;
-
-				if (lang == 'ru' && response.labels.ru)
+				var i;
+				for(i = 0; i < langPriority.length; i++)
 				{
-					url.label = response.labels.ru;
-					url.lang = 'ru';
+					if (Object.prototype.hasOwnProperty.call(response.definition, langPriority[i]) && response.definition[ langPriority[i] ])
+					{
+						definition = response.definition[ langPriority[i] ];
+					}
+					if (Object.prototype.hasOwnProperty.call(response.labels, langPriority[i]) && response.labels[ langPriority[i] ])
+					{
+						url.label = response.labels[ langPriority[i] ];
+						url.lang = langPriority[i];
+					}
 				}
-				else
-				if (response.labels.en)
-					url.label = response.labels.en;
 
 				if (definition)
 				{

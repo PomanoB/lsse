@@ -223,11 +223,13 @@ $(function(){
 		if ($(this).attr('href') == "#on")
 		{
 			$('#info_panel').show();
+			$('#graph_container').css('right', '270px');
 			showInfoPanel = true;
 		}	
 		else
 		{
 			$('#info_panel').hide();
+			$('#graph_container').css('right', '20px');
 			showInfoPanel = false;
 		}	
 

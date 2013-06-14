@@ -14,7 +14,7 @@ h3, h2
 }
 #result
 {
-	padding: 20px 40px 10px 40px;
+	padding: 20px 40px 10px 0;
 }
 nav>ul, footer>ul, #suggest_results
 {
@@ -123,7 +123,7 @@ nav>ul>li:last-child>a, footer>ul>li:last-child>a
 #result table td:first-child
 {
 	text-align: right;
-	width: 40px;
+	width: 24px;
 }
 .result_icon
 {
@@ -137,7 +137,7 @@ nav>ul>li:last-child>a, footer>ul>li:last-child>a
 #graph_container
 {
 	left: 450px;
-	right: 20px;
+	right: 270px;
 	top: 200px;
 	bottom: 10px;
 	position: absolute;

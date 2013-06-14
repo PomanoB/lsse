@@ -200,6 +200,10 @@ lsse.openDb(connection, function(err){
 		return;
 	}
 	
+	setInterval(function(){
+		connection.ping();
+	}, 1000 * 60 * 10);
+	
 	var server = http.createServer(app);
 
 	server.listen(app.get('port'), function(){
