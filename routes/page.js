@@ -39,6 +39,9 @@ exports.page = function(req, res){
 
 	res.locals.useLangLink = res.locals.useLang ? ('/' + res.locals.useLang) : '';
 
+	res.locals.samples = JSON.stringify(cfg.samples[res.locals.useLang] || cfg.samples[cfg.defalutLang]);
+
+
 	if (typeof req.params.page == "undefined")
 		req.params.page = "index";
 

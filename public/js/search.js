@@ -29,7 +29,7 @@ $(function(){
 	lsse = new LSSE(socket, useLang);
 
 	
-
+/*
 	var sampleSearch = [
 		"python",
 		"jaguar",
@@ -80,7 +80,7 @@ $(function(){
 		"cottage cheese",
 		"local speciality"
 	];
-
+*/
 	var suggestTimeout = null;
 
 	if (advanced)
