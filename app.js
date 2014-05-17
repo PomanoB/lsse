@@ -57,7 +57,7 @@ var wordsCollection = null;
 
 var dataModels = require('./data_models').models;
 
-app.get('/:lang(en|fr)?', routes.page);
+app.get('/:lang(en|fr|ru)?', routes.page);
 
 app.post('/sort/:word', function(req, res){
 	dbPedia.sort(req.body.data, function(){
@@ -91,9 +91,9 @@ app.get('/def/:word', function(req, res){
 		
 	});
 }); 
-app.get('/:lang(en|fr)?/page/:page', routes.page);
+app.get('/:lang(en|fr|ru)?/page/:page', routes.page);
 
-app.get('/:lang(en|fr)?/suggest/:suggest', function(req, res){
+app.get('/:lang(en|fr|ru)?/suggest/:suggest', function(req, res){
 	var searchWord = req.params.suggest.toLowerCase();
 	var result = [searchWord, [], [], []];
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
@@ -134,7 +134,7 @@ app.get('/SearchEngineInfo.xml', function(req, res){
 	}
 });
 
-app.get('/:lang(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
+app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res){
 	
 	var data = {
 		time: (new Date()).getTime(),
@@ -173,7 +173,7 @@ app.get('/:lang(en|fr)?/find/:model/:word/:limit?/:skip?', function(req, res){
 });
 
 var modelsListForAPI = null;
-app.get('/:db(en|fr)?/models', function(req, res){
+app.get('/:db(en|fr|ru)?/models', function(req, res){
 
 	if (modelsListForAPI == null)
 	{

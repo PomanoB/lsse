@@ -16,7 +16,8 @@
 		"logo_alt": "Serelex: Finds semantically related words",
 		"lang_choose": "Search Language",
 		"lang_fr": "French",
-		"lang_en": "English"
+		"lang_en": "English",
+		"lang_ru": "Russian"
 	},
 	"visualization": {
 		"delete_last_node": "delete last node",

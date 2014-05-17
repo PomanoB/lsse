@@ -8,7 +8,8 @@ var cfg = {
 	},
 	models: {
 		'norm60-corpus-all': 'en',
-		'pairsfr-efreq-rnum-cfreq-pnum': 'fr'
+		'pairsfr-efreq-rnum-cfreq-pnum': 'fr',
+		'ru-wiki': 'ru'
 	},
 	defalutLang: 'en',
 	samples: {
@@ -70,6 +71,11 @@ var cfg = {
 			"londres",
 			"pizza",
 			"quiche"
+		],
+		"ru": [
+			"империя",
+			"теория",
+			"соль"
 		]
 	}
 }

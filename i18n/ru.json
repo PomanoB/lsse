@@ -16,7 +16,8 @@
 		"logo_alt": "Serelex: Поиск семантически связных слов",
 		"lang_choose": "Язык поиска",
 		"lang_fr": "Французский",
-		"lang_en": "Английский"
+		"lang_en": "Английский",
+		"lang_ru": "Русский"
 	},
 	"visualization": {
 		"delete_last_node": "удалить последний узел",
