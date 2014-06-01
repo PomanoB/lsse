@@ -337,7 +337,11 @@ $(function(){
 				result += "</ul>";
 			}
 			else
+			{
 				result = lingua.not_found;
+				if (/[а-я]/i.test(data.word))
+					location.href = "/ru#" + data.word
+			}
 
 			$('#result').html(result);
 		}
