@@ -339,7 +339,7 @@ $(function(){
 			else
 			{
 				result = lingua.not_found;
-				if (/[а-я]/i.test(data.word))
+				if (/[а-я]/i.test(data.word) && location.pathname !== "/ru")
 					location.href = "/ru#" + data.word
 			}
 
