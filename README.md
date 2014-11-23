@@ -18,15 +18,8 @@ How to install
 2. Install MongoDB (Ubuntu -- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-debian-or-ubuntu-linux/).
 3. Clone this repository (git clone ...).
 4. Go to the directory with lsse and type "npm install" to install all Node.JS dependencies of the system.
-5. Use mongorestore tool to restore databases: "mongorestore backup", where "backup" is a folder with directory serelex2, containing files system.indexes.bson, words.bson and relations.bson. Downloadable here -- http://cental.fltr.ucl.ac.be/team/~panchenko/data/serelex/mongodb.tgz.
-If indexes were not generated automatically, please do 
-  - $mongo
-  - >use serelex2
-  - >db.words.ensureIndex({word: 1})
-  - >db.words.ensureIndex({id: 1})
-  - >db.relations.ensureIndex({word: 1, model: 1})
-  - >db.lemms.ensureIndex({lemma: 1}, {unique:true})
-  - >db.lemms.ensureIndex({forms: 1})
+5. Configure database access in `config.js` file
+6. Use `lsse.sql` script to create tables
 6. Use PORT environment variable to set port (e.g. "export PORT=8080" for Linux, "set PORT=8080" for Windows). By default -- 80.
 7. Start the application: "node app".
 
