@@ -15,7 +15,7 @@ How to install
 --------------
 
 1. Install Node.JS (Ubuntu -- https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager).
-2. Install MongoDB (Ubuntu -- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-debian-or-ubuntu-linux/).
+2. Install MySQL.
 3. Clone this repository (git clone ...).
 4. Go to the directory with lsse and type "npm install" to install all Node.JS dependencies of the system.
 5. Configure database access in `config.js` file
