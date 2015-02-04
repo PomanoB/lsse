@@ -2,7 +2,7 @@ var lsse;
 var graph = null;
 var displayResults = null;
 var currentSkip = 0;
-var showImages = false;
+var showImages = true;
 var showInfoPanel = true;
 
 function turnIconsOn()
@@ -83,10 +83,7 @@ $(function(){
 */
 	var suggestTimeout = null;
 
-	if (advanced)
-		turnIconsOn();
-	else
-		turnIconsOff();
+	turnIconsOn();
 
 	// $('select.relevance_select').change(function(){
 
