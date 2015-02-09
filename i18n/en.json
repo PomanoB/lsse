@@ -1,16 +1,23 @@
 {
 	"nav": {
-		"main": "main",
-		"graph": "graph",
-		"images": "images",
+		"main": "Main",
+		"graph": "Graph",
+		"images": "Images",
 		"advanced": "advanced",
-		"about": "about",
-		"english": "In English",
-		"russian": "По-русски",
+		"about": "About",
+		"download": "Download",
+		"contacts": "Contacts",
+		"english": "Eng",
+		"russian": "Rus",
 		"show_images": "Show Images",
 		"hide_images": "Hide images",
 		"hide_second_links": "Hide Secondary Links",
-		"show_second_links": "Show Secondary Links"
+		"show_second_links": "Show Secondary Links",
+		"logo_alt": "Serelex: Finds semantically related words",
+		"lang_choose": "Search Language",
+		"lang_fr": "French",
+		"lang_en": "English",
+		"lang_ru": "Russian"
 	},
 	"visualization": {
 		"delete_last_node": "delete last node",
@@ -22,8 +29,13 @@
 		"drag": "drag",
 		"spring_len": "Spring len",
 		"rel": "REL",
-		"show_2nd": "Show secondary links",
-		"apply": "Apply"
+		"on": "On",
+		"off": "Off",
+		"option_2nd": "Secondary links",
+		"apply": "Apply",
+		"option_icons": "Icons",
+		"show_as": "Show as",
+		"info_panel": "Info panel"
 	},
 	"relevance": {
 		"please_evaluate_quality": "Please, evaluate quality of the result! Words in the results should be semantically related to the query -- synonyms, hyponyms, associations, and so on.",
@@ -34,8 +46,9 @@
 		"other": "other",
 		"description": "Please remember that you provide your own opinion on the quality of the results. If the words in the results sound related to you -- use 1. If not at all -- use 3. The words in the results should be semantically related to the query in a broad sense. They can be synonyms, hyponyms, co-hyponyms, strong associations..."
 	},
-	"title": "Lexico-Semantic Search Engine",
-	"idea": "finds semantically related words",
+	"title": "Serelex: Finds semantically related words",
+	"idea": "Finds semantically related words",
+	"logo_text": "lexico-semantic search engine",
 	"about": {
 		"title": "About",
 		"description": "A traditional search engine, given a text query, provides as a results a list of related documents. This system is a \"lexico-semantic search engine\". Given a query it returns a list of related words. This way you can discover meaning of words in an interactive manner, search for synonyms and more. This is an ongoing project, please write your suggestions or comments to Alexander Panchenko (alexander.panchenko@uclouvain.be). <br/> This system is a result of a colloboration between <a href=\"http://www.uclouvain.be/\">Universite catholique de Louvain</a> (UCL) and <a href=\"http://www.bmstu.ru/\">Bauman Moscow State Technical University</a> (BMSTU). Several people contributed to the project: Alexander Panchenko (UCL), Alexey Romanov (BMSTU), Andrey Philippovich (BMSTU), Cedrick Fairon (UCL), Hubert Naets (UCL), Laeticia Browers (UCL), Olga Morozova (UCL), Sergey Adeykin (BMSTU), Pavel Romanov (BMSTU) and Yuri Philippovich (BMSTU). We would like to thank the following organizations for support: <a href=\"http://www.wbi.be/\">Wallonie-Brussels International</a>, <a href=\"http://www.uclouvain.be/cental\">Center for Natural Language Processing</a> of UCL, <a href=\"http://www.it-claim.ru/\">IT-CLAIM</a> of BMSTU and <a href=\"http://grant.rfh.ru/rfh\">Russian Humanities Foundation</a>.",
@@ -44,9 +57,15 @@
 		"this_site": "this site",
 		"publications": "Publications",
 		"simeval": "Extracted relations and evaluation scripts",
-		"api_description": "You can access the system without any limitations as following: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. This request should return a set of words related to 'ubuntu' in JSON format:",
+		"api_description": "You can access the system without any limitations. For English API use: <a href='http://serelex.cental.be/find/norm60-corpus-all/ubuntu'>http://serelex.cental.be/find/norm60-corpus-all/ubuntu</a>. For French API use <a href='http://serelex.cental.be/find/pairsfr-efreq-rnum-cfreq-pnum/belgique'>http://serelex.cental.be/find/pairsfr-efreq-rnum-cfreq-pnum/belgique</a>. The first query should return a set of words related to 'ubuntu' in JSON format:",
 		"advanced": "Advanced Mode",
-		"advanced_description": "By default the system relies on the semantic similarity measure <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. You can search for similar words with other measures and compare results: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>"
+		"advanced_description": "By default the system relies on the semantic similarity measure <i>PatternSim Efreq-Rnum-Cfreq-Pnum</i>. You can search for similar words with other measures and compare results: <br /> <a href='http://serelex.cental.be/page/advanced'>http://serelex.cental.be/page/advanced</a>",
+		"application": "Serelex for Windows 8 and Windows Phone",
+		"application_description": "Serelex is available for Windows 8! This app allows easy search and navigation by displaying the results of images for each word. <a href=\"http://apps.microsoft.com/windows/app/lsse/48dc239a-e116-4234-87fd-ac90f030d72c\">Screenshots and descriptions in the Windows Store</a><br /><br/>Version for Windows Phone is different because you can immediately search in Google for any term from the search results. Screenshots and description is avialable in the Windows Phone App+Games Store:<br /><br/><a href=\"http://www.windowsphone.com/s?appid=dbc7d458-a3da-42bf-8da1-de49915e0318\"><img src=\"/images/wp_qrcode.png\" alt=\"QR code\" style=\"width: 100px\" /></a>",
+		"contacts": "Contacts",
+		"contacts_detail": "For all questions please contact Alexander Panchenko (<span class='text2985 text2985_ap'> </span>) or Pavel Romanov (<span class='text2985 text2985_pr'> </span>)",
+		"design": "Design",
+		"design_description": "Design by Maxim Kolesov (<a href=\"http://midstripe.com/\" target=\"_blank\">Midstripe Teurgy</a>)"
 	},
 	"search": {
 		"input_word": "input word",
@@ -60,7 +79,12 @@
 			"two": "results",
 			"many": "results"
 		},
-		"for_example": "System finds semantically related words.<br /> For example"
+		"system_search": "System finds semantically related words",
+		"for_example": "For example",
+		"search_in": "Search in",
+		"wikipedia": "Wikipedia",
+		"disambiguates": "Disambiguates",
+		"show_all_disambiguates": "Show all"
 	},
 	"advanced": {
 		"title": "Lexico-Semantic Search Engine",

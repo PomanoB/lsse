@@ -1,19 +1,14 @@
 var async = require("async");
 var Trie = require("./tree");
 
-var ObjectID = require('mongodb').ObjectID;
-
 var LSSE = function(){
-	this.words = null;
-	this.relations = null;
-	this.lemms = null;
-	this.relevance = null;
+	
+	this.connection = null;
 
 	this.searchTree = new Trie();
 };
 
 LSSE.prototype.correctWord = function(word, cost){
-
 	var results = this.searchTree.search(word, cost);
 
 	results.sort(function(a, b){
@@ -23,6 +18,23 @@ LSSE.prototype.correctWord = function(word, cost){
 }
 
 LSSE.prototype.loadTree = function(callback){
+
+	// callback();
+	// return;
+	var query = this.connection.query('SELECT word FROM `words`');
+	query
+	.on('result', function(row) {
+		this.searchTree.insert(row.word);
+	}.bind(this))
+	.on('end', function() {
+		callback();
+	})
+	.on('error', function(err){
+		callback(err);
+	});
+/*
+	callback();
+	return;
 	var t = this;
 	this.words.find().sort({word: 1}).toArray(function(err, items){
 		if(err) 
@@ -38,6 +50,7 @@ LSSE.prototype.loadTree = function(callback){
 		
 		callback();
 	});
+*/
 }
 
 LSSE.prototype.getPerhaps = function(word){
@@ -59,35 +72,37 @@ LSSE.prototype.getPerhaps = function(word){
 	return words;
 }
 
-LSSE.prototype.getLemma = function(word, callback){
+LSSE.prototype.getLemma = function(word, lang, callback){
 
-	this.lemms.find({forms: word}).toArray(function(err, items){
-		if (err)
-		{
-			callback(err, []);
-			return;
+	this.connection.query(
+		"SELECT w.word FROM lemms l " +
+		"INNER JOIN words w ON w.id = l.word AND w.lang = ? " +
+		"WHERE l.lemm = (SELECT id FROM words WHERE word = ? AND lang = ?)", [lang, word, lang], 
+		function(err, results) {
+			if (err)
+			{
+				console.log(err, word);
+				callback(err, []);
+			}
+
+			callback(null, results.map(function(item){
+				return item.word;
+			}));
 		}
-		var lemms = [];
-		var i;
-		for(i = 0; i < items.length; i++)
-		{
-			lemms.push(items[i].lemma);
-		}
-		callback(null, lemms);
-	});
+	);
 };
 
-LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
+LSSE.prototype.getBestRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
 
-	this.getLemma(word, function(err, lemms){
+	this.getLemma(word, lang, function(err, lemms){
 		if (lemms.length == 0)
 			 lemms = [word];
 		else if (lemms.indexOf(word) == -1)
 			lemms.unshift(word);
 
 		async.map(lemms, function(lemma, callback){
-			t.loadRelations(lemma, model, callback);
+			t.loadRelations(lemma, model, lang, limit, skip, callback);
 		}, function(err, results){
 			if (err)
 			{
@@ -111,204 +126,76 @@ LSSE.prototype.getBestRelations = function(word, model, limit, skip, callback){
 				callback(null, null);
 				return;
 			}
-			var item = results[maxNumber];
-			if (typeof limit != "undefined" && (limit = +limit) > 0)
-			{
-				item.relations.sort(function(a, b){
-					return b.value - a.value;
-				});
-				item.relations.splice(0, skip);
-				item.relations.splice(limit, item.totalRelations - limit);
-			}
-
-			t.loadRelationsWords(item, function(err){
-				if (err)
-				{
-					callback(err)
-					return;
-				}
-				callback(null, item);
-			});
+			callback(null, results[maxNumber]);
 		});
 	});
 }
 
-LSSE.prototype.getRelations = function(word, model, limit, skip, callback){
-	var t = this;
-	this.loadRelations(word, model, function(err, item){
-		if (err)
-		{
-			callback(err)
-			return;
-		}
-		if (!item)
-		{
-			callback(null, null);
-			return;
-		}
-		if (typeof limit != "undefined" && (limit = +limit) > 0)
-		{
-			item.relations.sort(function(a, b){
-				return b.value - a.value;
-			});
-
-			item.relations.splice(0, skip);
-			item.relations.splice(limit, item.totalRelations - limit - skip);
-		}
-
-		t.loadRelationsWords(item, function(err){
-			if (err)
-			{
-				callback(err)
-				return;
-			}
-			callback(null, item);
-		});
-	});
-};
-
-LSSE.prototype.loadRelations = function(word, model, callback){
+LSSE.prototype.loadRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
 
-	this.words.find({word: {$in: [word, model]}}).toArray(function(err, items){
-
-		if (err)
-		{
-			callback(err)
-			return;
-		}
-
-		var i, wordId = -1, modelId = -1;
-		for(i = 0; i < items.length; i++)
-		{
-			if (items[i].word == word)
-				wordId = i;
-			else
-			if (items[i].word == model)
-				modelId = i;
-		}
-		if (wordId < 0 || modelId < 0)
-		{
-			callback(null);
-			return;
-		}
-		t.relations.findOne({word: items[wordId].id, model: items[modelId].id}, function(err, item){
-			
-			if (err)
-			{
-				callback(err)
-				return;
-			}
-
-			if (!item)
-			{
-				callback(null, null);
-				return;
-			}
-			item.word = items[wordId].word;
-			item.model = items[modelId].word;
-			item.totalRelations = item.relations.length;
-
-			callback(null, item);
-		});
+	var query = "\
+	SELECT SQL_CALC_FOUND_ROWS w.word, r.value\
+	FROM relations r\
+	INNER JOIN words w  ON w.id = r.relation\
+	WHERE r.word = (SELECT id FROM words WHERE word = ? AND lang = ? LIMIT 1)\
+		AND\
+	r.model = (SELECT id FROM models WHERE name = ? LIMIT 1)\
+	ORDER BY r.value DESC ";
+	if (skip >= 0)
+		query += "LIMIT ?, ?";
+	else
+	if (limit >= 0)
+		query += "LIMIT ?";
+	query += "; SELECT FOUND_ROWS() AS `total`";
+	
+	this.connection.query(query, [word, lang, model, skip|0, limit|0], function(err, results) {
+ 		
+ 		if (err)
+ 		{
+ 			callback(err);
+ 			return;
+ 		}
+ 		var result = {
+ 			word: word,
+ 			model: model,
+ 			totalRelations: results[1][0].total,
+ 			relations: []
+ 		}
+ 		var i;
+ 		for(i = 0; i < results[0].length; i++)
+ 		{
+ 			result.relations.push({
+ 				word: results[0][i].word,
+ 				value: results[0][i].value
+ 			});
+ 		}
+ 		callback(null, result);
 	});
 };
 
-LSSE.prototype.loadRelationsWords = function(item, callback){
-	var needWords = [];
-	var rel = item.relations;
-	for(i = 0; i < rel.length; i++)
-	{
-		needWords.push(rel[i].word);
-	}
-	this.words.find({id: {$in: needWords}}).toArray(function(err, items){
-		if (err)
-		{
-			callback(err);
-			return;
-		}
-		var i = 0, j = 0;
-		var wordsLength = items.length;
-		var length = item.relations.length;
+LSSE.prototype.openDb = function(connection, callback){
 
-		for(i = 0; i < length; i++)
-		{
-			for(j = 0; j < wordsLength; j++)
-			{
-				if (items[j].id == rel[i].word)
-				{
-					rel[i].word = items[j].word;
-					rel[i].icon = !!items[j].icon;
-					
-					items.splice(j, 1);
-					wordsLength--;
-				}
-			}
-		}
-		
-		callback(null);
-	});
-}
-
-LSSE.prototype.openDb = function(database, callback){
-
-	database.open(this.dbOpened.bind({
-		callback: callback,
-		lsse: this
-	}));
-};
-LSSE.prototype.dbOpened = function(err, db){
-	if (err)
-	{
-		this.callback(err);
-		return;
-	}
-
-	var t = this;
-	var collestions = ['words', 'relations', 'lemms', 'relevance'];
-	async.map(collestions, db.createCollection.bind(db), function(err, results){
-		if (err)
-		{
-			t.callback(err);
-			return;
-		}
-		var i;
-		for(i = 0; i < collestions.length; i++)
-		{
-			t.lsse[collestions[i]] = results[i];
-		}
-
-		// t.lsse.loadTree(t.callback)
-		t.callback(null);
-	});
+	this.connection = connection;
+	this.connection.connect((function(err) {
+		this.loadTree(callback);
+		// t.callback(null);
+		// callback(err);
+	}).bind(this));
 };
 
-LSSE.prototype.suggest = function(word, limit, callback)
+LSSE.prototype.suggest = function(word, lang, limit, callback)
 {
-
-	this.words.find({word: new RegExp('^'+ word.replace(/[^a-zA-Z0-9\s]/, ''))}, {word: 1, freq: 1})
-				.sort({freq: -1, word: 1}).limit(limit).toArray(function(err, items){
+	word = word.replace(/[%_']/g, '');
+	var query = "SELECT word FROM words WHERE lang = ? AND word LIKE '" + word + "%' ORDER BY frequency DESC";
+	if (limit)
+		query += " LIMIT " + (limit|0);
+	this.connection.query(query, [lang], function(err, results){
 		if (err)
-		{
-			callback([])
-			return;
-		}
-		var result = [];
-		for(var i = 0; i < items.length; i++)
-		{
-			result.push(items[i].word);
-		}
-		callback(result);
-	});
-}
-
-LSSE.prototype.saveRelevance = function(word, model, relevance, user){
-	this.relevance.insert({
-		word: word, 
-		model: model, 
-		relevance: relevance,
-		user: user
-	});
+			callback([]);
+		else
+			callback(results);
+	});	
 }
 
 module.exports = LSSE;

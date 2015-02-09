@@ -2,13 +2,34 @@ var lsse;
 var graph = null;
 var displayResults = null;
 var currentSkip = 0;
+var showImages = true;
+var showInfoPanel = true;
+
+function turnIconsOn()
+{
+	showImages = true;
+	// $('img.result_icon').show();
+	$('g.node>image').css('display', 'block');
+
+	$('#icons_switcher a').removeClass('current');
+	$('#icons_switcher a[href="#on"]').addClass('current');
+}
+function turnIconsOff()
+{
+	showImages = false;
+	// $('img.result_icon').hide();
+	$('g.node>image').hide();
+
+	$('#icons_switcher a').removeClass('current');
+	$('#icons_switcher a[href="#off"]').addClass('current');
+}
 
 $(function(){
 	var socket = io.connect();
-	lsse = new LSSE(socket, '/find');
+	lsse = new LSSE(socket, useLang);
 
-	var showImages = false;
-
+	
+/*
 	var sampleSearch = [
 		"python",
 		"jaguar",
@@ -59,11 +80,10 @@ $(function(){
 		"cottage cheese",
 		"local speciality"
 	];
-
+*/
 	var suggestTimeout = null;
 
-	if (advanced)
-		switchImages();
+	turnIconsOn();
 
 	// $('select.relevance_select').change(function(){
 
@@ -85,6 +105,9 @@ $(function(){
 		$('#result').empty();
 		$('#show_all').hide();
 		$('#suggest_results').hide();
+		$('#info_panel').html('').hide();
+		$('div.disambiguates_info').hide();
+
 		clearTimeout(suggestTimeout);
 
 		currentSkip = 0;
@@ -185,10 +208,44 @@ $(function(){
 						$('#suggest_results').hide();
 				});
 			}
+			else
+				$('#suggest_results').hide();
 		}, 200);
 	});
 
-	$('#switch_images').click(switchImages);
+	// $('#switch_images').click(switchImages);
+
+	$('#info_panel_switcher a').click(function(){
+
+		if ($(this).attr('href') == "#on")
+		{
+			$('#info_panel').show();
+			$('#graph_container').css('right', '270px');
+			showInfoPanel = true;
+		}	
+		else
+		{
+			$('#info_panel').hide();
+			$('#graph_container').css('right', '20px');
+			showInfoPanel = false;
+		}	
+
+		$('#info_panel_switcher a').removeClass('current');
+		$('#info_panel_switcher a[href="#' + (showInfoPanel ? 'on' : 'off') + '"]').addClass('current');
+
+		return false;
+	});
+	$('#info_panel_switcher a[href="#on"]').addClass('current');
+
+	$('#icons_switcher a').click(function(){
+
+		if ($(this).attr('href') == "#on")
+			turnIconsOn();
+		else
+			turnIconsOff();
+
+		return false;
+	});
 
 	$(document).on("click", "#suggest_results>li", function(){
 		location.hash = '#' + $(this).text();
@@ -200,103 +257,44 @@ $(function(){
 		$(this).parent().hide();
 		return false;
 	});
-
-
-	$('#switch_secondary_links').click(function(){
-		if (graph.show2ndLinks())
-		{
-			hide2ndLinks();
-			$(this).text(lingua.show_second_links);
-		}
-		else
-		{
-			show2ndLinks();
-			$(this).text(lingua.hide_second_links);
-		}	
-
+	$('div.infobox>a[href="#close"]').click(function(){
+		$(this).parent().hide();
 		return false;
 	});
 
+
+	// $('#switch_secondary_links').click(function(){
+	// 	if (graph.show2ndLinks())
+	// 	{
+	// 		hide2ndLinks();
+	// 		$(this).text(lingua.show_second_links);
+	// 	}
+	// 	else
+	// 	{
+	// 		show2ndLinks();
+	// 		$(this).text(lingua.hide_second_links);
+	// 	}	
+
+	// 	return false;
+	// });
+
+	var lastScroll = 0;
 	$(document).bind('scroll', function(){
 		$('#scroll_to_top').css('opacity', Math.min(1.0, $(window).scrollTop()/500));
 	});
 	$('#scroll_to_top').click(function(){
-		$('html, body').animate({scrollTop: 0}, 1000);
+		var currentScroll = $('body').scrollTop();
+		if (currentScroll)
+		{
+			lastScroll = currentScroll;
+			$('html, body').animate({scrollTop: 0}, 1000);
+		}
+		else
+			$('html, body').animate({scrollTop: lastScroll}, 1000);		
 	});
 
 	var currentExample = sampleSearch[ Math.floor( Math.random() * sampleSearch.length ) ];
 	$('#example_search>a').attr('href', '#' + currentExample).text(currentExample);
-
-	function switchImages()
-	{
-		showImages = !showImages;
-		if(showImages)
-		{
-			$('#switch_images').text(lingua.hide_images);
-			$('img.result_icon').show();
-		}
-		else
-		{
-			$('#switch_images').text(lingua.show_images);
-			$('img.result_icon').hide();
-		}
-		return false;
-	}
-	
-	if (!displayResults)
-	{
-		displayResults = function(data)
-		{
-			var result;
-			
-		//	$('#graph_container>div').show();
-			if (currentSkip == 0)
-			{
-				graph.clear();
-				$('#result').empty();
-			}
-			
-			if (data.totalRelations > 0)
-			{
-				graph.addData(data, 20, LinkType.PrimaryLink);
-				graph.update();
-
-				if (currentSkip == 0)
-				{
-					result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
-					result += '<table>';
-				}
-
-				var firstRel = -1;
-				var i;
-				for(i = 0; i < data.relations.length; i++)
-				{
-					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
-					result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
-					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
-					if (advanced)
-						result += (' - ' + data.relations[i].value);
-					result += '</td></tr>';
-				}
-				if (currentSkip == 0)
-					result += '</table>';
-
-				if (data.relations.length < data.totalRelations)
-					$('#show_all').show();
-
-			//	$('div.relevance').show().find('select').val(0);
-
-				if(graph.show2ndLinks())
-					show2ndLinks();
-				if (currentSkip == 0)
-					$('#result').html(result);
-				else
-					$('#result table>tbody').append(result);
-			}
-
-			return result;	
-		}
-	}
 
 	var _displayResults = displayResults;
 	displayResults = function(data)
@@ -304,7 +302,7 @@ $(function(){
 		$('#suggest_results').hide();
 		$('.social_buttons').show();
 
-		$('nav a.remember_word_link').each(function(){
+		$('a.remember_word_link').each(function(){
 			var href = $(this).attr('href');
 			var anchor = href.split('#');
 			$(this).attr('href', anchor[0] + '#' + data.word)
@@ -312,6 +310,9 @@ $(function(){
 
 		var result = _displayResults(data);
 		
+		if (showImages)
+			turnIconsOn();
+
 		if (data.totalRelations <= 0 && !result)
 		{
 			var pLen = data.perhaps.length;
@@ -333,7 +334,11 @@ $(function(){
 				result += "</ul>";
 			}
 			else
+			{
 				result = lingua.not_found;
+				if (/[а-я]/i.test(data.word) && location.pathname !== "/ru")
+					location.href = "/ru#" + data.word
+			}
 
 			$('#result').html(result);
 		}

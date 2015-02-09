@@ -9,7 +9,7 @@ var fileName = process.argv[2] || "data/dela-en-public-u8.dic.xml";
 
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('serelex2', server);
+var db = new Db('serelex3', server);
 
 db.open(function(err, db) {
 	if(err) 

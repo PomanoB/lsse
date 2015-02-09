@@ -14,6 +14,12 @@
 
 		<script>
 			
+			var useLang = "<%- useLang %>";
+			var defaultModel = "<%- useModel %>";
+			
+
+			var lang = "<%= locale %>";
+
 			var advanced = false;
 			var lingua = {
 				not_found: "<%= lingua.search.not_found %>",
@@ -25,17 +31,20 @@
 				hide_second_links: "<%= lingua.nav.hide_second_links %>",
 				show_second_links: "<%= lingua.nav.show_second_links %>"
 			};
-			var defaultModel = 'norm60-corpus-all';
 
 			$(function(){
 				$('#model').val(defaultModel);
 
 				$('#graph_container>div').hide();
 
-				$('#graph_container').css('left', '400px');
+				$('#graph_container').css('left', '290px');
 			});
 			
 			var currentPage = 'graph_search';
+
+			var showDisambiguates = 5;
+
+			var sampleSearch = <%- samples %>;
 
 		</script>
 
@@ -49,22 +58,76 @@
 		<div id="scroll_to_top">
 			<div></div>
 		</div>
-		<% include nav %>
-		<h2><%= lingua.title %></h2>
-		
-		<form action="?" id="input_form">
-			<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
-			<input type="hidden" name="model" id="model" />
-			<input type="submit" value="<%= lingua.search.search %>" />
-			<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
-			<ul id="suggest_results">
-				<li>dog</li>
-				<li>cat</li>
-				<li>human</li>
-			</ul>
-		</form>
 
-		<% include relevance %>
+		<% include nav %>
+		
+		<div id="top_header_conatiner">
+			<form action="?" id="input_form">
+				<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
+				<input type="hidden" name="model" id="model" />
+				<input type="submit" value="<%= lingua.search.search %>" />
+				<ul id="suggest_results">
+					<li>dog</li>
+					<li>cat</li>
+					<li>human</li>
+				</ul>
+				<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
+			</form>
+			
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.show_as %></div>
+				<ul>
+					<li><a href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
+					--><li><a href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
+				</ul>
+			</div>
+			
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.option_2nd %></div>
+				<ul id="2nd_link_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.option_icons %></div>
+				<ul id="icons_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.info_panel %></div>
+				<ul id="info_panel_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
+
+			<div class="top_header_switch">
+				<div><%= lingua.nav.lang_choose %></div>
+				<ul>
+					<li><a class="remember_word_link<%if (!useLang) {%>  current<%}%>" href="/"><%= lingua.nav.lang_en %></a></li><!--
+					--><li><a class="remember_word_link<%if (useLang == "fr") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_fr %></a></li><!--
+					--><li><a class="remember_word_link<%if (useLang == "ru") {%>  current<%}%>" href="/ru"><%= lingua.nav.lang_ru %></a></li>
+				</ul>
+			</div>
+
+			<div class="clearfix"></div>
+		</div>
+		
+		<div id="info_panel">
+			
+
+		</div>
+		<div class="infobox disambiguates_info">
+			<a href="#close">x</a>
+			<div>
+			</div>
+		</div>
 
 		<% include graph %>
 
@@ -72,7 +135,192 @@
 		</div>
 		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 
+		<script>
+		$(function(){
+			$('#info_panel').on('click', 'a.show_all_disambiguates', function(e){
+				$('ul.disambiguates_list>li').show();
+				$(e.target).hide();
+				return false;
+			});
+			$('#info_panel').on('click', 'ul.disambiguates_list a', function(e){
+				var word = decodeURIComponent($(e.target).attr('href').slice(29));
 
-		<% include social %>
+				$.getJSON('/def/' + word, function(response){
+				
+					var def = {
+						lang: "en", 
+						definition: response.definition.en,
+						label: word.replace(/_/g, ' ')
+					};
+					if (lang == "ru" && response.definition.ru != null)
+					{
+						def.definition = response.definition.ru;
+						def.lang = "ru";
+					}
+					if (response.labels[def.lang])
+						def.label = response.labels[def.lang];
+
+					if (def.definition)
+					{
+						var html = '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + def.label + '</strong> — ' + def.definition + 
+							'</div><a target="_blank" href="http://' + def.lang + '.wikipedia.org/wiki/' + encodeURIComponent(def.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
+						$('div.disambiguates_info').show().find('div').html(html);
+					}
+					
+				});
+				return false;
+			})
+		})
+
+		var searchIn = {
+			'Google': 'https://google.com/search?q=%s',
+			'Thesaurus.com': 'http://thesaurus.com/browse/%s?s=t',
+			'Longman Dictionary': 'http://www.ldoceonline.com/search/?q=%s',
+			'The Free Dictionary': 'http://www.thefreedictionary.com/%s',
+			'Oxford Dictionaries': 'http://oxforddictionaries.com/definition/english/%s',
+			'Merriam-Webster': 'http://www.merriam-webster.com/dictionary/%s',
+			'Cambridge Dictionary': 'http://dictionary.cambridge.org/dictionary/british/%s',
+			'Collins Dictionary': 'http://www.collinsdictionary.com/dictionary/english/%s'
+		};
+
+		var langPriority = [];
+		langPriority.push("en");
+		if (useLang != "en")
+			langPriority.push(useLang);
+		if (lang != "en")
+			langPriority.push(lang);		
+		
+
+		displayResults = function(data)
+		{
+
+			$.getJSON('/def/' + data.word, function(response){
+				var html = '';
+				var definition = '', url = {lang: 'en', label: response.word.replace(/_/g, ' ')};
+
+				var i;
+				for(i = 0; i < langPriority.length; i++)
+				{
+					if (Object.prototype.hasOwnProperty.call(response.definition, langPriority[i]) && response.definition[ langPriority[i] ])
+					{
+						definition = response.definition[ langPriority[i] ];
+					}
+					if (Object.prototype.hasOwnProperty.call(response.labels, langPriority[i]) && response.labels[ langPriority[i] ])
+					{
+						url.label = response.labels[ langPriority[i] ];
+						url.lang = langPriority[i];
+					}
+				}
+
+				if (definition)
+				{
+					var wordDefWords = definition.split(/\s+/);
+					if (wordDefWords.length > 50)
+					{
+						wordDefWords.splice(50);
+						wordDefWords.push("...");
+						definition = wordDefWords.join(' ');
+					}
+
+					if (response.image)
+						html += '<img class="info_panel_image" src="' + response.image + '" alt="" />';
+
+					html += '<div><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( definition ) + '</div><a target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
+				}
+				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
+				{
+					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
+					
+					$.post('/sort/' + data.word, {
+						data: response.disambiguates
+					}, function(response){
+						var i, html = '';
+						for(i = 0; i < response.length; i++)
+						{
+							html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response[i]) + '">' + response[i].replace('_', ' ') + '</a></li>';
+						}
+						$('#info_panel ul.disambiguates_list').append(html);
+						if (i > showDisambiguates)
+							$('#info_panel a.show_all_disambiguates').show();
+					});
+					/*
+					var i;
+					for(i = 0; i < response.disambiguates.length; i++)
+					{
+						html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+					}
+					*/
+					html += '</ul>';
+					// 
+				//	if (i > showDisambiguates)
+					html += '<a href="#show_all" class="show_all_disambiguates" style="display: none;" ><%= lingua.search.show_all_disambiguates %></a>';
+					html += '</div>';
+				}
+				html += '<div><%= lingua.search.search_in %>...</div><ul>';
+				for(var name in searchIn)
+				{
+					if (searchIn.hasOwnProperty(name))
+					{
+						html += '<li><a target="_blank" href="' + searchIn[name].replace('%s', data.word) + '">' + name + '</a></li>';
+					}
+				}
+				$('#info_panel').html(html).find('img.info_panel_image').error(function() { 
+					$(this).hide();
+				}).attr('src', response.image);
+
+				if (showInfoPanel)
+					$('#info_panel').show();
+			});
+
+			var result;
+			
+		//	$('#graph_container>div').show();
+			if (currentSkip == 0)
+			{
+				graph.clear();
+				$('#result').empty();
+			}
+			
+			if (data.totalRelations > 0)
+			{
+				graph.addData(data, 20, currentSkip == 0 ? LinkType.PrimaryLink : LinkType.SecondaryLink);
+				graph.update();
+
+				if (currentSkip == 0)
+				{
+					result = '<span>' + lingua.results_count+ ': ' + data.totalRelations + '</span>';
+					result += '<table>';
+				}
+
+				var firstRel = -1;
+				var i;
+				for(i = 0; i < data.relations.length; i++)
+				{
+					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
+				//	result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
+					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
+					if (advanced)
+						result += (' - ' + data.relations[i].value);
+					result += '</td></tr>';
+				}
+				if (currentSkip == 0)
+					result += '</table>';
+
+				if (data.relations.length < data.totalRelations)
+					$('#show_all').show();
+
+			//	$('div.relevance').show().find('select').val(0);
+
+				if(graph.show2ndLinks())
+					show2ndLinks();
+				if (currentSkip == 0)
+					$('#result').html(result);
+				else
+					$('#result table>tbody').append(result);
+			}
+
+			return result;	
+		}
+		</script>
 	</body>
 </html>

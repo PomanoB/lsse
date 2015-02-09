@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenSearchDescription 
+	xmlns="http://a9.com/-/spec/opensearch/1.1/" 
+	xmlns:moz="http://www.mozilla.org/2006/browser/search/"
+	xmlns:suggestions="http://www.opensearch.org/specifications/opensearch/extensions/suggestions/1.1"
+>
+	<ShortName>LSSE</ShortName>
+	<Description>Lexico-semantic search engine</Description>
+	<InputEncoding>UTF-8</InputEncoding>
+	<Url type="application/opensearchdescription+xml" rel="self" template="http://{siteUrl}/SearchEngineInfo.xml" />
+	<Url type="text/html" template="http://{siteUrl}/#{searchTerms}" />
+	<Url type="application/x-suggestions+json" template="http://{siteUrl}/suggest/{searchTerms}" />
+	<moz:SearchForm>{siteUrl}/</moz:SearchForm>
+</OpenSearchDescription>

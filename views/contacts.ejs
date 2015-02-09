@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= lingua.about.title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+
+		<% include meta %>
+
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+ 		<% include counters %>
+	</head>
+	<body>
+		<% include nav %>
+		<h3><%= lingua.about.contacts %></h2>
+		<div>
+			<%- lingua.about.contacts_detail %>
+		</div>
+	</body>
+</html>
