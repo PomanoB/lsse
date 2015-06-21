@@ -4,7 +4,9 @@ var express = require('express')
 	, lingua  = require('lingua')
 	, async = require('async')
 	, request = require('request')
-	, fs = require('fs');
+	, fs = require('fs')
+	, parse = require('csv-parse')
+;
 
 var mysql = require('mysql');
 
@@ -53,9 +55,34 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
-var wordsCollection = null;
+// Load words-extensions information
+var wordsExtensionsData = {};
+var parser = parse({delimiter: ','}, function(err, data){
+	data.forEach(function(we) {
+		var word = we[0].trim();
+		var ext = we[1].trim();
+		wordsExtensionsData[word] = ext;
+	});
+});
+fs.createReadStream(cfg.images.wordsExtensionsFilename).pipe(parser);
 
+
+var wordsCollection = null;
 var dataModels = require('./data_models').models;
+
+
+app.get('/image/:word', function(req, res){
+	var word = req.params.word;
+	
+	var redirectUrl;
+	if(wordsExtensionsData[word]) {
+		redirectUrl = cfg.images.baseUrl.replace('{word}', word).replace('{ext}', wordsExtensionsData[word]);
+	} else {
+		redirectUrl = cfg.images.fallbackUrl.replace('{word}', word);
+	}
+
+	res.redirect(redirectUrl);
+}); 
 
 app.get('/:lang(en|fr|ru)?', routes.page);
 

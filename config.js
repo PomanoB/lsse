@@ -11,6 +11,11 @@ var cfg = {
 		'pairsfr-efreq-rnum-cfreq-pnum': 'fr',
 		'ru-wiki': 'ru'
 	},
+	images: {
+		wordsExtensionsFilename: 'words_extensions.csv',
+		baseUrl: 'https://serelex.blob.core.windows.net/images/{word}{ext}',
+		fallbackUrl: 'http://{word}.jpg.to',
+	},
 	defalutLang: 'en',
 	samples: {
 		"en": [

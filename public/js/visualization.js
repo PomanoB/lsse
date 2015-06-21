@@ -225,7 +225,7 @@ Visualization.prototype.makeNode = function(node) {
 	var ui = Viva.Graph.svg('g').attr('class', 'node');
 	var rect = ui.append('rect').attr('fill', '#fff');
 	var text = ui.append('text').text(node.id);
-	var image = ui.append('image').link('http://' + node.id.replace(/[^a-z0-9]/i, '_') + '.jpg.to/m').attr('width', '32').attr('height', '32').attr('y', "-32");
+	var image = ui.append('image').link('/image/' + node.id.replace(/[^a-z0-9]/i, '_')).attr('width', '32').attr('height', '32').attr('y', "-32");
 
 	setTimeout(function(){
 		var bbox = text.getBBox();
