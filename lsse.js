@@ -1,6 +1,11 @@
 var async = require("async");
 var Trie = require("./tree");
-
+var fs = require('fs');
+var obj;
+fs.readFile('dbs.json', 'utf8', function (err, data) {
+  if (err) throw err;
+  obj = JSON.parse(data);
+});
 var LSSE = function(){
 	
 	this.connection = null;
@@ -94,7 +99,24 @@ LSSE.prototype.getLemma = function(word, lang, callback){
 
 LSSE.prototype.getBestRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
+	/*var actual_model = "";
+	console.log("Null Models:"+model.length);
+	console.log("Lang:"+lang);
+	if(model.length==0){
+		console.log("Index1:");
+		console.log("Name:"+obj[0].name);
+		model = obj[0].name;
+		lang = obj[0].lang;
 
+	}else{
+        	console.log("Index>1");
+		for(var i=3;i<model.length;i++){
+			actual_model = actual_model + model[i];
+		}
+		console.log("Actual Model:"+actual_model);
+		model = actual_model;
+                
+	}*/
 	this.getLemma(word, lang, function(err, lemms){
 		if (lemms.length == 0)
 			 lemms = [word];
@@ -133,7 +155,17 @@ LSSE.prototype.getBestRelations = function(word, model, lang, limit, skip, callb
 
 LSSE.prototype.loadRelations = function(word, model, lang, limit, skip, callback){
 	var t = this;
+	//console.log("Model is:"+ model);
+	if(model.length==0){
+		//console.log("Model Length==0");
+		//console.log("Name:"+obj[0].name);
+		//console.log("Lang:"+lang);
+		model = obj[0].name;
+		lang = obj[0].lang;
 
+	}
+	//console.log("Loading Relations..Model:"+model);
+	//console.log("Lang:"+lang);
 	var query = "\
 	SELECT SQL_CALC_FOUND_ROWS w.word, r.value\
 	FROM relations r\

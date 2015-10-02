@@ -1,8 +1,8 @@
 var cfg = {
 	database: {
 		host: '127.0.0.1',
-		user: 'lsse',
-		password : '',
+		user: 'root',
+		password : 'root',
 		database: 'lsse',
 		multipleStatements: true
 	},

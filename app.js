@@ -1,3 +1,4 @@
+console.log("Begin");
 var express = require('express')
 	, routes = require('./routes')
 	, http = require('http')
@@ -7,9 +8,9 @@ var express = require('express')
 	, fs = require('fs')
 	, parse = require('csv-parse')
 ;
-
+dbModels : JSON.parse(fs.readFileSync('./dbs.json'))
 var mysql = require('mysql');
-
+console.log("lsse");
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
 var lsse = new LSSE();
@@ -17,9 +18,34 @@ var lsse = new LSSE();
 var LsseLogger = require('./logger');
 var logger = new LsseLogger('logs');
 
-var cfg = require('./config.js');
+
 
 var app = express();
+
+var cfg = require('./config.js');
+var connection = mysql.createConnection(cfg.database);
+console.log("Query");
+connection.query("SELECT * FROM models",function select(error,rows,fields){
+if(error){
+
+	console.log("error in retrieving models");
+	connection.end();
+
+
+}if(rows.length>0){
+
+	var fs = require('fs');
+	fs.writeFile("dbs.json",JSON.stringify(rows,null,4),function(err){
+	if(err) throw err;
+	console.log("Saved");
+
+
+	});
+   }
+
+});
+
+
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 80);
@@ -69,7 +95,7 @@ fs.createReadStream(cfg.images.wordsExtensionsFilename).pipe(parser);
 
 var wordsCollection = null;
 var dataModels = require('./data_models').models;
-
+var latest_model = null;
 
 app.get('/image/:word', function(req, res){
 	var word = req.params.word;
@@ -84,7 +110,9 @@ app.get('/image/:word', function(req, res){
 	res.redirect(redirectUrl);
 }); 
 
-app.get('/:lang(en|fr|ru)?', routes.page);
+app.get('/:lang(en|fr|ru|pt)?', routes.page);
+app.get('/:lang(en|fr|ru|pt)?/:model?', routes.page);
+
 
 app.post('/sort/:word', function(req, res){
 	dbPedia.sort(req.body.data, function(){
@@ -92,8 +120,13 @@ app.post('/sort/:word', function(req, res){
 	});
 });
 app.get('/def/:word', function(req, res){
-
+	console.log("iWord:");
+	//console.log(req);
+	//console.log(res);
 	dbPedia.getDefinition(req.params.word, function(err, result){
+		//latest_model = req.params.model_select;
+		//console.log("Selected Model:"+req.params.model);
+		//console.log(req.params);
 		if (!err && result != null)
 		{
 			res.send(result);
@@ -118,9 +151,41 @@ app.get('/def/:word', function(req, res){
 		
 	});
 }); 
-app.get('/:lang(en|fr|ru)?/page/:page', routes.page);
 
-app.get('/:lang(en|fr|ru)?/suggest/:suggest', function(req, res){
+
+app.get('/def/:word/:', function(req, res){
+	//console.log("cWord:");
+	dbPedia.getDefinition(req.params.word, function(err, result){
+		latest_model = req.params.language_select;
+		if (!err && result != null)
+		{
+			res.send(result);
+		}
+		else
+		{
+			res.send({
+				word: req.params.word, 
+				definition: {
+					en: null,
+					ru: null
+				},
+				labels: {
+					en: null,
+					ru: null
+				}, 
+				image: null, 
+				disambiguates: []
+			});
+		}
+		//	res.send({en: null, ru: null, image: null, word: req.params.word});
+		
+	});
+});
+
+app.get('/:lang(en|fr|ru|pt)?/page/:page', routes.page);
+
+app.get('/:lang(en|fr|ru|pt)?/suggest/:suggest', function(req, res){
+	//console.log("Suggest:");
 	var searchWord = req.params.suggest.toLowerCase();
 	var result = [searchWord, [], [], []];
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
@@ -176,8 +241,8 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res)
 		}
 	}
 	logger.writeLogEntry(data);
-
-	lsse.getBestRelations(
+	//console.log("BestRelations:"+req.params.model.toLowerCase());
+	lsse.getBestRelations(		
 		req.params.word.toLowerCase(), 
 		req.params.model.toLowerCase(),
 		cfg.models[req.params.model.toLowerCase()] || null,
@@ -193,6 +258,7 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res)
 		}
 		else if (item)
 		{
+			console.log("Relations:");
 			res.send(item);
 		}
 		
@@ -217,11 +283,12 @@ app.get('/:db(en|fr|ru)?/models', function(req, res){
 	res.send(modelsListForAPI);
 });
 
+	
 
 var connection = mysql.createConnection(cfg.database);
 
 lsse.openDb(connection, function(err){
-	if (err)
+if (err)
 	{
 		console.log(err);
 		return;
@@ -243,8 +310,21 @@ lsse.openDb(connection, function(err){
 		socket.on('get relationships', function (data) {
 			data.word = data.word.toString().toLowerCase();
 			data.model = data.model.toString().toLowerCase();
-
-			lsse.getBestRelations(data.word, data.model, cfg.models[data.model] || "en", data.limit, data.skip || 0, function(err, item){
+			//console.log("App.js: Model:"+data.model);
+			
+			var lang = "";
+			for(var i=0;i<2;i++){
+				lang = lang+data.model[i];
+			}
+			var actual_model = "";			
+			for(var i=3;i<data.model.length;i++){
+				actual_model = actual_model + data.model[i];
+			}
+		//console.log("Actual Model:"+actual_model);
+		data.model = actual_model;
+			lsse.getBestRelations(data.word, data.model, cfg.models[data.model] || lang, data.limit, data.skip || 0, function(err, item){
+//lsse.getBestRelations(data.word, "python-model", cfg.models[data.model] || "en", data.limit, data.skip || 0, function(err, item){
+				//console.log("Model:",, cfg.models[data.model]);
 				if (err)
 				{
 					console.log(err);
