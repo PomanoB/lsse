@@ -1,0 +1,163 @@
+[
+    {
+        "id": 16,
+        "name": "pairsfr-efreq-rnum-cfreq-pnum",
+        "words": 0,
+        "relations": 0,
+        "lang": "fr"
+    },
+    {
+        "id": 17,
+        "name": "norm60-corpus-all",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 18,
+        "name": "python-google",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 19,
+        "name": "python-model",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 21,
+        "name": "apple-model",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 22,
+        "name": "house-model",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 23,
+        "name": "house-small-model",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 24,
+        "name": "test",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 25,
+        "name": "large-model",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 57,
+        "name": "GoogleWiki",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 58,
+        "name": "PortugueseModel",
+        "words": 0,
+        "relations": 0,
+        "lang": "po"
+    },
+    {
+        "id": 65,
+        "name": "OnlyApplyModel",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 66,
+        "name": "JustApplyModel",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 67,
+        "name": "Mango",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 68,
+        "name": "TinyModel",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 96,
+        "name": "PortMod",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    },
+    {
+        "id": 97,
+        "name": "PortMod2D",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    },
+    {
+        "id": 98,
+        "name": "PortMod-100k",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    },
+    {
+        "id": 99,
+        "name": "PortModEnt",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    },
+    {
+        "id": 100,
+        "name": "PortModEnt2",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    },
+    {
+        "id": 101,
+        "name": "TestShortLemma",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 102,
+        "name": "TestShortLemma1",
+        "words": 0,
+        "relations": 0,
+        "lang": "en"
+    },
+    {
+        "id": 104,
+        "name": "TestShortLemma2",
+        "words": 0,
+        "relations": 0,
+        "lang": "pt"
+    }
+]
