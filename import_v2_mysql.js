@@ -27,8 +27,8 @@ var serelex = new Serelex();
 var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host     : '127.0.0.1',
-	user     : 'lsse',
-	password : '',
+	user     : 'root',
+	password : 'root',
 	database: 'lsse',
 	multipleStatements: true
 });

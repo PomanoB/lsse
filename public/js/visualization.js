@@ -17,8 +17,8 @@ var Visualization = function(options){
 		userLinkColor: '#DDD',
 		highlightLinkColor: '#f00',
 		highlightNodeColor: '#f00',
-		parentNodeColor: '#000',
-		nodeColor: '#00B7FF',
+		parentNodeColor: '#337ab7',
+		nodeColor: '#337ab7',
 
 		springLengthA: 0,
 		springLengthB: 150,
