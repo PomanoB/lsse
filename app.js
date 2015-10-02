@@ -8,7 +8,7 @@ var express = require('express')
 	, fs = require('fs')
 	, parse = require('csv-parse')
 ;
-dbModels : JSON.parse(fs.readFileSync('./dbs.json'))
+dbModels : JSON.parse(fs.readFileSync('dbs.json'))
 var mysql = require('mysql');
 console.log("lsse");
 var LSSE = require('./lsse');
@@ -32,7 +32,8 @@ if(error){
 	connection.end();
 
 
-}if(rows.length>0){
+}
+//if(rows.length>0){
 
 	var fs = require('fs');
 	fs.writeFile("dbs.json",JSON.stringify(rows,null,4),function(err){
@@ -41,7 +42,7 @@ if(error){
 
 
 	});
-   }
+  // }
 
 });
 
