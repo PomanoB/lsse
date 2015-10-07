@@ -13,8 +13,8 @@ var cfg = {
 	},
 	images: {
 		wordsExtensionsFilename: 'words_extensions.csv',
-		baseUrl: 'https://serelex.blob.core.windows.net/images/{word}{ext}',
-		fallbackUrl: 'http://{word}.jpg.to',
+		baseUrl: 'http://panchenko.me/images/clipart/{word}{ext}',
+		fallbackUrl: 'https://serelex.blob.core.windows.net/images/{word}{ext}',
 	},
 	defalutLang: 'en',
 	samples: {
