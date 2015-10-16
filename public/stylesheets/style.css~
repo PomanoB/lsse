@@ -310,7 +310,7 @@ nav.main_nav
 #top_header_conatiner
 {
 	border-bottom: 1px solid #00B7FF;
-	color:  #858585;
+	color: #00B7FF;
 	padding: 5px 0;
 }
 

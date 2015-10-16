@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= lingua.about.title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+
+		<% include meta %>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+ 		<% include counters %>
+	</head>
+	<body>
+		<% include nav %>
+		<h3><%= lingua.about.source_code %></h2>
+		<ul>
+			<li>PatternSim -- <a target="_blank" href="https://github.com/cental/patternsim">https://github.com/cental/patternsim</a></li>
+			<li>Serelex (<%= lingua.about.this_site %>) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
+		<li>DefVectors -- <a target="_blank" href="https://github.com/jgc128/DefVectors">https://github.com/jgc128/DefVectors</a></li>
+
+			<li><%= lingua.about.simeval %> -- <a target="_blank" href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/">http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/</a></li>
+		</ul>
+		
+		
+	</body>
+</html>

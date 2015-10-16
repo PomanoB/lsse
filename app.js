@@ -1,4 +1,3 @@
-console.log("Begin");
 var express = require('express')
 	, routes = require('./routes')
 	, http = require('http')
@@ -6,11 +5,11 @@ var express = require('express')
 	, async = require('async')
 	, request = require('request')
 	, fs = require('fs')
+	, cfg = require('./config.js')
 	, parse = require('csv-parse')
 ;
-dbModels : JSON.parse(fs.readFileSync('dbs.json'))
+//dbModels : JSON.parse(fs.readFileSync('./dbs.json'))
 var mysql = require('mysql');
-console.log("lsse");
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
 var lsse = new LSSE();
@@ -23,28 +22,8 @@ var logger = new LsseLogger('logs');
 var app = express();
 
 var cfg = require('./config.js');
-var connection = mysql.createConnection(cfg.database);
-console.log("Query");
-connection.query("SELECT * FROM models",function select(error,rows,fields){
-if(error){
-
-	console.log("error in retrieving models");
-	connection.end();
 
 
-}
-//if(rows.length>0){
-
-	var fs = require('fs');
-	fs.writeFile("dbs.json",JSON.stringify(rows,null,4),function(err){
-	if(err) throw err;
-	console.log("Saved");
-
-
-	});
-  // }
-
-});
 
 
 
@@ -121,7 +100,7 @@ app.post('/sort/:word', function(req, res){
 	});
 });
 app.get('/def/:word', function(req, res){
-	console.log("iWord:");
+	//console.log("iWord:");
 	//console.log(req);
 	//console.log(res);
 	dbPedia.getDefinition(req.params.word, function(err, result){
@@ -204,6 +183,9 @@ app.get('/:lang(en|fr|ru|pt)?/suggest/:suggest', function(req, res){
 	});
 });
 
+
+
+
 var searchEngineInfoCache = {};
 app.get('/SearchEngineInfo.xml', function(req, res){
 	var hostName = req.headers['host'] || "serelex.it-claim.ru";
@@ -265,6 +247,9 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res)
 		
 	})
 });
+
+
+
 
 var modelsListForAPI = null;
 app.get('/:db(en|fr|ru)?/models', function(req, res){

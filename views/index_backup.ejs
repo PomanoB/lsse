@@ -11,9 +11,6 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="/js/vivagraph.js"></script>
 		<script src="/js/lsse.js"></script>
 		<!--<style type="text/css">
@@ -29,40 +26,6 @@
 		  .main-nav li:hover li a:hover {background: #808080;}
 		  #drop-nav li ul li {border-top: 0px;}
 		</style>-->
-
-
-
-		<style>
-
-			#nav, #nav ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-
-#nav a {
-	display: block;
-	width: 10em;
-}
-
-#nav li {
-	float: left;
-	width: 10em;
-}
-
-#nav li ul {
-	position: absolute;
-	width: 10em;
-	left: -999em;
-}
-
-#nav li:hover ul {
-	left: auto;
-}
-
-
-
-		</style>
 		<style>
 			#rightMenu{
 				postion:absolute;
@@ -97,14 +60,14 @@
 
 			#menu4 a
 			{
-			color: #000000;
+			color: #000;
 			text-decoration: none;
 			font-size: 14px;
 			display: block;
 			padding: 3px;
 			width: 160px;
-			background-color: #FFFFFF;
-			
+			background-color: #FDFCF3;
+			border: 1px dotted #B5E3C7;
 			margin:0px 0px 2px 0px;
 			}
 
@@ -194,7 +157,6 @@
 		
 	</head>
 	<body>
-		<div class="container">
 		<div id="scroll_to_top">
 			<div></div>
 		</div>
@@ -202,37 +164,31 @@
 		<% include nav %>
 		
 		<div id="top_header_conatiner">
-			<form action="?" id="input_form" class="form-inline">
-				<div class="form-group">
-				<input type="text" class="form-control"  placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' /> &nbsp;&nbsp;&nbsp;&nbsp;
-				
-<input type="submit" class="btn" style="width:90px;background-color:#858585;color:white;"  value="<%= lingua.search.search %>" />
+			<form action="?" id="input_form">
+				<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
 				<input type="hidden" name="model" id="model" />
-				
-				
-				</div>
-				 
+				<input type="submit" value="<%= lingua.search.search %>" />
 				<script>
 
-					var dbModels = <%-cfg.models.dbModelValues %>;
+					var dbModels = <%- JSON.stringify(dbModels) %>;
 					var selected_model = "";
 					var model_val = "";
-				</script>
+				</script><!--
+				<select id="model_select" name="model_select" onchange="this.options[this.selectedIndex].value && (window.location=this.options[this.selectedIndex].value);" style="" >
+					
 
-
-				
+					<% dbModels.forEach(function(row){ %>
+						<option value = <%= "/".concat(row.lang).concat("/").concat(row.name) %> ><a class="remember_word_link<%if (!useLang) {%>  current<%}%>" href=<%= "/".concat(row.lang) %> > <%= row.name %></a></option>
+					<% })%>
+				</select>-->
 				<div id="model-dropdown" class="model-dropdown" name="model-dropdown" style="visibility:hidden;">
 				<select id="model_select" name="model_select" onchange="this.options[this.selectedIndex].value && (window.location=this.options[this.selectedIndex].value);" style="" >
 					
-					<% cfg.models.dbModelValues.forEach(function(row){ %>
+					<% dbModels.forEach(function(row){ %>
 						<option value = <%= "/".concat(row.lang).concat("/").concat(row.name) %> ><a class="remember_word_link<%if (!useLang) {%>  current<%}%>" href=<%= "/".concat(row.lang) %> > <%= "".concat(row.lang).concat("-").concat(row.name) %></a></option>
 					<% })%>
 				</select>
-				
 				</div>
-				
-
-
 					
 							
 				<ul id="suggest_results">
@@ -254,29 +210,15 @@
 						var arr_url = valueToSet.split("/");
 						//var arr_lang = arr_url[3].split(":");
 						//alert(arr_url[3]);
-						//alert("setSelectedValue: "+ arr_url[1]);
-						if(arr_url[4] != null){
-							model_val = arr_url[4].trim("#.*");
-						}else {
-							model_val_arr = arr_url[1].split('#');
-							
-							model_val = model_val_arr[0];
+						model_val = arr_url[4].trim("#.*");
+						model_val = arr_url[3]+"-"+model_val;
+						//alert("Model:"+model_val);						
+						if (selectEle.options[i].text== model_val) {
+						    selectEle.options[i].selected = true;
+						//alert("Inside");
+						    selected_model = model_val;
+						return;
 						}
-							model_val = arr_url[3]+"-"+model_val;
-						
-							//alert("Model:"+model_val);
-                                                        //alert("hi:"+selectEle.options[0].text);
-                                                        if(model_val === -undefined){
-								//alert("In...");
-								model_val = selectEle.options[0].text;
-							}						
-							if (selectEle.options[i].text== model_val) {
-						    		selectEle.options[i].selected = true;
-								//alert("Inside");
-						    		selected_model = model_val;
-								return;
-							}
-						
 					    }
 					}
 
@@ -350,62 +292,55 @@
 			});
 			</script>
 
-				
+
 			
-			<div class="top_header_switch"  >
-				<!--<div><%= lingua.visualization.show_as %></div>-->
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.show_as %></div>
 				<ul>
-					<li><a  href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
-					--><li><a  href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
+					<li><a href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
+					--><li><a href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
 				</ul>
 			</div>
 			
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.option_2nd %></div>
+				<ul id="2nd_link_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.option_icons %></div>
+				<ul id="icons_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
+
+			<div class="top_header_switch">
+				<div><%= lingua.visualization.info_panel %></div>
+				<ul id="info_panel_switcher">
+					<li><a href="#on"><%= lingua.visualization.on %></a></li><!--
+					--><li><a href="#off"><%= lingua.visualization.off %></a></li>
+				</ul>
+			</div>
 			
-
-
-
-
-
-
-			<div class="dropdown" style="position:absolute;right:180px;">
-			    <button id="modelButton" class="btn dropdown-toggle" style="width:70px;background-color:#858585;" onClick="this.style.backgroundColor='#C0C0C0'" onmouseout="this.style.backgroundColor='#858585'" type="button" data-toggle="dropdown">
-				<span style="color:white;" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-			    </button>
-			    <ul onmouseover="onmouseUL()" class="dropdown-menu" id="model-dropdown-menu">
-			     <% cfg.models.dbModelValues.forEach(function(row){ %>
-						<li   id= <%= "/".concat(row.lang).concat("/").concat(row.name) %> >
-							<a onmouseover="onmouseUL()" href= <%= "/".concat(row.lang).concat("/").concat(row.name) %> > <%= "".concat(row.lang.toUpperCase()).concat("-").concat(row.name) %></a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="model-menu"><i  class="material-icons w3-large">settings</i></button>		
+				<div id="rightMenu" >
+					<ul id="menu4" >
+						
+					<% dbModels.forEach(function(row){ %>
+						<li  id= <%= "/".concat(row.lang).concat("/").concat(row.name) %> >
+							<a  href= <%= "/".concat(row.lang).concat("/").concat(row.name) %> > <%= "".concat(row.lang).concat("-").concat(row.name) %></a>
 						</li>
 				
 					<% })%>
-			    </ul>
-			  </div>
-
-			
-			
-
-			
-				
-				
-
-				
-
-<!--								
-<ul id="nav">
-	<li><a href="#">Percoidei</a>
-		<ul>
-			<li><a href="#">Remoras</a></li>
-			<li><a href="#">Tilefishes</a></li>
-			<li><a href="#">Bluefishes</a></li>
-			<li><a href="#">Tigerfishes</a></li>
-		</ul>
-	</li>
-
--->	
-
-	<!-- etc. -->
-
-</ul>
+					
+					</ul>
+				</div>
 			<div class="top_header_switch">
 				<!--<div><%= lingua.nav.lang_choose %></div>
 				<ul>
@@ -474,7 +409,7 @@
 					if (def.definition)
 					{
 						var html = '<div style="max-height: 400px;text-overflow: ellipsis;overflow: hidden"><strong>' + def.label + '</strong> — ' + def.definition + 
-							'</div><a  target="_blank" href="http://' + def.lang + '.wikipedia.org/wiki/' + encodeURIComponent(def.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
+							'</div><a target="_blank" href="http://' + def.lang + '.wikipedia.org/wiki/' + encodeURIComponent(def.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
 						$('div.disambiguates_info').show().find('div').html(html);
 					}
 					
@@ -536,11 +471,11 @@
 					if (response.image)
 						html += '<img class="info_panel_image" src="' + response.image + '" alt="" />';
 
-					html += '<div><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( definition ) + '</div><a   target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
+					html += '<div><strong>' + response.word.replace(/_/g, ' ') + '</strong> — ' + ( definition ) + '</div><a target="_blank" href="http://' + url.lang + '.wikipedia.org/wiki/' + encodeURIComponent(url.label.replace(/ /g, '_')) + '"><%= lingua.search.wikipedia %></a>';
 				}
 				if (typeof response.disambiguates != "undefined" && response.disambiguates.length > 0)
 				{
-					html += '<div><%= lingua.search.disambiguates %>:<ul 	class="disambiguates_list">';
+					html += '<div><%= lingua.search.disambiguates %>:<ul class="disambiguates_list">';
 					
 					$.post('/sort/' + data.word, {
 						data: response.disambiguates
@@ -548,7 +483,7 @@
 						var i, html = '';
 						for(i = 0; i < response.length; i++)
 						{
-							html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank"  href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response[i]) + '">' + response[i].replace('_', ' ') + '</a></li>';
+							html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response[i]) + '">' + response[i].replace('_', ' ') + '</a></li>';
 						}
 						$('#info_panel ul.disambiguates_list').append(html);
 						if (i > showDisambiguates)
@@ -558,13 +493,13 @@
 					var i;
 					for(i = 0; i < response.disambiguates.length; i++)
 					{
-						html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a  target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
+						html += '<li' + (i < showDisambiguates ? '' : ' style="display: none"') + '><a target="_blank" href="http://en.wikipedia.org/wiki/' + encodeURIComponent(response.disambiguates[i]) + '">' + response.disambiguates[i].replace('_', ' ') + '</a></li>';
 					}
 					*/
 					html += '</ul>';
 					// 
 				//	if (i > showDisambiguates)
-					html += '<a   href="#show_all" class="show_all_disambiguates" style="display: none;" ><%= lingua.search.show_all_disambiguates %></a>';
+					html += '<a href="#show_all" class="show_all_disambiguates" style="display: none;" ><%= lingua.search.show_all_disambiguates %></a>';
 					html += '</div>';
 				}
 				html += '<div><%= lingua.search.search_in %>...</div><ul>';
@@ -572,7 +507,7 @@
 				{
 					if (searchIn.hasOwnProperty(name))
 					{
-						html += '<li><a  target="_blank" href="' + searchIn[name].replace('%s', data.word) + '">' + name + '</a></li>';
+						html += '<li><a target="_blank" href="' + searchIn[name].replace('%s', data.word) + '">' + name + '</a></li>';
 					}
 				}
 				$('#info_panel').html(html).find('img.info_panel_image').error(function() { 
@@ -607,9 +542,9 @@
 				var i;
 				for(i = 0; i < data.relations.length; i++)
 				{
-					result += ('<tr><td style="color:#808080" >'+ (currentSkip + i + 1)+ '-</td>');
-				//	result += ('<td ><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
-					result += ('<td ><a  href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
+					result += ('<tr><td>'+ (currentSkip + i + 1)+ '</td>');
+				//	result += ('<td><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
+					result += ('<td><a href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 					if (advanced)
 						result += (' - ' + data.relations[i].value);
 					result += '</td></tr>';
@@ -645,15 +580,6 @@
 			});
 
 		</script>
-		<script type="text/javascript">
-			
-			function onmouseUL(){
-				var eleUL = document.getElementById("modelButton");
-				eleUL.style.color = "#C0C0C0";
-			}
-					
-
-		</script>
-		</div>
+		
 	</body>
 </html>
