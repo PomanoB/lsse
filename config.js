@@ -1,15 +1,24 @@
-var cfg = {
+
+var mysql = require('mysql');
+var dbModelValues = null;
+var connection = mysql.createConnection({
+   host     : 'localhost',
+   user     : 'root',
+   password : 'root',
+   database : 'lsse'
+});
+connection.connect();
+
+ var cfg = {
 	database: {
 		host: '127.0.0.1',
-		user: 'lsse',
-		password : '',
+		user: 'root',
+		password : 'root',
 		database: 'lsse',
 		multipleStatements: true
 	},
 	models: {
-		'norm60-corpus-all': 'en',
-		'pairsfr-efreq-rnum-cfreq-pnum': 'fr',
-		'ru-wiki': 'ru'
+		dbModelValues:dbModelValues
 	},
 	images: {
 		wordsExtensionsFilename: 'words_extensions.csv',
@@ -85,4 +94,30 @@ var cfg = {
 	}
 }
 
+function selection(callback){
+	connection.query('SELECT * from models', function(err, rows) {
+		
+		if (!err){
+			//assign(rows);
+			callback(null, rows);
+		}
+   else
+		callback(err, null);
+ });
+}
+
+selection(function(err,data){
+		
+	if(!err){
+		
+		dbModelValues = data;
+		cfg.models.dbModelValues = data;
+		
+		module.exports = cfg;
+	}
+	else{
+		console.log("Error while selecting models...");
+	}
+});
+ 
 module.exports = cfg;

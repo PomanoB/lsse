@@ -1,17 +1,23 @@
+
 var fs = require("fs");
+
 var cfg = require('./../config.js');
 var models = require('./../data_models').models;
 
-var langToModel = {}
+var langToModel = {};
+
 for(var model in cfg.models)
 {
 	langToModel[ cfg.models[model] ] = model;
 }
 
+var dbModelValues = cfg.models.dbModelValues;
 var allowedPages = {
 	index: {
 		models: models,
-		view: 'index'
+		view: 'index',
+		//dbModels : JSON.parse(fs.readFileSync('./dbs.json'))
+		dbModels: dbModelValues
 	},
 	about: {
 		view: "about"
@@ -36,7 +42,7 @@ var allowedPages = {
 exports.page = function(req, res){
 	res.locals.useLang = req.params.lang;
 	res.locals.useModel = langToModel[req.params.lang || cfg.defalutLang];
-
+	
 	res.locals.useLangLink = res.locals.useLang ? ('/' + res.locals.useLang) : '';
 
 	res.locals.samples = JSON.stringify(cfg.samples[res.locals.useLang] || cfg.samples[cfg.defalutLang]);
@@ -53,4 +59,5 @@ exports.page = function(req, res){
 		res.send();
 	}	
 };
+
 exports.allowedPages = allowedPages;

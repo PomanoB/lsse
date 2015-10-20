@@ -1,0 +1,213 @@
+<div id="grpah_options">
+	<a href="#close">x</a>
+	<table>
+		<tr>
+			<td>
+				<label for="graph_option_gravity"><%= lingua.visualization.gravity %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_gravity" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_springCoeff"><%= lingua.visualization.springCoeff %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_springCoeff" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_theta"><%= lingua.visualization.theta %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_theta" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="graph_option_drag"><%= lingua.visualization.drag %></label>
+			</td>
+			<td>
+				<input type="text" id="graph_option_drag" />
+			</td>
+		</tr>
+		<tr class="graph_option_links_length_options">
+			<td><%= lingua.visualization.spring_len %> = </td>
+			<td>
+				<input type="text" id="graph_option_springLengthA"  class="graph_small_option"/> * <%= lingua.visualization.rel %> +
+				<input type="text" id="graph_option_springLengthB" class="graph_small_option" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" id="graph_apply_button" value="<%= lingua.visualization.apply %>" />
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="graph_container">
+	<div style="display:none;">
+		<a href="#delete"><%= lingua.visualization.delete_last_node %></a>
+		<a href="#delete_free_nodes"><%= lingua.visualization.delete_all_free_node %></a>
+		<a href="#show_options"><%= lingua.visualization.show_options %></a>
+	</div>
+	<div></div>
+</div>
+
+<script>
+
+
+$(function(){
+
+	graph = new Visualization({
+		container: $('#graph_container').get(0),
+	//	click: function(){console.log(this, arguments)},
+		click: function(node){
+			lsse.search(node.id, lsse.lastQuery.model, 0, 20, function(data){
+				graph.addData(data, 20, LinkType.UserLoadedLink);
+				if (graph.show2ndLinks())
+					show2ndLinks();
+				if (showImages)
+					turnIconsOn();
+			}, true);
+			node.data.type = NodeType.UserClickNode;
+			node.ui.attr('class', 'parent node').attr('fill', graph.options.parentNodeColor);
+			// if (!node.data.parent)
+			// {
+			// 	node.data.parent = true;
+			// 	graph.forEachLinkedNode(node.id, function(node, link){
+			// 		link.data.type = LinkType.PrimaryLink;
+			// 		link.ui.attr('stroke', graph.getLinkColorByType(LinkType.PrimaryLink));
+			// 	})
+			// }
+		},
+		mouseover: function(node){
+			graph.forEachLinkedNode(node.id, function(node, link){
+				link.ui.attr('stroke', graph.options.highlightLinkColor);
+				node.ui.attr('fill', graph.options.highlightNodeColor);				
+			});
+		},
+		mouseout: function(node){
+			graph.forEachLinkedNode(node.id, function(node, link){
+				link.ui.attr('stroke', graph.getLinkColorByType(link.data.type));
+				node.ui.attr('fill', (node.data.parent || node.data.type == NodeType.UserClickNode) ? graph.options.parentNodeColor : graph.options.nodeColor);	
+			});
+		}
+	});
+
+	
+	$('#graph_container>div>a[href="#delete"]').click(function(){
+		graph.removeCurrentNode();
+		return false;
+	});
+	$('#graph_container>div>a[href="#delete_free_nodes"]').click(function(){
+		graph.removeFreeNodes();
+		return false;
+	});
+	$('#graph_container>div>a[href="#show_options"]').click(function(){
+		$('#grpah_options').toggle();
+		return false;
+	});
+
+	$('#2nd_link_switcher a').click(function(){
+
+		var show = $(this).attr('href') == "#on";
+		graph.show2ndLinks(show);
+		if (show)
+			show2ndLinks();
+		else
+			hide2ndLinks();
+
+		return false;
+	});
+
+	var graphOptions = [
+		'gravity',
+		'springCoeff',
+		'theta',
+		'drag',
+		'springLengthA',
+		'springLengthB'
+	];
+	var i;
+	for(i = 0; i < graphOptions.length; i++)
+	{
+		$('#graph_option_' + graphOptions[i]).val(graph[graphOptions[i]]());
+	}
+
+	$('#graph_apply_button').click(function(){
+
+		var i;
+		for(i = 0; i < graphOptions.length; i++)
+		{
+			graph[graphOptions[i]]($('#graph_option_' + graphOptions[i]).val());
+		}
+		
+	//	graph.show2ndLinks($('#graph_option_show_2nd').prop('checked'));
+
+		graph.update();
+
+		// if (graph.show2ndLinks())
+		// 	show2ndLinks();
+		// else
+		// 	hide2ndLinks();
+
+		$('#grpah_options').hide();
+	});
+
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#off"]').addClass('current');
+	
+	// if (graph.show2ndLinks())
+	// 	$('#switch_secondary_links').text(lingua.hide_second_links);
+	// else
+	// 	$('#switch_secondary_links').text(lingua.show_second_links);
+
+});
+
+function hide2ndLinks()
+{
+	var removeLinks = [];
+	graph.forEachLink(function(link){
+		if (link.data.type == LinkType.SecondaryLink)
+			removeLinks.push(link);
+	});
+	var i;
+	for(i = 0; i < removeLinks.length; i++)
+	{
+		graph.removeLink(removeLinks[i]);
+	}
+	graph.show2ndLinks(false);
+
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#off"]').addClass('current');
+}
+
+function show2ndLinks()
+{
+	for(i = 0; i < graph.secondLinksNodes.length; i++)
+	{
+		lsse.search(graph.secondLinksNodes[i], lsse.lastQuery.model, 0, graph.options.limit2ndLinks, function(data){
+			var j, len = data.relations.length;
+			
+			for(j = 0; j < len; j++)
+			{
+				if (typeof graph.getNode(data.relations[j].word) == "undefined")
+				{
+					data.relations.splice(j, 1);
+					len --;
+					j --;
+				}	
+			}
+			graph.addData(data, graph.options.limit2ndLinks, LinkType.SecondaryLink);
+		}, true);
+	}
+	graph.show2ndLinks(true);
+
+	$('#2nd_link_switcher a').removeClass('current');
+	$('#2nd_link_switcher a[href="#on"]').addClass('current');
+}
+</script>
