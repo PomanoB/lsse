@@ -302,16 +302,18 @@ ul.relevance_select>li.relevance_bad
 
 nav.main_nav
 {
-	position: absolute;
+	/* position: absolute;
 	top: 0;
-	left: 300px;
+	left: 300px; */
+	text-align: center;
 }
 
 #top_header_conatiner
 {
-	border-bottom: 1px solid #00B7FF;
+	border-bottom: 1px solid #337ab7;
 	color:  #858585;
 	padding: 5px 0;
+	margin-right: -46pt;
 }
 
 .top_header_switch

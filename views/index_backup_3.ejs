@@ -245,7 +245,6 @@
 			<script>
 				function setSelectedValue(selectEle){
 					var arr_url = valueToSet.split("/");
-					var language = "<%= cfg.defalutLang.toLowerCase() %>";
 					if(arr_url[4]){
 						model_val = arr_url[4].trim("#.*");
 						model_val = arr_url[3]+"-"+model_val;
@@ -271,22 +270,13 @@
 									model_val = selectEle.options[i].text;
 									selectEle.options[i].selected = true;
 									selected_model = model_val;
-									language = lang[0];
 								}
 								} else if(selectEle.options[i].text == model_val){
-								var lang = selectEle.options[i].text.split("-");
-								language = lang[0];
 								selectEle.options[i].selected = true;
 								selected_model = model_val;
 							}
 						}
 					}
-					<% cfg.models.dbModelValues.forEach(function(row){ %>
-						if("<%= row.lang %>" == language){
-							<% var searchLang = row.lang.toLowerCase() %>;
-							sampleSearch = <%- JSON.stringify(cfg.samples[searchLang]) %>;
-						}
-						<% }) %>
 					return;
 				}
 							
