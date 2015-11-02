@@ -9,6 +9,20 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
+connection.on('error', function(err){
+	if(err.code == "PROTOCOL_CONNECTION_LOST"){
+		var connection = mysql.createConnection({
+			host     : 'localhost',
+			user     : 'root',
+			password : 'root',
+			database : 'lsse'
+		});
+		connection.connect();
+	} else {
+		throw err;
+	}
+});
+
  var cfg = {
 	database: {
 		host: '127.0.0.1',
