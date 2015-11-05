@@ -2,18 +2,32 @@
 var mysql = require('mysql');
 var dbModelValues = null;
 var connection = mysql.createConnection({
-   host     : 'localhost',
-   user     : 'root',
-   password : 'root',
+   host     : '127.0.0.1',
+   user     : 'lsse',
+   password : '',
    database : 'lsse'
 });
 connection.connect();
 
+connection.on('error', function(err){
+	if(err.code == "PROTOCOL_CONNECTION_LOST"){
+		connection = mysql.createConnection({
+			host: '127.0.0.1',
+			user: 'lsse',
+			password: '',
+			database: 'lsse'
+		});
+		connection.connect();
+	} else{
+		throw err;
+	}
+});
+
  var cfg = {
 	database: {
 		host: '127.0.0.1',
-		user: 'root',
-		password : 'root',
+		user: 'lsse',
+		password : '',
 		database: 'lsse',
 		multipleStatements: true
 	},
@@ -87,9 +101,15 @@ connection.connect();
 			"quiche"
 		],
 		"ru": [
-			"империя",
-			"теория",
-			"соль"
+			"\u0438\u043C\u043F\u0435\u0440\u0438\u044F",
+			"\u0442\u0435\u043E\u0440\u0438\u044F",
+			"\u0441\u043E\u043B\u044C"
+		],
+		"pt": [
+			"aca\u00E7\u00E1",
+			"su\u00E9cia",
+			"redu\u00E7\u00E3o",
+			"aachen"
 		]
 	}
 }
@@ -111,12 +131,15 @@ selection(function(err,data){
 	if(!err){
 		
 		dbModelValues = data;
+		data.sort(function(data1, data2){
+			return data1.lang.localeCompare(data2.lang);
+		});
 		cfg.models.dbModelValues = data;
 		
 		module.exports = cfg;
 	}
 	else{
-		console.log("Error while selecting models...");
+		console.log("Error while selecting models...: ", err);
 	}
 });
  

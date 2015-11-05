@@ -23,9 +23,9 @@ LSSE.prototype.correctWord = function(word, cost){
 }
 
 LSSE.prototype.loadTree = function(callback){
-
-	// callback();
-	// return;
+	callback();
+	return;
+	// Build suffix tree from words	
 	var query = this.connection.query('SELECT word FROM `words`');
 	query
 	.on('result', function(row) {
@@ -37,7 +37,8 @@ LSSE.prototype.loadTree = function(callback){
 	.on('error', function(err){
 		callback(err);
 	});
-/*
+
+	/*
 	callback();
 	return;
 	var t = this;
@@ -55,7 +56,7 @@ LSSE.prototype.loadTree = function(callback){
 		
 		callback();
 	});
-*/
+	*/
 }
 
 LSSE.prototype.getPerhaps = function(word){

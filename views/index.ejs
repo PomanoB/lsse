@@ -216,12 +216,11 @@
 
 					var dbModels = <%-cfg.models.dbModelValues %>;
 					var selected_model = "";
-					var model_val = "";
 				</script>
 
 
 				
-				<div id="model-dropdown" class="model-dropdown" name="model-dropdown" style="visibility:hidden;">
+				<div id="model-dropdown" class="model-dropdown" name="model-dropdown" style="visibility:hidden;display:none;">
 				<select id="model_select" name="model_select" onchange="this.options[this.selectedIndex].value && (window.location=this.options[this.selectedIndex].value);" style="" >
 					
 					<% cfg.models.dbModelValues.forEach(function(row){ %>
@@ -244,104 +243,66 @@
 			</form>
 			
 			<script>
-			
-								
-
-				function setSelectedValue(selectEle) {
-											
-					    for (var i = 0; i < selectEle.options.length; i++) {
-						//alert(selectEle+"--"+valueToSet);
-						var arr_url = valueToSet.split("/");
-						//var arr_lang = arr_url[3].split(":");
-						//alert(arr_url[3]);
-						//alert("setSelectedValue: "+ arr_url[1]);
-						if(arr_url[4] != null){
-							model_val = arr_url[4].trim("#.*");
-						}else {
-							model_val_arr = arr_url[1].split('#');
-							
-							model_val = model_val_arr[0];
-						}
-							model_val = arr_url[3]+"-"+model_val;
-						
-							//alert("Model:"+model_val);
-                                                        //alert("hi:"+selectEle.options[0].text);
-                                                        if(model_val === -undefined){
-								//alert("In...");
-								model_val = selectEle.options[0].text;
-							}						
-							if (selectEle.options[i].text== model_val) {
-						    		selectEle.options[i].selected = true;
-								//alert("Inside");
-						    		selected_model = model_val;
-								return;
-							}
-						
-					    }
-					}
-
-				var objSelectEle = document.getElementById("model_select");
-				if(window.location.href.indexOf("/localhost/")>-1){
-					var valueToSet = window.location.href;
-					//alert("If:"+objSelectEle+"--"+valueToSet);
-					setSelectedValue(objSelectEle);					
-				
-				}/* else if (window.location.href.indexOf("/localhost/fr")>-1){
-					setSelectedValue(objSelectEle, valueToSet);					
-				
-				}else if (window.location.href.indexOf("/localhost/ru")>-1){
-					setSelectedValue(objSelectEle, valueToSet);					
-				
-				}*/  
-       
-
-
-			</script>
-			<!--
-			<script>
-			
-			
-				
-				function setSelectedValue(selectEle) {
-											
-					    for (var i = 0; i < selectEle.options.length; i++) {
-						//alert(selectEle+"--"+valueToSet);
-						var arr_url = valueToSet.split("/");
+				function setSelectedValue(selectEle){
+					var arr_url = valueToSet.split("/");
+					var language = "<%= cfg.defalutLang.toLowerCase() %>";
+					if(arr_url[4]){
 						model_val = arr_url[4].trim("#.*");
-						//alert("Model:"+model_val);						
-						if (selectEle.options[i].text== model_val) {
-						    selectEle.options[i].selected = true;
-						//alert("Inside");
-						    selected_model = model_val;
-						return;
+						model_val = arr_url[3]+"-"+model_val;
+						} else if(arr_url[3]){
+						model_val_arr = arr_url[3].split('#');
+						if(model_val_arr[0]){
+							model_val = model_val_arr[0]+"-";
 						}
-					    }
+						} else{
+						model_val_arr = arr_url[1].split("#");
+						model_val = model_val_arr[0];
 					}
-
-				var objSelectEle = document.getElementById("model_select");
-				if(window.location.href.indexOf("/localhost/")>-1){
-					var valueToSet = window.location.href;
-					//alert("If:"+objSelectEle+"--"+valueToSet);
-					setSelectedValue(objSelectEle);					
-				
-				}/* else if (window.location.href.indexOf("/localhost/fr")>-1){
-					setSelectedValue(objSelectEle, valueToSet);					
-				
-				}else if (window.location.href.indexOf("/localhost/ru")>-1){
-					setSelectedValue(objSelectEle, valueToSet);					
-				
-				}*/  
-       
-
-
-			</script> -->
+					if(!model_val){
+						model_val = selectEle.options[0].text;
+						selectEle.options[0].selected = true;
+						selected_model = model_val;
+						} else{
+						for( var i=0; i < selectEle.options.length; i++){
+							if(model_val.endsWith('-')){
+								var lang = selectEle.options[i].text.split("-");
+								var lang_selected = model_val.split("-");
+								if(lang[0] == lang_selected[0]){
+									model_val = selectEle.options[i].text;
+									selectEle.options[i].selected = true;
+									selected_model = model_val;
+									language = lang[0];
+								}
+								} else if(selectEle.options[i].text == model_val){
+								var lang = selectEle.options[i].text.split("-");
+								language = lang[0];
+								selectEle.options[i].selected = true;
+								selected_model = model_val;
+							}
+						}
+					}
+					<% cfg.models.dbModelValues.forEach(function(row){ %>
+						if("<%= row.lang %>" == language){
+							<% var searchLang = row.lang.toLowerCase() %>;
+							sampleSearch = <%- JSON.stringify(cfg.samples[searchLang]) %>;
+						}
+						<% }) %>
+					return;
+				}
+							
+			</script>
+			
 			<script>
-			$(function(){
-				//alert(model_val);
+				var model_val = "";
+				var objSelectEle = document.getElementById("model_select");
+				var valueToSet = window.location.href;
+				setSelectedValue(objSelectEle);
+				$(function(){
+				
 				if(model_val.indexOf("#")>-1){
 				var arr_clean_model_url = model_val.split("#");
 					model_val = arr_clean_model[0];
-					alert(model_val);
+					
 				}
 				$('#model').val(model_val);
 				$('#graph_container>div').hide();
@@ -355,8 +316,8 @@
 			<div class="top_header_switch"  >
 				<!--<div><%= lingua.visualization.show_as %></div>-->
 				<ul>
-					<li><a  href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
-					--><li><a  href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
+					<!--<li><a  href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li>
+					<li><a  href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li> -->
 				</ul>
 			</div>
 			
@@ -607,7 +568,7 @@
 				var i;
 				for(i = 0; i < data.relations.length; i++)
 				{
-					result += ('<tr><td style="color:#808080" >'+ (currentSkip + i + 1)+ '-</td>');
+					result += ('<tr><td style="color:#808080" >'+ (currentSkip + i + 1)+ '&nbsp;</td>');
 				//	result += ('<td ><img ' + (showImages ? '' : 'style="display: none" ')+ 'src="/svg/' + (data.relations[i].icon ? data.relations[i].word : 'no') + '.svg" class="result_icon" /></td>');
 					result += ('<td ><a  href="#' + data.relations[i].word + '">' + data.relations[i].word + '</a>');
 					if (advanced)
