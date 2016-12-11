@@ -225,7 +225,7 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res)
 	}
 	logger.writeLogEntry(data);
 	var actualModel = req.params.model.toLowerCase();
-	var cfgLang = cfg.models.dbModelValues.some(function(model){
+	var cfgLang = cfg.models.dbModelValues.find(function(model){
 		return model.name.toLowerCase() === actualModel;
 	});
 	if (cfgLang)
