@@ -224,11 +224,17 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function(req, res)
 		}
 	}
 	logger.writeLogEntry(data);
+	var actualModel = req.params.model.toLowerCase();
+	var cfgLang = cfg.models.dbModelValues.some(function(model){
+		return model.name.toLowerCase() === actualModel;
+	});
+	if (cfgLang)
+		cfgLang = cfgLang.lang.toLowerCase()
 	//console.log("BestRelations:"+req.params.model.toLowerCase());
 	lsse.getBestRelations(		
 		req.params.word.toLowerCase(), 
-		req.params.model.toLowerCase(),
-		cfg.models[req.params.model.toLowerCase()] || null,
+		actualModel,
+		cfgLang || req.params.lang,
 		parseInt(req.params.limit), 
 		parseInt(req.params.skip), 
 		function(err, item) {
