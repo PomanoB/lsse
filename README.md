@@ -5,8 +5,9 @@ Lexico-Semantic Search Engine
 
 This system is a kind of "lexico-semantic search engine". Given a text query it provides a list of related words. For instance, for the word "python" it will return words, such as "Ruby", "C++", "Java", "snake", "boa", etc. Instead, a traditional search engine provides as a results a list of related documents. The system provides visual interface to systems like word2vec. Originally, back to 2012, the system used a graph of related words derived based using the pattern-based semantic similarity measure [*PatternSim*](http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/). Lated, in 2013, when word2vec was introduced, we added some models based on the Skip-Gram model. In principle, the system is able to represent results of any other method for computing similarities, as it takes as an input a *distributional thesaurus* represented in the form ```word_i<TAB>word_j<TAB>similarity_ij```. 
 
-If you would like to know more about the system or would like to refer to it in a publication, please use the following citation: 
-Panchenko et al. (2013) Serelex: Search and visualization of semantically related words](http://link.springer.com/chapter/10.1007/978-3-642-36973-5_97). In Proceedings of the European Conference on Information Retrieval, ECIR'2013. Springer.
+If you would like to know more about the system or would like to refer to it in a publication, please refer to the following paper:
+ 
+Panchenko et al. (2013) [**Serelex: Search and visualization of semantically related words**.](http://link.springer.com/chapter/10.1007/978-3-642-36973-5_97). In Proceedings of the European Conference on Information Retrieval, ECIR'2013. Springer.
 
 ```latex
 @inproceedings{panchenko2013serelex,
