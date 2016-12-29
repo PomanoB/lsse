@@ -1,24 +1,90 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><%= lingua.about.title %></title>
-		<link rel='stylesheet' href='/stylesheets/style.css' />
+<head>
+	<title><%= lingua.about.title %></title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<% include meta %>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<% include counters %>
+</head>
+	
+<body>
+	<% include nav %>
 
-		<% include meta %>
-		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
- 		<% include counters %>
-	</head>
-	<body>
-		<% include nav %>
-		<h3><%= lingua.about.source_code %></h2>
-		<ul>
-			<li>PatternSim -- <a target="_blank" href="https://github.com/cental/patternsim">https://github.com/cental/patternsim</a></li>
-			<li>Serelex (<%= lingua.about.this_site %>) -- <a target="_blank" href="https://github.com/PomanoB/lsse">https://github.com/PomanoB/lsse</a></li>
-		
+	<br/>
+	<h2>API</h2>
+	
+You can access the system without any limitations using the following endpoint:
+<code>http://www.serelex.org/MODEL/WORD</code>
 
-			<li><%= lingua.about.simeval %> -- <a target="_blank" href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/">http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/</a></li>
-		</ul>
+<ul>
+<li>English PatternSim model: <a href='http://www.serelex.org/find/norm60-corpus-all/ubuntu'>http://www.serelex.org/find/norm60-corpus-all/ubuntu</a>.</li>
+
+<li>French PatternSim model: <a href='http://www.serelex.org/find/pairsfr-efreq-rnum-cfreq-pnum/belgique'>http://www.serelex.org/find/pairsfr-efreq-rnum-cfreq-pnum/belgique</a>.</li>
+
+<li>Russian PatternSim model: <a href='http://www.serelex.org/find/ru-wiki/%D1%81%D0%BE%D0%BB%D1%8C'>http://www.serelex.org/find/ru-wiki/соль</a>.</li>
+
+<li>Russian SkipGram melod (aka <a href='http://russe.nlpub.ru/downloads/'>Russian Distributional Thesaurus</a>, RDT) <a href='http://www.serelex.org/find/SkipGramNS/%D1%81%D0%BE%D0%BB%D1%8C'>http://www.serelex.org/find/SkipGramNS/соль</a></li>
+
+<li>Portugese PatternSim model use <a href='http://www.serelex.org/find/PortugueseModel/lisboa'>http://www.serelex.org/find/PortugueseModel/lisboa</a>.</li>
+
+</ul>
+
+The sample English request mentioned above should return a list of words related to 'ubuntu' in JSON format:
+<pre><code>
+{
+  "word": "ubuntu",
+  "model": "norm60-corpus-all",
+  "relations": [
+    {
+      "word": "debian",
+      "value": 0.848965058911512,
+      "icon": false
+    },
+    {
+      "word": "mandriva",
+      "value": 0.498265193741008,
+      "icon": false
+    },
+    {
+      "word": "fedora",
+      "value": 0.333650822618753,
+      "icon": false
+    },
+    {
+      "word": "gentoo",
+      "value": 0.333297162942371,
+      "icon": false
+    },
+    {
+      "word": "opensuse",
+      "value": 0.232300240955515,
+      "icon": false
+    },
+...
+}
+</pre></code>
+
+<h2>Graphs of related words</h2>
+You can download distributional thesauri (i.e. graphs of semantically related words) that are used as the basis of the current system in the CSV format: "word_i&lt;TAB&gt;word_j&lt;TAB&gt;similarity_ij", where "word_i" and "word_j" are words, such as ""Python" and "Ruby" and "similarity_ij" is their similarity score e.g. 0.789.	
+
+<ul>
+<li><a href='http://panchenko.me/data/serelex/pairs/pairs-en-norm60.csv.gz'>English PatternSim model</a> extracted from the combination of ukWaC and Wikipedia corpora. You can also download <a href="patternsim-59g.csv.gz">raw PatternSim features</a> derived from a larger corpus (a 59G combination of Wikipedia, ukWaC, GigaWord, and Leipzig news corpus).</li>
+<li><a href='http://panchenko.me/data/serelex/pairs/pairs-fr.csv.gz'>French PatternSim model</a> extracted from the frWaC and Wikipedia corpora. You can also download <a href="http://panchenko.me/data/serelex/pairs/patternsim-fr-wiki-frwac.csv.gz">raw PatternSim features</a> of this model. </li>
+<li>Russian PatternSim model: <a href="http://panchenko.me/data/serelex/pairs/pairs-ru-wikiweb-norm6.csv.gz">based on DBpedia abstracts</a>, <a href="http://panchenko.me/data/serelex/pairs/pairs-ru-wiki-norm6.csv.gz">based on DBpedia abstracts and ruWaC</a>.</li>
+<li><a href='https://s3-eu-west-1.amazonaws.com/dsl-research/distrib_thes/3attempt/all.norm-sz500-w10-cb0-it3-min5.w2v.vocab_1100000_similar250.gz'>Russian SkipGram model</a> aka <a href='http://russe.nlpub.ru/downloads/'>Russian Distributional Thesaurus</a> (RDT)</li>
+</ul>
+
+
+<h2><%= lingua.about.source_code %></h2>
+
+If you would like to extract word similarity graphs from your own corpus you can use the PatternSim tool. Source code for evaluation of such graphs is also available (the sim-eval tool). Finally, you can run your own instance of the backend for improved performance if you use the API from your application. 
+
+<ul>
+<li><a target="_blank" href="https://github.com/cental/patternsim">PatternSim</a>: a pattern-based semantic relatednes measure used to extract word graphs used in Serelex from text corpora. </li>
+<li><a target="_blank" href="https://github.com/PomanoB/lsse">Serelex</a> lexical-semantic search engine (this web site). </li>
+<li><a target="_blank" href="https://github.com/alexanderpanchenko/sim-eval">sim-eval</a>: tools for evaluation of semantic similarity/relatedness measures. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/">More informaton</a> about this tool.</li>
+</ul>
 		
 		
 	</body>
