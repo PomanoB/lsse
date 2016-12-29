@@ -1,4 +1,4 @@
-[Serelex.org](http://www.serelex.org/) -- a lexico-semantic search engine
+[Serelex](http://www.serelex.org/) -- a lexico-semantic search engine
 =======
 
 This system is a kind of "lexico-semantic search engine". Given a text query it provides a list of related words. For instance, for the word "python" it will return words, such as "Ruby", "C++", "Java", "snake", "boa", etc. Instead, a traditional search engine provides as a results a list of related documents. The system provides visual interface to systems like word2vec. Originally, back to 2012, the system used a graph of related words derived based using the pattern-based semantic similarity measure [*PatternSim*](http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/). Lated, in 2013, when word2vec was introduced, we added some models based on the Skip-Gram model. In principle, the system is able to represent results of any other method for computing similarities, as it takes as an input a *distributional thesaurus* represented in the form ```word_i<TAB>word_j<TAB>similarity_ij```. If you would like to know more about the system or would like to refer to it in a publication, please refer to the following paper:
@@ -15,6 +15,15 @@ Panchenko et al. (2013) [**Serelex: Search and visualization of semantically rel
   organization={Springer}
 }
 ```
+
+API
+---
+
+All models can be accessed using the RESTful API.
+
+- execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
+- for instance  http://serelex.cental.be/find/norm60-corpus-all/ubuntu
+- this request should return a set of words related to 'ubuntu' in JSON format
 
 How to install
 --------------
@@ -42,6 +51,8 @@ sudo apt install mysql-server mysql-client
 wget http://panchenko.me/data/serelex/lsse-backup-28-12-2016.sql.gz
 gunzip lsse-backup-28-12-2016.sql.gz 
 mysql -u lsse -p -h localhost < lsse-backup-28-12-2016.sql
+# mysql privilegies for the lsse user:
+GRANT ALL ON *.* to 'lsse'@'localhost' identified with '';
 
 # install the application 
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -54,14 +65,20 @@ sudo npm install
 cd ..
 wget http://panchenko.me/data/serelex/serelex-restart.sh
 sudo bash serelex-restart.sh
+
+# run using supervisord
+sudo apt-get install supervisor
+sudo vim /etc/supervisor/conf.d/serelex.conf
+# enter the following:
+[program:serelex]
+command=killall -s 9 node; cd /home/ubuntu/lsse; node ./app.js
+autostart=true
+autorestart=true
+stderr_logfile=/home/ubuntu/serelex.err.log
+stdout_logfile=/home/ubuntu/serelex.out.log
+
+sudo supervisorctl reread
+sudo supervisorctl update
 ```
-
-
-API
----
-
-- execute request GET /find/&lt;model&gt;/&lt;word&gt; to obtain results
-- for instance  http://serelex.cental.be/find/norm60-corpus-all/ubuntu
-- the result is a This request should return a set of words related to 'ubuntu' in JSON format
 
 
