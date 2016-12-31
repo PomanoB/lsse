@@ -81,7 +81,7 @@
                     <% cfg.models.dbModelValues.forEach(function(row){ %>
                     <option value= <%= "/".concat(row.lang).concat("/").concat(row.name) %>><a
                                 class="remember_word_link<% if (!useLang) { %>  current<% } %>"
-                                href=<%= "/".concat(row.lang) %>> <%= "".concat(row.lang).concat("-").concat(row.name) %></a>
+                                href=<%= "/".concat(row.lang) %>> <%= row.title %></a>
                     </option>
                     <% }) %>
                 </select>
