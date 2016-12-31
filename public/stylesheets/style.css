@@ -429,13 +429,13 @@ dt>h3
 }
 
 .cd-dropdown ul {
-	position: absolute;
-	top: 0px;
-	width: 100%;
+	position: relative;
+	/*top: 0px;*/
+	/*width: 100%;*/
 }
 
 .cd-dropdown ul li {
-	position: absolute;
+	position: relative;
 	width: 100%;
 }
 
