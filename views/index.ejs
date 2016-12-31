@@ -161,7 +161,7 @@
         </script>
 
         <div class="top_header_switch">
-            <!--
+            <!-- uncomment when better coverage of images will be available
             <div><%= lingua.visualization.show_as %></div>
              <ul>
                 <li><a  href="<%= useLangLink %>/" class="remember_word_link<% if (view == "index") { %>  current<% } %>" ><%= lingua.nav.graph %></a></li>
@@ -180,7 +180,7 @@
                 <% cfg.models.dbModelValues.forEach(function(row){ %>
                 <li id= <%= "/".concat(row.lang).concat("/").concat(row.name) %>>
                     <a onmouseover="onmouseUL()"
-                       href= <%= "/".concat(row.lang).concat("/").concat(row.name) %>> <%= "".concat(row.lang.toUpperCase()).concat("-").concat(row.name) %></a>
+                       href= <%= "/".concat(row.lang).concat("/").concat(row.name) %>> <%= "".concat(row.lang.toUpperCase()).concat("\t").concat(row.name) %></a>
                 </li>
 
                 <% }) %>
@@ -272,9 +272,7 @@
         if (lang != "en")
             langPriority.push(lang);
 
-
         displayResults = function (data) {
-
             $.getJSON('/def/' + data.word, function (response) {
                 var html = '';
                 var definition = '', url = {lang: 'en', label: response.word.replace(/_/g, ' ')};
