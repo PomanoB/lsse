@@ -72,21 +72,21 @@
                 var selected_model = "";
             </script>
 
-            <div id="model-dropdown" class="model-dropdown" name="model-dropdown"
-                 style="visibility:hidden;display:none;">
-                <select id="model_select" name="model_select"
-                        onchange="this.options[this.selectedIndex].value && (window.location=this.options[this.selectedIndex].value);"
-                        style="">
+            <!--<div id="model-dropdown" class="model-dropdown" name="model-dropdown"-->
+                 <!--style="visibility:hidden;display:none;">-->
+                <!--<select id="model_select" name="model_select"-->
+                        <!--onchange="this.options[this.selectedIndex].value && (window.location=this.options[this.selectedIndex].value);"-->
+                        <!--style="">-->
 
-                    <% cfg.models.dbModelValues.forEach(function(row){ %>
-                    <option value= <%= "/".concat(row.lang).concat("/").concat(row.name) %>><a
-                                class="remember_word_link<% if (!useLang) { %>  current<% } %>"
-                                href=<%= "/".concat(row.lang) %>> <%= "".concat(row.lang).concat("-").concat(row.name) %></a>
-                    </option>
-                    <% }) %>
-                </select>
+                    <!--<% cfg.models.dbModelValues.forEach(function(row){ %>-->
+                    <!--<option value= <%= "/".concat(row.lang).concat("/").concat(row.name) %>><a-->
+                                <!--class="remember_word_link<% if (!useLang) { %>  current<% } %>"-->
+                                <!--href=<%= "/".concat(row.lang) %>> <%= "".concat(row.lang).concat("-&#45;&#45;").concat(row.name) %></a>-->
+                    <!--</option>-->
+                    <!--<% }) %>-->
+                <!--</select>-->
 
-            </div>
+            <!--</div>-->
 
             <ul id="suggest_results">
                 <li>dog</li>
