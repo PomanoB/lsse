@@ -176,7 +176,7 @@
                     type="button" data-toggle="dropdown">
                 <span style="color:white;" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </button>
-            <ul onmouseover="onmouseUL()" class="dropdown-menu" id="model-dropdown-menu">
+            <ul onmouseover="onmouseUL()" class="dropdown-menu" id="model-dropdown-menu" style="position:relative;left:10px;">
                 <% cfg.models.dbModelValues.forEach(function(row){ %>
                 <li id= <%= "/".concat(row.lang).concat("/").concat(row.name) %>>
                     <a onmouseover="onmouseUL()"
