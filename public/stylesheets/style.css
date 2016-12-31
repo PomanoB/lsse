@@ -431,12 +431,12 @@ dt>h3
 .cd-dropdown ul {
 	position: absolute;
 	top: 0px;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 .cd-dropdown ul li {
 	position: absolute;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 .cd-active.cd-dropdown > span {

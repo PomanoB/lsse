@@ -62,7 +62,6 @@
         <form action="?" id="input_form" class="form-inline">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off'/>
-                &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="submit" class="btn" style="width:90px;background-color:#858585;color:white;" value="<%= lingua.search.search %>"/>
                 <input type="hidden" name="model" id="model"/>
             </div>
@@ -170,13 +169,13 @@
 			-->
         </div>
 
-        <div class="dropdown" style="position:absolute;right:180px;">
-            <button id="modelButton" class="btn dropdown-toggle" style="width:70px;background-color:#858585;"
+        <div class="dropdown" style="left:250px;top:1px;">
+            <button id="modelButton" class="btn dropdown-toggle" style="width:50px;background-color:#858585;"
                     onClick="this.style.backgroundColor='#C0C0C0'" onmouseout="this.style.backgroundColor='#858585'"
                     type="button" data-toggle="dropdown">
                 <span style="color:white;" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </button>
-            <ul onmouseover="onmouseUL()" class="dropdown-menu" id="model-dropdown-menu">
+            <ul onmouseover="onmouseUL()" class="dropdown-menu" id="model-dropdown-menu" style="left:255px;">
                 <% cfg.models.dbModelValues.forEach(function(row){ %>
                 <li id= <%= "/".concat(row.lang).concat("/").concat(row.name) %>>
                     <a onmouseover="onmouseUL()"
