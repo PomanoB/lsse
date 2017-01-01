@@ -5,21 +5,16 @@ var express = require('express')
     , async = require('async')
     , request = require('request')
     , fs = require('fs')
-    , cfg = require('./config.js')
     , parse = require('csv-parse')
     ;
-//dbModels : JSON.parse(fs.readFileSync('./dbs.json'))
+
 var mysql = require('mysql');
 var LSSE = require('./lsse');
 var dbPedia = require('./dbpedia');
 var lsse = new LSSE();
-
 var LsseLogger = require('./logger');
 var logger = new LsseLogger('logs');
-
-
 var app = express();
-
 var cfg = require('./config.js');
 
 
@@ -69,11 +64,6 @@ var parser = parse({delimiter: ','}, function (err, data) {
 fs.createReadStream(cfg.images.wordsExtensionsFilename).pipe(parser);
 
 
-app.get('/foo/:id', function (request, response) {
-    response.send('user ' + request.params.id);
-});
-
-
 var dataModels = require('./data_models').models;
 var latest_model = null;
 
@@ -84,7 +74,7 @@ app.get('/image/:word', function (req, res) {
     if (wordsExtensionsData[word]) {
         redirectUrl = cfg.images.baseUrl.replace('{word}', word).replace('{ext}', wordsExtensionsData[word]);
     } else {
-        redirectUrl = cfg.images.fallbackUrl.replace('{word}', word);
+        redirectUrl = cfg.images.fallbackUrl;
     }
 
     res.redirect(redirectUrl);
@@ -100,9 +90,6 @@ app.post('/sort/:word', function (req, res) {
     });
 });
 app.get('/def/:word', function (req, res) {
-    //console.log("iWord:");
-    //console.log(req);
-    //console.log(res);
     dbPedia.getDefinition(req.params.word, function (err, result) {
         //latest_model = req.params.model_select;
         //console.log("Selected Model:"+req.params.model);
@@ -132,7 +119,6 @@ app.get('/def/:word', function (req, res) {
 
 
 app.get('/def/:word/:', function (req, res) {
-    //console.log("cWord:");
     dbPedia.getDefinition(req.params.word, function (err, result) {
         latest_model = req.params.language_select;
         if (!err && result != null) {
@@ -161,7 +147,6 @@ app.get('/def/:word/:', function (req, res) {
 app.get('/:lang(en|fr|ru|pt)?/page/:page', routes.page);
 
 app.get('/:lang(en|fr|ru|pt)?/suggest/:suggest', function (req, res) {
-    //console.log("Suggest:");
     var searchWord = req.params.suggest.toLowerCase();
     var result = [searchWord, [], [], []];
     var hostName = req.headers['host'] || "serelex.it-claim.ru";
@@ -172,7 +157,6 @@ app.get('/:lang(en|fr|ru|pt)?/suggest/:suggest', function (req, res) {
             result[2].push("");
             result[3].push("http://" + hostName + "/#" + words[i].word);
         }
-
         res.set('Content-Type', 'application/x-suggestions+json');
         res.send(JSON.stringify(result));
     });
@@ -220,7 +204,6 @@ app.get('/:lang(en|fr|ru)?/find/:model/:word/:limit?/:skip?', function (req, res
     });
     if (cfgLang)
         cfgLang = cfgLang.lang.toLowerCase()
-    //console.log("BestRelations:"+req.params.model.toLowerCase());
     lsse.getBestRelations(
         req.params.word.toLowerCase(),
         actualModel,
