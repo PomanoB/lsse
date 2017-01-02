@@ -5,77 +5,37 @@
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 
 		<% include meta %>
-
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  		<% include counters %>
 	</head>
 	<body>
 		<% include nav %>
-		<h2><%= lingua.about.title %></h2>
-		<dl>			
-			<dd><%- lingua.about.description %></dd>	
-			<dt><h3><%= lingua.about.publications %></h3></dt>
-			<dd>
-				<ul>
-					<li>Panchenko A., Romanov P., Morozova O., Naets H., Philippovich A., Romanov. A., Fairon C. "Serelex: Search and Visualization of Semantically Related Words. In Proceedings of the 35th European Conference on Information Retrieval (ECIR 2013). Springler's Lecture Notes on Computer Science, 2013, Moscow (Russia). 
-					</li>
-					<li> Панченко A., Романов П., Романов А., Филиппович А., Филиппович Ю. <a href="http://aistconf.org/stuff/aist2013/submissions/aist2013_submission_11.pdf"> "Серелекс: поиск и визуализация семантически связанных слов."</a> Конференция по Анализу Изображений, Сетей и Текстов (АИСТ). Екатеринбург, стр. 1--10. Интуит, 2013. </li>
-					<li>Panchenko A., Morozova O., Naets H. <a href="http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf">A Semantic Similarity Measure Based on Lexico-Syntactic Patterns.</a> // In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-poster.pdf">Poster</a> <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-presentation.pdf">Presentation</a></li>
-					<li>Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href="http://ceur-ws.org/Vol-871/paper_9.pdf">Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9</li>
-					<li>Панченко A., Адейкин С., Романов П., Романов A. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/aist-camera-final.pdf">Извлечение семантических отношений из статей Википедии с помощью алгоритмов ближайших соседей.</a> // Труды конференции Анализ Социальных сетей, Изображений и Текстов (АИСТ) --- Екатеринбург, 2012 --- С.~208--219. <a href="http://aistconf.org/images/Presentations/panchenko.pdf"> Презентация</a></li>
-				</ul>
-			</dd>
-						
-		<!--	<dt><h3><%= lingua.about.advanced %></h3></dt>
-			<dd>
-			<%- lingua.about.advanced_description %>
-			</dd> 
-		-->
 
-			<dt><h3><%= lingua.about.design %></h3></dt>
-			<dd>
-			<%- lingua.about.design_description %>
-			</dd>
+<br />
+<h2>About the system</h2> 
+A traditional search engine, given a text query, provides as a results a list of related documents. This system is a "lexico-semantic search engine". Given a query it returns a list of related words. This way you can discover meaning of words in an interactive manner, search for related words and more. This project is a result of a colloboration between <a href="http://www.uclouvain.be/">Universite catholique de Louvain</a> (UCL) and <a href="http://www.bmstu.ru/">Moscow State Technical University</a> (BMSTU). Several people contributed to the project: Alexander Panchenko, Alexey Romanov, Andrey Philippovich, Cedrick Fairon, Hubert Naets, Laeticia Browers, Olga Morozova, Sergey Adeykin, Pavel Romanov, Yuri Philippovich, Otto Vale, and Artem Lukanin. We would like to thank the following organizations for support: <a href="http://www.wbi.be/">Wallonie-Brussels International</a>, <a href="http://www.uclouvain.be/cental">Center for Natural Language Processing</a> of UCL, <a href="http://www.it-claim.ru/">IT-CLAIM</a> of BMSTU and <a href="http://grant.rfh.ru/rfh">Russian Humanities Foundation</a>. Currently the system is maintained by <a href="https://www.inf.uni-hamburg.de/en/inst/ab/lt.html">Language Technology Group</a> of Hamburg University and hosted using the generous support of UCL. Original design of the logo and the web site was developed by Maxim Kolesov (<a href='http://midstripe.com/'>Midstripe Teurgy</a>).
 
-			<dt><h3>API</h3></dt>
-			<dd>
-			<%- lingua.about.api_description %>
-			<pre><code>
-{
-  "word": "ubuntu",
-  "model": "norm60-corpus-all",
-  "relations": [
-    {
-      "word": "debian",
-      "value": 0.848965058911512,
-      "icon": false
-    },
-    {
-      "word": "mandriva",
-      "value": 0.498265193741008,
-      "icon": false
-    },
-    {
-      "word": "fedora",
-      "value": 0.333650822618753,
-      "icon": false
-    },
-    {
-      "word": "gentoo",
-      "value": 0.333297162942371,
-      "icon": false
-    },
-    {
-      "word": "opensuse",
-      "value": 0.232300240955515,
-      "icon": false
-    },
-...
-}
-</pre></code>
+<br /><br />
 
-		</dl>
+If you would like to know more about the system or would like to refer to it in a publication, please refer to the following paper: Panchenko et al. (2013) <a href="http://link.springer.com/chapter/10.1007/978-3-642-36973-5_97"><b>Serelex: Search and visualization of semantically related words</b></a>. In Proceedings of the European Conference on Information Retrieval, ECIR'2013. Springer.
 
-	</body>
+<pre><code>
+@inproceedings&#123;panchenko2013serelex, <br/>&nbsp;&nbsp;&nbsp;title=&#123;Serelex: Search and visualization of semantically related words&#125;, <br/>&nbsp;&nbsp;&nbsp;author=&#123;Panchenko, Alexander and Romanov, Pavel and Morozova, Olga and Naets, Hubert and Philippovich, Andrey and Romanov, Alexey and Fairon, Cedrick&#125;, <br/>&nbsp;&nbsp;&nbsp;booktitle=&#123;European Conference on Information Retrieval&#125;, <br/>&nbsp;&nbsp;&nbsp;pages=&#123;837--840&#125;, <br/>&nbsp;&nbsp;&nbsp;year=&#123;2013&#125;, <br/>&nbsp;&nbsp;&nbsp;organization=&#123;Springer&#125;<br/>&#125;
+</code></pre>
+
+The paper mentioned above provides a general introduction of the system. Further information about variations of the systems for different languages featuring a detailed descriptions of the PatternSim similarity measure can be found in the publications below: 
+
+<ul>
+<li>Panchenko A., Romanov P., Morozova O., Naets H., Philippovich A., Romanov. A., Fairon C. <a href="http://link.springer.com/chapter/10.1007/978-3-642-36973-5_97"><b>Serelex: Search and Visualization of Semantically Related Words</b></a>. In Proceedings of the 35th European Conference on Information Retrieval (ECIR 2013). Springler's Lecture Notes on Computer Science, 2013, Moscow, Russia.</li>
+
+<li>Panchenko A., Morozova O., Naets H. <a href="http://www.oegai.at/konvens2012/proceedings/23_panchenko12p/23_panchenko12p.pdf"><b>A Semantic Similarity Measure Based on Lexico-Syntactic Patterns</b></a>. In Proceedings of 11th Conference on Natural Language Processing (KONVENS 2012), — Vienna (Austria), pp.174--178, 2012. <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-poster.pdf">Poster</a> <a href="http://cental.fltr.ucl.ac.be/team/~panchenko/sim-eval/konvens-presentation.pdf">Presentation</a></li>
+
+<li>Panchenko A., Adeykin S., Romanov A. and Romanov P. <a href="http://ceur-ws.org/Vol-871/paper_9.pdf"><b>Extraction of Semantic Relations between Concepts with KNN Algorithms on Wikipedia.</b></a> In.: Dmitry I. Ignatov, Sergei O. Kuznetsov, Jonas Poelmans (Eds.) Proceedings of 2nd International Workshop on Concept Discovery in Unstructured Data 2012. Published by KU-Leuven, ISBN 978-9-08-140991-9</li>
+
+<li>Panchenko A., Romanov P., Romanov A., Philippovich A., Philippovich Y. (In Russian) <a href="http://aistconf.org/stuff/aist2013/submissions/aist2013_submission_11.pdf"><b>Serelex: search and visualisation of semantically related words.</b></a> In Proceedings of the 3rd Conference on Analysis of Images, Social Networks and Texts (AIST'2013). Yeketerinburg, Russia. pp. 1--10. Intuit, 2013.</li>
+
+</ul>
+
+
+</body>
 </html>

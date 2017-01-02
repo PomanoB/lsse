@@ -36,8 +36,8 @@ connection.on('error', function(err){
 	},
 	images: {
 		wordsExtensionsFilename: 'words_extensions.csv',
-		baseUrl: 'http://panchenko.me/images/clipart/{word}{ext}',
-		fallbackUrl: 'https://serelex.blob.core.windows.net/images/{word}{ext}',
+		baseUrl: 'http://panchenko.me/data/serelex/images/clipart/{word}{ext}',
+		fallbackUrl: '/images/no-img.png',
 	},
 	defalutLang: 'en',
 	samples: {

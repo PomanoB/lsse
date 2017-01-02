@@ -2,7 +2,6 @@ var request = require('request'), fs = require('fs');
 var PageRank = require('pagerank'), async = require('async');
 
 var dbPedia = {
-	
 	sort: function(data, callback){
 		async.parallel([
 			function(callback){
@@ -12,31 +11,43 @@ var dbPedia = {
 				dbPedia.sortByPageRank(data, callback);
 			}
 		], function(error, sortedResult){
-			// console.log(error, result);
-			var pageRank = {};
-			var pageLength = {};
-			var i;
-			for(i = 0; i < sortedResult[0].length; i++)
-				pageLength[ sortedResult[0][i].word ] = sortedResult[0][i].length;
-			for(i = 0; i < sortedResult[1].length; i++)
-				pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
-			var resultArray = [];
-			data.sort(function(a, b){
-				if (pageRank[b] > pageRank[a])
-					return 1;
-				if (pageRank[a] > pageRank[b])
-					return -1;	
-				return pageLength[b] > pageLength[a];
-			});
-			for(i = 0; i < data.length; i++)
-			{
-				resultArray[i] = {
-					word: data[i],
-					pageRank: pageRank[ data[i] ],
-					pageLength: pageLength[ data[i] ]
-				};
-			}
-			callback(error, resultArray);
+            var resultArray = [];
+            if(sortedResult == null || sortedResult.length < 2 || sortedResult[0] == null || !sortedResult[0].hasOwnProperty("length")) {
+                callback(error, resultArray);
+                return;
+            }
+            try {
+
+                var pageRank = {};
+                var pageLength = {};
+                var i;
+                for(i = 0; i < sortedResult[0].length; i++)
+                    pageLength[ sortedResult[0][i].word ] = sortedResult[0][i].length;
+                for(i = 0; i < sortedResult[1].length; i++)
+                    pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
+                data.sort(function(a, b){
+                    if (pageRank[b] > pageRank[a])
+                        return 1;
+                    if (pageRank[a] > pageRank[b])
+                        return -1;
+                    return pageLength[b] > pageLength[a];
+                });
+                for(i = 0; i < data.length; i++)
+                {
+                    resultArray[i] = {
+                        word: data[i],
+                        pageRank: pageRank[ data[i] ],
+                        pageLength: pageLength[ data[i] ]
+                    };
+                }
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+            finally {
+                callback(error, resultArray);
+            }
 		});
 	},
 	sortByPageRank: function(words, callback){
@@ -94,16 +105,13 @@ var dbPedia = {
 		});
 	},
 	getDefinition: function(word, callback, disambiguates, oldResult) {
-
 		word = word.charAt(0).toUpperCase() + word.slice(1);
 		word = word.replace(/ /g, '_');
 		request('http://dbpedia.org/data/' + word + '.json', {
 			headers: {'User-Agent': 'LSSE'}
 		}, function (error, response, body) {
-			// console.log(response.statusCode, body);
 			if (response && response.statusCode == 200)
 			{
-				// fs.writeFileSync('3.js', body);
 				var data
 				try
 				{

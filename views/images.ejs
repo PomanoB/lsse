@@ -1,246 +1,221 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><%= lingua.title %></title>
+<head>
+    <title><%= lingua.title %></title>
 
-		<% include meta %>
+    <% include meta %>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <style type="text/css">
+        #result {
+            width: auto;
+            margin-top: 20px;
+        }
 
-		<link rel='stylesheet' href='/stylesheets/style.css' />
+        #result ul.images_search {
+            list-style-type: none;
+            position: relative;
+            margin: 0;
+        }
 
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-		<script src="/js/jquery.imagesloaded.js"></script>
-		<script src="/js/vivagraph.js"></script>
-		<script src="/js/lsse.js"></script>
+        #result ul.images_search li {
+            display: inline-block;
+            width: 175px;
+            height: 175px;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 5px;
+            position: relative;
+            cursor: pointer;
+        }
 
-		<script>
-			
-			var useLang = "<%- useLang %>";
-			var defaultModel = "<%- useModel %>";
-			
-			var advanced = false;
-			var lingua = {
-				not_found: "<%= lingua.search.not_found %>",
-				not_found_try_perhaps: "<%= lingua.search.not_found_try_perhaps %>",
-				results_count: "<%= lingua.search.results_count %>",
-				results: ["<%= lingua.search.results.one %>", "<%= lingua.search.results.two %>", "<%= lingua.search.results.many %>"],
-				show_images: "<%= lingua.nav.show_images %>",
-				hide_images: "<%= lingua.nav.hide_images %>",
-				hide_second_links: "<%= lingua.nav.hide_second_links %>",
-				show_second_links: "<%= lingua.nav.show_second_links %>"
-			};
-			
+        #result ul.images_search li img {
+            position: absolute;
+        }
 
-			$(function(){
-				$('#model').val(defaultModel);
+        #result ul.images_search li div {
+            position: absolute;
+            bottom: 0;
+            height: 40px;
+            background-color: rgba(20, 20, 20, 0.8);
+            color: #FFF;
+            font-size: 16px;
+            padding: 10px;
+            width: 155px;
+        }
+    </style>
 
-				$('#graph_container>div').hide();
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/js/jquery.imagesloaded.js"></script>
+    <script src="/js/vivagraph.js"></script>
+    <script src="/js/lsse.js"></script>
+    <% include counters %>
+    <script>
+        var useLang = "<%- useLang %>";
+        var defaultModel = "<%- useModel %>";
+        var advanced = false;
+        var lingua = {
+            not_found: "<%= lingua.search.not_found %>",
+            not_found_try_perhaps: "<%= lingua.search.not_found_try_perhaps %>",
+            results_count: "<%= lingua.search.results_count %>",
+            results: ["<%= lingua.search.results.one %>", "<%= lingua.search.results.two %>", "<%= lingua.search.results.many %>"],
+            show_images: "<%= lingua.nav.show_images %>",
+            hide_images: "<%= lingua.nav.hide_images %>",
+            hide_second_links: "<%= lingua.nav.hide_second_links %>",
+            show_second_links: "<%= lingua.nav.show_second_links %>"
+        };
 
-			});
+        $(function () {
+            $('#model').val(defaultModel);
+            $('#graph_container>div').hide();
+        });
+        var currentPage = 'images_search';
+        var sampleSearch = <%- samples %>;
+    </script>
+    <script src="/js/search.js"></script>
+    <script src="/js/visualization.js"></script>
+</head>
 
-			var currentPage = 'images_search';
+<body>
+<div id="scroll_to_top">
+    <div></div>
+</div>
+<% include nav %>
 
-			var sampleSearch = <%- samples %>;
-			
-		</script>
+<div id="top_header_conatiner">
+    <form action="?" id="input_form">
+        <input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off'/>
+        <input type="hidden" name="model" id="model"/>
+        <input type="submit" value="<%= lingua.search.search %>"/>
+        <ul id="suggest_results">
+            <li>dog</li>
+            <li>cat</li>
+            <li>human</li>
+        </ul>
+        <div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
+    </form>
 
-		<script src="/js/search.js"></script>
-		<script src="/js/visualization.js"></script>
-		
-		<style type="text/css">
-		#result
-		{
-			width: auto;
-			margin-top: 20px;
-		}
+    <div class="top_header_switch">
+        <div><%= lingua.visualization.show_as %></div>
+        <ul>
+            <li><a href="<%= useLangLink %>/"
+                   class="remember_word_link<% if (view == "index") { %>  current<% } %>"><%= lingua.nav.graph %></a>
+            </li>
+            <li><a href="<%= useLangLink %>/page/images"
+                   class="remember_word_link<% if (view == "images") { %> current<% } %>"><%= lingua.nav.images %></a>
+            </li>
+        </ul>
+    </div>
 
-		#result ul.images_search 
-		{
-			list-style-type: none;
-			position: relative;
-			margin: 0;
-		}
-		#result ul.images_search li
-		{
-			display: inline-block;
-			width: 175px;
-			height: 175px;
-			overflow: hidden;
-			background-repeat: no-repeat;
-			background-position: center;
-			margin: 5px;
-			position: relative;
-			cursor: pointer;
-		}
+    <div class="top_header_switch">
+        <div><%= lingua.nav.lang_choose %></div>
+        <ul>
+            <li><a class="remember_word_link<% if (!useLang) { %>  current<% } %>"
+                   href="/"><%= lingua.nav.lang_en %></a></li>
+            <li><a class="remember_word_link<% if (useLang == "fr") { %>  current<% } %>"
+                   href="/fr"><%= lingua.nav.lang_fr %></a></li>
+            <li><a class="remember_word_link<% if (useLang == "ru") { %>  current<% } %>"
+                   href="/fr"><%= lingua.nav.lang_ru %></a></li>
+        </ul>
+    </div>
 
-		#result ul.images_search li img 
-		{
-			position: absolute;
-		}
-		#result ul.images_search li div
-		{
-			position: absolute;
-			bottom: 0;
-			height: 40px;
-			background-color: rgba(20, 20, 20, 0.8);
-			color: #FFF;
-			font-size: 16px;
-			padding: 10px;
-			width: 155px;
-		}
-	/*	#result ul.images_search li img 
-		{
-			display: block;
-			max-height: 250px;
-			max-width: 250px;
-		}*/
-		</style>
+    <div class="clearfix"></div>
+</div>
 
-		<% include counters %>
+<div id="result">
+</div>
+<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
 
-	</head>
-	<body>
-		<div id="scroll_to_top">
-			<div></div>
-		</div>
-		<% include nav %>
-		
-		<div id="top_header_conatiner">
-			<form action="?" id="input_form">
-				<input type="text" placeholder="<%= lingua.search.input_word %>" id="input_word" autocomplete='off' />
-				<input type="hidden" name="model" id="model" />
-				<input type="submit" value="<%= lingua.search.search %>" />
-				<ul id="suggest_results">
-					<li>dog</li>
-					<li>cat</li>
-					<li>human</li>
-				</ul>
-				<div id="example_search"><%- lingua.search.for_example %>, <a href="#fruit">fruit</a></div>
-			</form>
-			
-			<div class="top_header_switch">
-				<div><%= lingua.visualization.show_as %></div>
-				<ul>
-					<li><a href="<%= useLangLink %>/" class="remember_word_link<%if (view == "index") {%>  current<%}%>" ><%= lingua.nav.graph %></a></li><!--
-					--><li><a href="<%= useLangLink %>/page/images" class="remember_word_link<%if (view == "images") {%> current<%}%>" ><%= lingua.nav.images %></a></li>
-				</ul>
-			</div>
-			
-			<div class="top_header_switch">
-				<div><%= lingua.nav.lang_choose %></div>
-				<ul>
-					<li><a class="remember_word_link<%if (!useLang) {%>  current<%}%>" href="/"><%= lingua.nav.lang_en %></a></li><!--
-					--><li><a class="remember_word_link<%if (useLang == "fr") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_fr %></a></li><!--
-					--><li><a class="remember_word_link<%if (useLang == "ru") {%>  current<%}%>" href="/fr"><%= lingua.nav.lang_ru %></a></li>
-				</ul>
-			</div>
+<script>
+    var allowScroll = true;
+    displayResults = function (data) {
+        allowScroll = true;
+        var html = "";
 
-			<div class="clearfix"></div>
-		</div>
-		
-		<div id="result">
-		</div>
-		<a href="#show_all" id="show_all"><%= lingua.search.show_all %></a>
-			
-		<script>
-			var allowScroll = true;
-			displayResults = function(data)
-			{
-				allowScroll = true;
-				var html = "";
+        if (data.totalRelations > 20)
+            $('#show_all').show();
+        else
+            $('#show_all').hide();
 
-				if (data.totalRelations > 20)
-					$('#show_all').show();
-				else
-					$('#show_all').hide();
+        if (data.totalRelations > 0) {
+            if (currentSkip == 0)
+                html = '<ul class="images_search">';
 
-				if (data.totalRelations > 0)
-				{
-					if (currentSkip == 0)
-						html = '<ul class="images_search">';
+            for (i = 0; i < data.relations.length; i++) {
 
-					for(i = 0; i < data.relations.length; i++)
-					{
+                html += ('<li data-word="' + data.relations[i].word + '"><img src="http://' + data.relations[i].word.replace(/\s+/g, '_') + '.jpg.to/m" />' +
 
-						html += ('<li data-word="' + data.relations[i].word + '"><img src="http://' + data.relations[i].word.replace(/\s+/g, '_') + '.jpg.to/m" />'+
+                '<div>' + (currentSkip + i + 1) + '. ' + data.relations[i].word + '</a></div>' +
 
-								'<div>' + (currentSkip + i + 1) + '. ' + data.relations[i].word + '</a></div>' +
+                '</li>');
+            }
 
-							'</li>');
-					}
+            if (currentSkip == 0)
+                html += '</ul>';
+            html = $(html);
 
-					if (currentSkip == 0)
-						html += '</ul>';
-					html = $(html);
+            html.imagesLoaded(function () {
+                this.find('img').each(function () {
+                    var i = $(this);
+                    var w = i.width();
+                    var h = i.height();
 
-					html.imagesLoaded(function() {
-						this.find('img').each(function(){
-							var i = $(this);
-							var w = i.width();
-							var h = i.height();
-							
-							if (w > h)
-							{
-								w = w * (175/h);
-								i.css({
-									height: '175px',
-									left: (175 - w)/2 + 'px'
-								});
-							}	
-							else
-							{
-								h = h * (175/w);
-								i.css({
-									width: '175px',
-									top: (175 - h)/2 + 'px'
-								});
-							}
-						});
-					});
+                    if (w > h) {
+                        w = w * (175 / h);
+                        i.css({
+                            height: '175px',
+                            left: (175 - w) / 2 + 'px'
+                        });
+                    }
+                    else {
+                        h = h * (175 / w);
+                        i.css({
+                            width: '175px',
+                            top: (175 - h) / 2 + 'px'
+                        });
+                    }
+                });
+            });
 
-					if (currentSkip == 0)
-						$('#result').empty().append(html);
-					else
-						$('#result ul.images_search').append(html);
-					
-					
-					html.find('img').parent().click(function(){
-
-						var word = $(this).data('word');
-						if (word)
-						{
-							currentSkip = 0;
-							allowScroll = false;
-							location.hash = word;
-						}
-					});
-					// $('#result ul.images_search').imagesLoaded(function() {
-					// 	$('#result li').wookmark({
-					// 		container: $('#result'),
-					// 		offset: 2, // Optional, the distance between grid items
-     //   						itemWidth: 210
-					// 	});
-					// });
-					
-				}
-
-			}
-
-			$(function(){
+            if (currentSkip == 0)
+                $('#result').empty().append(html);
+            else
+                $('#result ul.images_search').append(html);
 
 
-				$(document).bind('scroll', function(){
-					if ($(window).scrollTop() + $(window).height() > $(document).height() - 100 && allowScroll)
-					{
-						loadCompleted = false;
+            html.find('img').parent().click(function () {
 
-						currentSkip += 20;
+                var word = $(this).data('word');
+                if (word) {
+                    currentSkip = 0;
+                    allowScroll = false;
+                    location.hash = word;
+                }
+            });
+            // $('#result ul.images_search').imagesLoaded(function() {
+            // 	$('#result li').wookmark({
+            // 		container: $('#result'),
+            // 		offset: 2, // Optional, the distance between grid items
+            //   						itemWidth: 210
+            // 	});
+            // });
 
-						lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults, true);
-					}
-				});
-			});
+        }
 
-		</script>
-	</body>
+    }
+
+    $(function () {
+        $(document).bind('scroll', function () {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100 && allowScroll) {
+                loadCompleted = false;
+
+                currentSkip += 20;
+
+                lsse.search($('#input_word').val(), $('#model').val(), currentSkip, 20, displayResults, true);
+            }
+        });
+    });
+</script>
+</body>
 </html>
