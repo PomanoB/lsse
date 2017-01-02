@@ -12,7 +12,7 @@ var dbPedia = {
 			}
 		], function(error, sortedResult){
             var resultArray = [];
-            if(sortedResult == null || sortedResult.length < 2 || sortedResult[0] == null) callback(error, resultArray);
+            if(sortedResult == null || sortedResult.length < 2 || sortedResult[0] == null || !sortedResult[0].hasOwnProperty("length")) callback(error, resultArray);
 
             var pageRank = {};
 			var pageLength = {};
