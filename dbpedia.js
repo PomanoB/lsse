@@ -13,30 +13,38 @@ var dbPedia = {
 		], function(error, sortedResult){
             var resultArray = [];
             if(sortedResult == null || sortedResult.length < 2 || sortedResult[0] == null || !sortedResult[0].hasOwnProperty("length")) callback(error, resultArray);
+            try {
 
-            var pageRank = {};
-			var pageLength = {};
-			var i;
-			for(i = 0; i < sortedResult[0].length; i++)
-				pageLength[ sortedResult[0][i].word ] = sortedResult[0][i].length;
-			for(i = 0; i < sortedResult[1].length; i++)
-				pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
-			data.sort(function(a, b){
-				if (pageRank[b] > pageRank[a])
-					return 1;
-				if (pageRank[a] > pageRank[b])
-					return -1;	
-				return pageLength[b] > pageLength[a];
-			});
-			for(i = 0; i < data.length; i++)
-			{
-				resultArray[i] = {
-					word: data[i],
-					pageRank: pageRank[ data[i] ],
-					pageLength: pageLength[ data[i] ]
-				};
-			}
-			callback(error, resultArray);
+                var pageRank = {};
+                var pageLength = {};
+                var i;
+                for(i = 0; i < sortedResult[0].length; i++)
+                    pageLength[ sortedResult[0][i].word ] = sortedResult[0][i].length;
+                for(i = 0; i < sortedResult[1].length; i++)
+                    pageRank[ sortedResult[1][i].word ] = sortedResult[1][i].pageRank;
+                data.sort(function(a, b){
+                    if (pageRank[b] > pageRank[a])
+                        return 1;
+                    if (pageRank[a] > pageRank[b])
+                        return -1;
+                    return pageLength[b] > pageLength[a];
+                });
+                for(i = 0; i < data.length; i++)
+                {
+                    resultArray[i] = {
+                        word: data[i],
+                        pageRank: pageRank[ data[i] ],
+                        pageLength: pageLength[ data[i] ]
+                    };
+                }
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+            finally {
+                callback(error, resultArray);
+            }
 		});
 	},
 	sortByPageRank: function(words, callback){
@@ -99,10 +107,8 @@ var dbPedia = {
 		request('http://dbpedia.org/data/' + word + '.json', {
 			headers: {'User-Agent': 'LSSE'}
 		}, function (error, response, body) {
-			// console.log(response.statusCode, body);
 			if (response && response.statusCode == 200)
 			{
-				// fs.writeFileSync('3.js', body);
 				var data
 				try
 				{
