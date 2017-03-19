@@ -69,9 +69,10 @@ sudo bash serelex-restart.sh
 # run using supervisord
 sudo apt-get install supervisor
 sudo vim /etc/supervisor/conf.d/serelex.conf
-# enter the following:
+
+# enter the following adjusting the path to the lsse directory (you also need to modify the path in s.sh):
 [program:serelex]
-command=killall -s 9 node; cd /home/ubuntu/lsse; node ./app.js
+command=/home/ubuntu/lsse/s.sh
 autostart=true
 autorestart=true
 stderr_logfile=/home/ubuntu/serelex.err.log
